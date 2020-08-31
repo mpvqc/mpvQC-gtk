@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schemalist gettext-domain="mpvQC">
+    <schema id="com.github.mpvqc.mpvQC" path="/com/github/mpvqc/mpvQC/">
+
+        <key name="header-bar-subtitle-format" type="i">
+            <default>1</default>
+            <summary>Display additional information in the header bar</summary>
+            <description>
+                0=nothing,
+                1=current video file name,
+                2=current video path
+            </description>
+        </key>
+
+        <key name="prefer-dark-theme" type="b">
+            <default>false</default>
+            <summary>Set the dark theme for the application</summary>
+            <description/>
+        </key>
+
+        <key name="comment-types" type="as">
+            <default>["Translation", "Spelling", "Punctuation", "Phrasing", "Timing", "Typeset", "Hint"]</default>
+            <summary>All comment types to choose from</summary>
+            <description>
+                The array contains all comment types the user can choose from.
+                All comment types that are part of the default value will always be in English for translation purposes.
+            </description>
+        </key>
+
+        <key name="auto-backup-enabled" type="b">
+            <default>true</default>
+            <summary>Back up the current document periodically</summary>
+            <description/>
+        </key>
+
+        <key name="auto-backup-interval" type="i">
+            <default>90</default>
+            <summary>Set the time interval between two backups in seconds</summary>
+            <description/>
+        </key>
+
+        <key name="status-bar-time-format" type="i">
+            <default>0</default>
+            <summary>Select the format for video time in the status bar</summary>
+            <description>
+                0=default format (current/total),
+                1=current time,
+                2=remaining time,
+                3=nothing
+            </description>
+        </key>
+
+        <key name="status-bar-percentage" type="b">
+            <default>true</default>
+            <summary>Enable percent indicator in the status bar</summary>
+            <description/>
+        </key>
+
+        <key name="import-open-video-automatically" type="b">
+            <default>false</default>
+            <summary>Open videos from imported documents automatically</summary>
+            <description>
+                If an imported qc document points to an existing video file that video file may be opened automatically
+            </description>
+        </key>
+
+        <key name='export-qc-document-nick' type='s'>
+            <default>"nickname"</default>
+            <summary>Set the nickname for document exports</summary>
+            <description/>
+        </key>
+
+        <key name="export-append-nick" type="b">
+            <default>true</default>
+            <summary>Append nickname to file name</summary>
+            <description/>
+        </key>
+
+        <key name="export-write-header" type="b">
+            <default>true</default>
+            <summary>Write additional information into the exported document</summary>
+            <description/>
+        </key>
+
+        <key name="export-write-date" type="b">
+            <default>true</default>
+            <summary>Write current date into meta data section</summary>
+            <description/>
+        </key>
+
+        <key name="export-write-generator" type="b">
+            <default>true</default>
+            <summary>Write about mpvQC into the meta data section</summary>
+            <description/>
+        </key>
+
+        <key name="export-write-nick" type="b">
+            <default>true</default>
+            <summary>Write current nickname into the meta data section</summary>
+            <description/>
+        </key>
+
+        <key name="export-write-path" type="b">
+            <default>true</default>
+            <summary>Write current video path into the meta data section</summary>
+            <description/>
+        </key>
+
+        <key name="latest-paths-export-qc-directory" type="s">
+            <default>""</default>
+            <summary>Set the default directory for the document export</summary>
+            <description/>
+        </key>
+
+        <key name="latest-paths-import-qc-directory" type="s">
+            <default>""</default>
+            <summary>Set the default directory for the document import</summary>
+            <description/>
+        </key>
+
+        <key name="latest-paths-import-video-directory" type="s">
+            <default>""</default>
+            <summary>Set the default directory for the video import</summary>
+            <description/>
+        </key>
+
+        <key name="latest-paths-import-subtitle-directory" type="s">
+            <default>""</default>
+            <summary>Set the default directory for the subtitle import</summary>
+            <description/>
+        </key>
+
+        <key name="latest-paths-recent-files" type="as">
+            <default>[]</default>
+            <summary>Set the list of all recent files</summary>
+            <description/>
+        </key>
+
+        <key name="app-window-width" type="i">
+            <default>1280</default>
+            <summary>Set the app window width</summary>
+            <description/>
+        </key>
+
+        <key name="app-window-height" type="i">
+            <default>850</default>
+            <summary>Set the app window height</summary>
+            <description/>
+        </key>
+
+        <key name="app-window-video-height" type="i">
+            <default>720</default>
+            <summary>Set the video height</summary>
+            <description/>
+        </key>
+
+    </schema>
+</schemalist>

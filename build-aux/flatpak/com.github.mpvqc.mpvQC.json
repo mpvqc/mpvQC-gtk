@@ -1,0 +1,207 @@
+{
+  "app-id": "com.github.mpvqc.mpvQC",
+  "runtime": "org.gnome.Platform",
+  "runtime-version": "3.36",
+  "sdk": "org.gnome.Sdk",
+  "command": "mpvQC",
+  "finish-args": [
+    "--device=dri",
+    "--share=ipc",
+    "--socket=x11",
+    "--socket=wayland",
+    "--socket=pulseaudio",
+    "--filesystem=host",
+    "--filesystem=~/.config/dconf:ro",
+    "--talk-name=ca.desrt.dconf",
+    "--env=DCONF_USER_CONFIG_DIR=.config/dconf"
+  ],
+  "build-options": {
+    "cflags": "-O2 -g",
+    "cxxflags": "-O2 -g",
+    "env": {
+      "V": "1"
+    }
+  },
+  "cleanup": [
+    "/include",
+    "/lib/pkgconfig",
+    "/man",
+    "/share/doc",
+    "/share/gtk-doc",
+    "/share/man",
+    "*.la",
+    "*.a"
+  ],
+  "modules": [
+    {
+      "name": "libmpv",
+      "cleanup": [
+        "/include",
+        "/lib/pkgconfig"
+      ],
+      "buildsystem": "simple",
+      "build-commands": [
+        "python3 waf configure --prefix=${FLATPAK_DEST} --enable-libmpv-shared --disable-manpage-build --disable-debug-build",
+        "python3 waf build",
+        "python3 waf install"
+      ],
+      "sources": [
+        {
+          "type": "archive",
+          "url": "https://github.com/mpv-player/mpv/archive/v0.32.0.tar.gz",
+          "sha256": "9163f64832226d22e24bbc4874ebd6ac02372cd717bef15c28a0aa858c5fe592"
+        },
+        {
+          "type": "file",
+          "url": "https://waf.io/waf-2.0.19",
+          "sha256": "ba63c90a865a9bcf46926c4e6776f9a3f73d29f33d49b7f61f96bc37b7397cef",
+          "dest-filename": "waf"
+        }
+      ],
+      "modules": [
+        {
+          "name": "luajit",
+          "no-autogen": true,
+          "cleanup": [
+            "/bin",
+            "/lib/*.a",
+            "/include",
+            "/lib/pkgconfig",
+            "/share/man"
+          ],
+          "sources": [
+            {
+              "type": "archive",
+              "url": "http://luajit.org/download/LuaJIT-2.1.0-beta3.tar.gz",
+              "sha256": "1ad2e34b111c802f9d0cdf019e986909123237a28c746b21295b63c9e785d9c3"
+            },
+            {
+              "type": "shell",
+              "commands": [
+                "sed -i 's|/usr/local|/app|' ./Makefile"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "libass",
+          "cleanup": [
+            "/include",
+            "/lib/*.la",
+            "/lib/pkgconfig"
+          ],
+          "config-opts": [
+            "--disable-static"
+          ],
+          "sources": [
+            {
+              "type": "archive",
+              "url": "https://github.com/libass/libass/releases/download/0.14.0/libass-0.14.0.tar.xz",
+              "sha256": "881f2382af48aead75b7a0e02e65d88c5ebd369fe46bc77d9270a94aa8fd38a2"
+            }
+          ],
+          "modules": [
+            {
+              "name": "fribidi",
+              "cleanup": [
+                "/bin",
+                "/include",
+                "/lib/pkgconfig",
+                "/lib/*.la",
+                "/share/man"
+              ],
+              "buildsystem": "simple",
+              "build-commands": [
+                "meson setup --prefix=${FLATPAK_DEST} --buildtype=release build -D docs=false",
+                "ninja -C build",
+                "ninja -C build install"
+              ],
+              "sources": [
+                {
+                  "type": "git",
+                  "url": "https://github.com/fribidi/fribidi.git"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "ffmpeg",
+          "cleanup": [
+            "/include",
+            "/lib/pkgconfig",
+            "/share/ffmpeg/examples"
+          ],
+          "config-opts": [
+            "--enable-shared",
+            "--disable-static",
+            "--enable-gnutls",
+            "--disable-doc",
+            "--disable-programs",
+            "--disable-muxers",
+            "--disable-devices"
+          ],
+          "sources": [
+            {
+              "type": "git",
+              "url": "https://github.com/FFmpeg/FFmpeg.git"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pypi-dependencies",
+      "buildsystem": "simple",
+      "build-commands": [
+      ],
+      "modules": [
+        {
+          "name": "python-mpv",
+          "buildsystem": "simple",
+          "build-commands": [
+            "pip3 install --no-index --find-links=\"file://${PWD}\" --prefix=${FLATPAK_DEST} 'python-mpv == 0.5.2'"
+          ],
+          "sources": [
+            {
+              "type": "file",
+              "url": "https://files.pythonhosted.org/packages/3b/84/c1f54d3527a7f454e22b5165a4c7cacd5ea81a6aa36b4506fabe667062fe/python-mpv-0.5.2.tar.gz",
+              "sha256": "10c7ae61eff441602c7188595108391cdede153c15454772d8811c2bcb9e6823"
+            }
+          ]
+        },
+        {
+          "name": "python3-PyOpenGL",
+          "buildsystem": "simple",
+          "build-commands": [
+            "pip3 install --no-index --find-links=\"file://${PWD}\" --prefix=${FLATPAK_DEST} 'PyOpenGL>=3.1.5'"
+          ],
+          "sources": [
+            {
+              "type": "file",
+              "url": "https://files.pythonhosted.org/packages/47/9a/8d9364533ebcaa13621994a63dcc6a6051e27671ae5e1715dac4af18cac2/PyOpenGL-3.1.5-py3-none-any.whl",
+              "sha256": "36b4ac28220e4bfa29e5557525ad2967ca74558a94bccea48864fc742b18db11"
+            }
+          ]
+        },
+        {
+          "name": "mpvQC",
+          "buildsystem": "meson",
+          "config-opts": [
+            "--libdir=lib"
+          ],
+          "builddir": true,
+          "sources": [
+            {
+              "type": "dir",
+              "path": "/home/elias/Projects/mpvqc-flatpak"
+            }
+          ]
+        }
+      ],
+      "config-opts": [
+        "--force-clean"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,20 @@
+.video-area {
+    background: black;
+}
+
+#StatusBar {
+    font-family: monospace;
+}
+
+#SearchFrame {
+    background-color: @theme_bg_color;
+}
+
+.label-monospace {
+    font-family: monospace;
+}
+
+.statusbar-button {
+    border-radius: 0;
+    border: none;
+}

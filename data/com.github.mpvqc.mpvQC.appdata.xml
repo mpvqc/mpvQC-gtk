@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright 2019 - mpvQC developers -->
+<component type="desktop">
+    <id>com.github.mpvqc.mpvQC.desktop</id>
+    <metadata_license>CC0-1.0</metadata_license>
+    <project_license>AGPL-3.0-or-later</project_license>
+    <!-- Translators: Do not translate application name -->
+    <name>mpvQC</name>
+    <summary>A libmpv based application for the creation of quality control reports of video files.</summary>
+    <description>
+        <p/>
+    </description>
+    <releases>
+        <release date="2019-08-31" version="v1.0.0">
+            <description>
+                <p>Initial release</p>
+            </description>
+        </release>
+    </releases>
+    <project_group>mpvQC</project_group>
+    <url type="homepage">https://github.com/mpvqc/mpvQC-gtk</url>
+    <url type="bugtracker">https://github.com/mpvqc/mpvQC-gtk/issues</url>
+    <update_contact>elias.mueller@mailbox.org</update_contact>
+    <translation type="gettext">com.github.mpvqc.mpvQC</translation>
+</component>

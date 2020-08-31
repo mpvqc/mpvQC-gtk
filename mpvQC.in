@@ -1,0 +1,56 @@
+#!@PYTHON_PATH@
+
+# mpvQC
+#
+# Copyright (C) 2020 mpvQC developers
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU Affero General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU Affero General Public License for more details.
+#
+# You should have received a copy of the GNU Affero General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+
+DIR_PKGDATA = "@DIR_PKGDATA@"
+DIR_LOCALE = "@DIR_LOCALE@"
+
+if __name__ == "__main__":
+    import gettext
+    import locale
+    import os
+    import signal
+    import sys
+
+    import gi
+
+    gi.require_version("Gtk", "3.0")
+    from gi.repository import Gio
+
+    sys.path.insert(1, DIR_PKGDATA)
+    signal.signal(signal.SIGINT, signal.SIG_DFL)
+
+    # Sets application internationalization
+    locale.bindtextdomain("mpvQC", DIR_LOCALE)
+    locale.textdomain("mpvQC")
+
+    gettext.bindtextdomain("mpvQC", DIR_LOCALE)
+    gettext.textdomain("mpvQC")
+
+    resource = Gio.Resource.load(os.path.join(DIR_PKGDATA, "mpvQC.gresource"))
+    resource._register()
+
+    from mpvqc import main
+
+    sys.exit(main.main(app_id="@APP_ID@",
+                       app_name="@APP_NAME@",
+                       app_url="@APP_URL@",
+                       app_version="@APP_VERSION@",
+                       vcs_hash="@VCS_HASH@",
+                       vcs_tag="@VCS_TAG@"))

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gresources>
+    <gresource prefix="/data">
+        <file>config/input.conf</file>
+        <file>config/mpv.conf</file>
+        <file>css/style.css</file>
+        <file>ui/about.ui</file>
+        <file>ui/contentmainmpv.ui</file>
+        <file>ui/contentmaintable.ui</file>
+        <file>ui/input.ui</file>
+        <file>ui/messagestack.ui</file>
+        <file>ui/popoveropen.ui</file>
+        <file>ui/popovertimeedit.ui</file>
+        <file>ui/popovertypeedit.ui</file>
+        <file>ui/prefpagegeneral.ui</file>
+        <file>ui/prefpageimexport.ui</file>
+        <file>ui/prefpageinput.ui</file>
+        <file>ui/prefpagempv.ui</file>
+        <file>ui/searchframe.ui</file>
+        <file>ui/statusbar.ui</file>
+        <file>ui/window.ui</file>
+        <file>com.github.mpvqc.mpvQC.svg</file>
+    </gresource>
+</gresources>

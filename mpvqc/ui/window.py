@@ -20,7 +20,7 @@ from locale import gettext as _
 
 from gi.repository import Gtk, Gdk
 
-from mpvqc import get_settings
+from mpvqc import get_settings, get_app
 from mpvqc.qc.manager import QcManager
 from mpvqc.ui.about import AboutDialog
 from mpvqc.ui.contentmainmpv import ContentMainMpv
@@ -357,7 +357,9 @@ class MpvqcWindow(Gtk.ApplicationWindow):
         """
 
         def __destroy(*data):
-            self.do_delete_event()
+            quit = not self.do_delete_event()
+            if quit:
+                get_app().quit()
 
         a = Gtk.AccelGroup()
         a.connect(

@@ -91,6 +91,7 @@ class ContentMainMpv(Gtk.EventBox):
             elif btn == MouseButton.MIDDLE:
                 self.__mpv.mouse_action(1, ActionType.PRESS)
             elif btn == MouseButton.RIGHT:
+                self.__parent.unfullscreen()
                 self.create_context_menu(btn, event.time)
             elif btn == MouseButton.BACK:
                 self.__mpv.mouse_action(5, ActionType.PRESS)

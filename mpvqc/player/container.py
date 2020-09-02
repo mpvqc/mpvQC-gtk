@@ -20,10 +20,10 @@ import ctypes
 
 from OpenGL import GL, GLX
 from gi.repository import Gtk, Gdk, GLib
-from mpv import OpenGlCbGetProcAddrFn, MpvRenderContext, MPV
 
 from mpvqc import get_app_paths, get_app_metadata
 from mpvqc.player import MpvPlayer
+from mpvqc.player.mpv import OpenGlCbGetProcAddrFn, MpvRenderContext, MPV
 
 
 def _get_process_address(_, name):

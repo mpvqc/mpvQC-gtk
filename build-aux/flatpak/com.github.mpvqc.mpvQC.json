@@ -157,20 +157,6 @@
       ],
       "modules": [
         {
-          "name": "python-mpv",
-          "buildsystem": "simple",
-          "build-commands": [
-            "pip3 install --no-index --find-links=\"file://${PWD}\" --prefix=${FLATPAK_DEST} 'python-mpv == 0.5.2'"
-          ],
-          "sources": [
-            {
-              "type": "file",
-              "url": "https://files.pythonhosted.org/packages/3b/84/c1f54d3527a7f454e22b5165a4c7cacd5ea81a6aa36b4506fabe667062fe/python-mpv-0.5.2.tar.gz",
-              "sha256": "10c7ae61eff441602c7188595108391cdede153c15454772d8811c2bcb9e6823"
-            }
-          ]
-        },
-        {
           "name": "python3-PyOpenGL",
           "buildsystem": "simple",
           "build-commands": [

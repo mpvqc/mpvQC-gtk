@@ -18,7 +18,7 @@
 
 import re
 
-from gi.repository import Gtk, Gdk, GObject
+from gi.repository import Gtk, Gdk, GObject, GLib
 
 from mpvqc.cellrenderer import CellRendererSeek, CellRendererTime, CellRendererType, CellRendererComment
 from mpvqc.qc import Comment
@@ -104,6 +104,9 @@ class ContentMainTable(Gtk.TreeView):
         self.__model.connect("row-inserted", self.__fire_signal_not_up_to_date)
         self.__fire_signal_blocked = False
 
+        # Class variables
+        self.__scrollbar_position = None
+
     def add_comments(self, comments):
         """
         Adds a list of comments to the table and scrolls to the last added comment.
@@ -163,6 +166,17 @@ class ContentMainTable(Gtk.TreeView):
         """
 
         self.__column_comment.set_cell_data_func(self.__renderer_comment, func)
+
+    def before_hide(self):
+        self.__scrollbar_position = self.get_vadjustment().get_value()
+
+    def after_show(self):
+        # Workaround to restore the scroll bar position
+        def __set_scrollbar_position():
+            if self.__scrollbar_position:
+                self.get_vadjustment().set_value(self.__scrollbar_position)
+
+        GLib.timeout_add(90, __set_scrollbar_position)
 
     @Gtk.Template.Callback()
     def on_button_press_event(self, widget, event):

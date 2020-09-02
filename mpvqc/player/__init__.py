@@ -18,8 +18,7 @@
 
 from typing import Dict
 
-from mpv import MPV
-
+from mpvqc.player.mpv import MPV
 from mpvqc.utils import seconds_float_to_formatted_string_hours
 
 

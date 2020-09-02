@@ -27,7 +27,7 @@ class Comment:
         self.comment_note = comment_note
 
     def __str__(self):
-        return "[{}][{}] {}".format(self.comment_time, self.comment_type, self.comment_note)
+        return "[{}] [{}] {}".format(self.comment_time, self.comment_type, self.comment_note)
 
     def __eq__(self, other):
         if isinstance(other, Comment):

@@ -23,7 +23,7 @@ from gi.repository import Gtk, Gdk, GLib
 from mpv import OpenGlCbGetProcAddrFn, MpvRenderContext, MPV
 
 from mpvqc import get_app_paths, get_app_metadata
-from mpvqc.player.mpv import MpvPlayer
+from mpvqc.player import MpvPlayer
 
 
 def _get_process_address(_, name):

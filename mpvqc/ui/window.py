@@ -284,6 +284,9 @@ class MpvqcWindow(Gtk.ApplicationWindow):
         Action when "f" (fullscreen key) is pressed and app is fullscreen.
         """
 
+        if not self.__is_fullscreen:
+            return
+
         super(MpvqcWindow, self).unfullscreen()
         self.__is_fullscreen = False
 

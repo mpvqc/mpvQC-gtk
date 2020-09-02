@@ -16,6 +16,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
+from os import environ
 from pathlib import Path
 
 from gi.repository import GLib
@@ -24,16 +25,22 @@ from gi.repository import GLib
 class FilePaths:
 
     def __init__(self):
+        from mpvqc import get_app_metadata
+        app_name = get_app_metadata().app_name
+
         documents = Path(GLib.get_user_special_dir(GLib.USER_DIRECTORY_DOCUMENTS))
         pictures = Path(GLib.get_user_special_dir(GLib.USER_DIRECTORY_PICTURES))
 
-        self.__dir_backup = documents / "mpvQC" / "backup"
+        config = environ.get('APPDATA') or environ.get('XDG_CONFIG_HOME')
+        config = Path(config) if config else Path.home() / ".config"
+
+        self.__dir_backup = documents / app_name / "backup"
         self.__dir_backup.mkdir(exist_ok=True, parents=True)
 
-        self.__dir_config = documents / "mpvQC"
+        self.__dir_config = config / app_name
         self.__dir_config.mkdir(exist_ok=True, parents=True)
 
-        self.__dir_screenshots = pictures / "mpvQC"
+        self.__dir_screenshots = pictures / app_name
         self.__dir_screenshots.mkdir(exist_ok=True, parents=True)
 
     @property

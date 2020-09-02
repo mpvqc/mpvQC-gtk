@@ -262,7 +262,6 @@ class MpvqcWindow(Gtk.ApplicationWindow):
         Action when "f" (fullscreen key) is pressed and app is not already fullscreen.
         """
 
-        super(MpvqcWindow, self).fullscreen()
         self.__is_fullscreen = True
 
         def __on_fullscreen(widget, event):
@@ -276,7 +275,9 @@ class MpvqcWindow(Gtk.ApplicationWindow):
 
         self.__full_screen_handler = self.connect("key-press-event", __on_fullscreen)
         self.__status_bar.hide()
+        self.__table_widget.before_hide()
         self.table_container_overlay.hide()
+        super(MpvqcWindow, self).fullscreen()
 
     def unfullscreen(self):
         """
@@ -290,6 +291,7 @@ class MpvqcWindow(Gtk.ApplicationWindow):
             self.disconnect(self.__full_screen_handler)
 
         self.table_container_overlay.show()
+        self.__table_widget.after_show()
         self.__status_bar.show()
 
     def focus_table_widget(self):

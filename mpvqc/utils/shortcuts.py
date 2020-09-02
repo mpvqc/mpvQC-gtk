@@ -154,7 +154,7 @@ __ALL_SHORTCUTS = (
              accelerator="j",
              description=_("Cycle through subtitle tracks")),
     Shortcut(_GROUP_VIDEO,
-             accelerator="#",  # todo find out this char
+             accelerator="numbersign",
              description=_("Cycle through audio tracks")),
     Shortcut(_GROUP_VIDEO,
              accelerator="s",

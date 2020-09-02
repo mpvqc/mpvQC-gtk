@@ -144,50 +144,13 @@
               </packing>
             </child>
             <child>
-              <object class="GtkButtonBox">
+              <object class="GtkButton">
+                <property name="label" translatable="yes">Save</property>
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="layout_style">start</property>
-                <child>
-                  <object class="GtkButton">
-                    <property name="label" translatable="yes">Save</property>
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="receives_default">True</property>
-                    <property name="tooltip_text" translatable="yes">Save current document</property>
-                    <signal name="clicked" handler="on_button_save_clicked" swapped="no"/>
-                  </object>
-                  <packing>
-                    <property name="expand">True</property>
-                    <property name="fill">True</property>
-                    <property name="position">0</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkButton">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="receives_default">True</property>
-                    <property name="tooltip_text" translatable="yes">Save current document with a different name</property>
-                    <signal name="clicked" handler="on_button_save_as_clicked" swapped="no"/>
-                    <child>
-                      <object class="GtkImage">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="icon_name">document-save-symbolic</property>
-                      </object>
-                    </child>
-                  </object>
-                  <packing>
-                    <property name="expand">True</property>
-                    <property name="fill">True</property>
-                    <property name="position">1</property>
-                    <property name="non_homogeneous">True</property>
-                  </packing>
-                </child>
-                <style>
-                  <class name="linked"/>
-                </style>
+                <property name="receives_default">True</property>
+                <property name="tooltip_text" translatable="yes">Save current document</property>
+                <signal name="clicked" handler="on_button_save_clicked" swapped="no"/>
               </object>
               <packing>
                 <property name="pack_type">end</property>
@@ -273,12 +236,12 @@
         <property name="margin_bottom">10</property>
         <property name="orientation">vertical</property>
         <child>
-          <object class="GtkModelButton" id="button_dark_theme">
+          <object class="GtkModelButton">
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
+            <property name="can_focus">True</property>
             <property name="receives_default">True</property>
-            <property name="text" translatable="yes">Dark Theme</property>
-            <signal name="clicked" handler="on_button_dark_theme_toggle_clicked" swapped="no"/>
+            <property name="text" translatable="yes">Save As...</property>
+            <signal name="clicked" handler="on_button_save_as_clicked" swapped="no"/>
           </object>
           <packing>
             <property name="expand">False</property>
@@ -298,6 +261,31 @@
           </packing>
         </child>
         <child>
+          <object class="GtkModelButton" id="button_dark_theme">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="receives_default">True</property>
+            <property name="text" translatable="yes">Dark Theme</property>
+            <signal name="clicked" handler="on_button_dark_theme_toggle_clicked" swapped="no"/>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">2</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkSeparator">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">3</property>
+          </packing>
+        </child>
+        <child>
           <object class="GtkModelButton" id="menu_preferences">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
@@ -308,7 +296,7 @@
           <packing>
             <property name="expand">False</property>
             <property name="fill">True</property>
-            <property name="position">2</property>
+            <property name="position">4</property>
           </packing>
         </child>
         <child>
@@ -323,7 +311,7 @@
           <packing>
             <property name="expand">False</property>
             <property name="fill">True</property>
-            <property name="position">4</property>
+            <property name="position">5</property>
           </packing>
         </child>
         <child>
@@ -337,7 +325,7 @@
           <packing>
             <property name="expand">False</property>
             <property name="fill">True</property>
-            <property name="position">5</property>
+            <property name="position">6</property>
           </packing>
         </child>
       </object>

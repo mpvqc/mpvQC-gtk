@@ -20,8 +20,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
-"POT-Creation-Date: 2020-08-31 18:14+0200\n"
-"PO-Revision-Date: 2020-08-31 18:14+0200\n"
+"POT-Creation-Date: 2020-09-02 21:26+0200\n"
+"PO-Revision-Date: 2020-09-02 21:27+0200\n"
 "Last-Translator: Elias Müller <elias.mueller@mailbox.org>\n"
 "Language-Team: \n"
 "Language: de\n"
@@ -390,43 +390,43 @@ msgstr "Neues Dokument erstellen"
 msgid "Open document, video or subtitle files"
 msgstr "Dokumente, Videos oder Untertitel öffnen"
 
-#: data/ui/window.ui:153
+#: data/ui/window.ui:148
 msgid "Save"
 msgstr "Speichern"
 
-#: data/ui/window.ui:157 mpvqc/utils/shortcuts.py:104
+#: data/ui/window.ui:152 mpvqc/utils/shortcuts.py:104
 msgid "Save current document"
 msgstr "Aktuelles Dokument speichern"
 
-#: data/ui/window.ui:171 mpvqc/utils/shortcuts.py:107
-msgid "Save current document with a different name"
-msgstr "Aktuelles Dokument unter anderem Namen speichern"
-
-#: data/ui/window.ui:224
+#: data/ui/window.ui:187
 msgid "Return"
 msgstr "Zurück"
 
-#: data/ui/window.ui:240
+#: data/ui/window.ui:203
 msgid "Restore default"
 msgstr "Zurücksetzen"
 
-#: data/ui/window.ui:244
+#: data/ui/window.ui:207
 msgid "Restore the default settings on this page"
 msgstr "Standardeinstellugen auf dieser Seite wiederherstellen"
 
-#: data/ui/window.ui:280
+#: data/ui/window.ui:243
+msgid "Save As..."
+msgstr "Speichern unter ..."
+
+#: data/ui/window.ui:268
 msgid "Dark Theme"
 msgstr "Dunkles Theme"
 
-#: data/ui/window.ui:305
+#: data/ui/window.ui:293
 msgid "Preferences"
 msgstr "Einstellungen"
 
-#: data/ui/window.ui:320
+#: data/ui/window.ui:308
 msgid "Keyboard Shortcuts"
 msgstr "Tastenkürzel"
 
-#: data/ui/window.ui:334
+#: data/ui/window.ui:322
 msgid "About"
 msgstr "Info zu mpvQC"
 
@@ -709,6 +709,10 @@ msgstr "Willkommen zurück {}!"
 #: mpvqc/utils/shortcuts.py:34
 msgid "Search"
 msgstr "Suche"
+
+#: mpvqc/utils/shortcuts.py:107
+msgid "Save current document with a different name"
+msgstr "Aktuelles Dokument unter anderem Namen speichern"
 
 #: mpvqc/utils/shortcuts.py:110
 msgid "Open preferences"

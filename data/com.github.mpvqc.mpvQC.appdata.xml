@@ -11,9 +11,9 @@
         <p/>
     </description>
     <releases>
-        <release date="2019-08-31" version="v1.0.0">
+        <release date="2019-09-04" version="v0.9">
             <description>
-                <p>Initial release</p>
+                <p>Initial Linux release</p>
             </description>
         </release>
     </releases>

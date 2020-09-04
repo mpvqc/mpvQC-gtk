@@ -1,2 +1,2 @@
-# Version 1.0
-* Initial release
+# v0.9
+* Initial Linux release

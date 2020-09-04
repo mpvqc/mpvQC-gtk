@@ -20,8 +20,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
-"POT-Creation-Date: 2020-09-02 21:26+0200\n"
-"PO-Revision-Date: 2020-09-02 21:27+0200\n"
+"POT-Creation-Date: 2020-09-04 11:07+0200\n"
+"PO-Revision-Date: 2020-09-04 11:07+0200\n"
 "Last-Translator: Elias Müller <elias.mueller@mailbox.org>\n"
 "Language-Team: \n"
 "Language: de\n"
@@ -50,8 +50,8 @@ msgstr ""
 "Qualitätsberichten zu Videodateien."
 
 #: data/com.github.mpvqc.mpvQC.appdata.xml:16
-msgid "Initial release"
-msgstr "Erstmalige Veröffentlichung"
+msgid "Initial Linux release"
+msgstr "Erstmalige Linux-Veröffentlichung"
 
 #: data/com.github.mpvqc.mpvQC.gschema.xml:7
 msgid "Display additional information in the header bar"
@@ -256,7 +256,7 @@ msgstr "Export"
 
 #: data/ui/prefpageimexport.ui:192
 msgid "Nickname"
-msgstr "Nicknamen"
+msgstr "Nickname"
 
 #: data/ui/prefpageimexport.ui:297
 msgid "Write meta data section"

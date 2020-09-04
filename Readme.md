@@ -6,6 +6,12 @@
 
 Currently this application only runs on Linux, but we have plans for a Windows version.
 
+### Arch/Manjaro
+
+Install the AUR package: [https://aur.archlinux.org/packages/mpvqc-gtk-git/](https://aur.archlinux.org/packages/mpvqc-gtk-git/)
+
+### Other distributions
+
 **Install**
 
 <!-- 

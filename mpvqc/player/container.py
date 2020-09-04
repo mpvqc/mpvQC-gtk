@@ -17,6 +17,8 @@
 
 
 import ctypes
+import platform
+from enum import Enum, auto
 
 from OpenGL import GL, GLX
 from gi.repository import Gtk, Gdk, GLib
@@ -26,94 +28,20 @@ from mpvqc.player import MpvPlayer
 from mpvqc.player.mpv import OpenGlCbGetProcAddrFn, MpvRenderContext, MPV
 
 
-def _get_process_address(_, name):
-    address = GLX.glXGetProcAddress(name.decode("utf-8"))
-    return ctypes.cast(address, ctypes.c_void_p).value
+class _OS(Enum):
+    LINUX = auto()
+    WINDOWS = auto()
 
 
-def _set_versioning_metadata(mpv):
-    metadata = get_app_metadata()
-    metadata.version_mpv = mpv.version_mpv()
-    metadata.version_ffmpeg = mpv.version_ffmpeg()
-
-
-class WaylandContainer(Gtk.GLArea):
-
-    def __init__(self, **properties):
-        super().__init__(**properties)
-
-        self._proc_addr_wrapper = OpenGlCbGetProcAddrFn(_get_process_address)
-
-        self.__ctx = None
-        self.__mpv = MpvPlayer()
-
-        style: Gtk.StyleContext = self.get_style_context()
-        style.add_class("video-area")
-
-        # Add all events but let parent handle them
-        self.add_events(Gdk.EventMask.POINTER_MOTION_MASK)
-        self.add_events(Gdk.EventMask.BUTTON_PRESS_MASK)
-        self.add_events(Gdk.EventMask.BUTTON_RELEASE_MASK)
-        self.add_events(Gdk.EventMask.KEY_PRESS_MASK)
-        self.add_events(Gdk.EventMask.STRUCTURE_MASK)
-        self.add_events(Gdk.EventMask.SCROLL_MASK)
-
-        self.connect("realize", self.on_realize)
-
-    def on_realize(self, area):
-        self.make_current()
-
-        app_paths = get_app_paths()
-        mpv = MPV(
-            vo="libmpv",
-            gpu_context="wayland",
-            keep_open="yes",
-            idle="yes",
-            osc="yes",
-            cursor_autohide="no",
-            input_cursor="no",
-            config="yes",
-            input_default_bindings="no",
-            config_dir=app_paths.dir_config,
-            screenshot_directory=app_paths.dir_screenshots,
-            log_handler=print
-        )
-        self.__ctx = MpvRenderContext(mpv, 'opengl', opengl_init_params={'get_proc_address': self._proc_addr_wrapper})
-        self.__ctx.update_cb = self.on_mpv_callback
-        self.__mpv.initialize(mpv)
-        _set_versioning_metadata(self.__mpv)
-
-    def do_render(self, *args):
-        if self.__ctx:
-            factor = self.get_scale_factor()
-            rect = self.get_allocated_size()[0]
-
-            width = rect.width * factor
-            height = rect.height * factor
-
-            fbo = GL.glGetIntegerv(GL.GL_DRAW_FRAMEBUFFER_BINDING)
-            self.__ctx.render(flip_y=True, opengl_fbo={'w': width, 'h': height, 'fbo': fbo})
-            return True
-        return False
-
-    def do_unrealize(self, *args, **kwargs):
-        self.__ctx.free()
-        self.__mpv.terminate()
-        return True
-
-    def on_mpv_callback(self):
-        GLib.idle_add(self.call_frame_ready, None, GLib.PRIORITY_HIGH)
-
-    def call_frame_ready(self, *args):
-        if self.__ctx.update():
-            self.queue_render()
+class _Container:
 
     @property
-    def player(self):
-        return self.__mpv
+    def player(self) -> MpvPlayer:
+        """Returns the embedded 'high level mpy player' of the container"""
+        raise NotImplementedError()
 
 
-class XContainer(Gtk.Label):
+class _XWidContainer(_Container, Gtk.Label):
 
     def __init__(self, **properties):
         super().__init__(**properties)
@@ -149,11 +77,132 @@ class XContainer(Gtk.Label):
         return True
 
     @property
+    def player(self) -> MpvPlayer:
+        return self.__mpv
+
+
+class _RenderContainer(_Container, Gtk.GLArea):
+
+    def __init__(self, os: _OS, **properties):
+        super().__init__(**properties)
+        self.__os = os
+
+        self._proc_addr_wrapper = OpenGlCbGetProcAddrFn(_get_process_address)
+
+        self.__ctx = None
+        self.__mpv = MpvPlayer()
+
+        style: Gtk.StyleContext = self.get_style_context()
+        style.add_class("video-area")
+
+        # Add all events but let parent handle them
+        self.add_events(Gdk.EventMask.POINTER_MOTION_MASK)
+        self.add_events(Gdk.EventMask.BUTTON_PRESS_MASK)
+        self.add_events(Gdk.EventMask.BUTTON_RELEASE_MASK)
+        self.add_events(Gdk.EventMask.KEY_PRESS_MASK)
+        self.add_events(Gdk.EventMask.STRUCTURE_MASK)
+        self.add_events(Gdk.EventMask.SCROLL_MASK)
+
+        self.connect("realize", self.on_realize)
+
+    def on_realize(self, area):
+        self.make_current()
+
+        app_paths = get_app_paths()
+        dir_config = app_paths.dir_config
+        dir_screenshots = app_paths.dir_screenshots
+
+        if self.__os == _OS.WINDOWS:
+            mpv = MPV(
+                vo="libmpv",
+                # gpu_context="wayland",  todo: Check and tweak a little or delete line if "auto" is best
+                keep_open="yes",
+                idle="yes",
+                osc="yes",
+                cursor_autohide="no",
+                input_cursor="no",
+                config="yes",
+                input_default_bindings="no",
+                config_dir=dir_config,
+                screenshot_directory=dir_screenshots,
+                log_handler=print
+            )
+        elif self.__os == _OS.LINUX:
+            mpv = MPV(
+                vo="libmpv",
+                gpu_context="wayland",
+                keep_open="yes",
+                idle="yes",
+                osc="yes",
+                cursor_autohide="no",
+                input_cursor="no",
+                config="yes",
+                input_default_bindings="no",
+                config_dir=dir_config,
+                screenshot_directory=dir_screenshots,
+                log_handler=print
+            )
+        else:
+            raise RuntimeError("Operating system not supported")
+
+        self.__ctx = MpvRenderContext(mpv, 'opengl', opengl_init_params={'get_proc_address': self._proc_addr_wrapper})
+        self.__ctx.update_cb = self.on_mpv_callback
+        self.__mpv.initialize(mpv)
+        _set_versioning_metadata(self.__mpv)
+
+    def do_render(self, *args):
+        if self.__ctx:
+            factor = self.get_scale_factor()
+            rect = self.get_allocated_size()[0]
+
+            width = rect.width * factor
+            height = rect.height * factor
+
+            fbo = GL.glGetIntegerv(GL.GL_DRAW_FRAMEBUFFER_BINDING)
+            self.__ctx.render(flip_y=True, opengl_fbo={'w': width, 'h': height, 'fbo': fbo})
+            return True
+        return False
+
+    def do_unrealize(self, *args, **kwargs):
+        self.__ctx.free()
+        self.__mpv.terminate()
+        return True
+
+    def on_mpv_callback(self):
+        GLib.idle_add(self.call_frame_ready, None, GLib.PRIORITY_HIGH)
+
+    def call_frame_ready(self, *args):
+        if self.__ctx.update():
+            self.queue_render()
+
+    @property
     def player(self):
         return self.__mpv
 
 
-def get_mpv_widget(parent: Gtk.Widget):
-    if parent.get_display().get_name().lower().startswith("wayland"):
-        return WaylandContainer()
-    return XContainer()
+def get_mpv_widget(parent: Gtk.Widget) -> _Container:
+    """Returns a container holding the 'high level mpv player' object"""
+
+    plat = platform.system()
+
+    if plat == "Linux":
+        is_wayland = parent.get_display().get_name().lower().startswith("wayland")
+        if is_wayland:
+            return _RenderContainer(_OS.LINUX)
+        else:
+            return _XWidContainer()
+    elif plat == "Windows":
+        return _RenderContainer(_OS.WINDOWS)
+    else:
+        raise RuntimeError("Platform '{}' not supported ".format(plat))
+
+
+def _get_process_address(_, name):
+    address = GLX.glXGetProcAddress(name.decode("utf-8"))
+    return ctypes.cast(address, ctypes.c_void_p).value
+
+
+def _set_versioning_metadata(mpv):
+    metadata = get_app_metadata()
+    metadata.version_mpv = mpv.version_mpv()
+    metadata.version_ffmpeg = mpv.version_ffmpeg()

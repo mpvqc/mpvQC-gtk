@@ -408,7 +408,7 @@ msgstr "Zurücksetzen"
 
 #: data/ui/window.ui:207
 msgid "Restore the default settings on this page"
-msgstr "Standardeinstellugen auf dieser Seite wiederherstellen"
+msgstr "Standardeinstellungen auf dieser Seite wiederherstellen"
 
 #: data/ui/window.ui:243
 msgid "Save As..."
@@ -468,7 +468,7 @@ msgstr "Nicht verwendbare Dateien"
 
 #: mpvqc/messagedialogs.py:34
 msgid "The following files are not compatible with this application:"
-msgstr "Die follgenden Dateien sind nicht mit dieser Anwendung kompatibel:"
+msgstr "Die folgenden Dateien sind nicht mit dieser Anwendung kompatibel:"
 
 #: mpvqc/messagedialogs.py:56
 msgid "Video found"
@@ -724,7 +724,7 @@ msgstr "Anwendung beenden"
 
 #: mpvqc/utils/shortcuts.py:116
 msgid "Display shortcuts"
-msgstr "Tastenkürzel enzeigen"
+msgstr "Tastenkürzel anzeigen"
 
 #: mpvqc/utils/shortcuts.py:122
 msgid "Enter/leave fullscreen mode"
@@ -788,7 +788,7 @@ msgstr "Screenshot anfertigen"
 
 #: mpvqc/utils/shortcuts.py:167
 msgid "Render subtitles at window/video resolution"
-msgstr "Untertitel in Fenster-/Videauflösung rendern"
+msgstr "Untertitel in Fenster-/Videoauflösung rendern"
 
 #: mpvqc/utils/shortcuts.py:170
 msgid "Display statistics of the currently played video"

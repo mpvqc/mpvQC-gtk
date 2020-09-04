@@ -178,11 +178,11 @@
           ],
           "builddir": true,
           "sources": [
-            {
-              "type": "dir",
-              "path": "/home/elias/Projects/mpvqc-flatpak"
-            }
-          ]
+              {
+                "type": "git",
+                "url": "https://github.com/mpvqc/mpvQC-gtk.git"
+              }
+            ]
         }
       ],
       "config-opts": [

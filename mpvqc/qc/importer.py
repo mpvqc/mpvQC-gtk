@@ -18,6 +18,7 @@
 
 import re
 from os import path
+from typing import Optional, List, Tuple
 
 from mpvqc.qc import Comment
 from mpvqc.utils import replace_special_characters
@@ -69,7 +70,7 @@ def __find_comment(line):
     return None
 
 
-def get_qc_content(document_paths):
+def get_qc_content(document_paths: Optional[List[str]]) -> Tuple[List[str], List[Comment], List[str], List[str]]:
     """
     Reads qc information from the given paths.
 

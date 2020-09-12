@@ -115,6 +115,7 @@ class ContentMainTable(Gtk.TreeView):
         """
 
         if comments:
+            comments = comments[:]
             last = comments.pop(-1)
 
             self.__fire_signal_blocked = True

@@ -76,7 +76,7 @@ class WaylandContainer(Gtk.GLArea):
             input_default_bindings="no",
             config_dir=app_paths.dir_config,
             screenshot_directory=app_paths.dir_screenshots,
-            log_handler=print
+            # log_handler=print
         )
         self.__ctx = MpvRenderContext(mpv, 'opengl', opengl_init_params={'get_proc_address': self._proc_addr_wrapper})
         self.__ctx.update_cb = self.on_mpv_callback

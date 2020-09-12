@@ -532,7 +532,7 @@ msgstr "Ohne Speichern beenden"
 
 #: mpvqc/qc/manager.py:379
 msgid "Created new document"
-msgstr "Neues Dokument erstellen"
+msgstr "Neues Dokument erstellt"
 
 #: mpvqc/qc/manager.py:388
 msgid "Imported video file {}"
@@ -560,7 +560,7 @@ msgstr "Dokument gespeichert"
 
 #: mpvqc/qc/manager.py:431
 msgid "Saved document as new file"
-msgstr "Dokument unter anderem Namen gespeichert"
+msgstr "Dokument unter neuem Namen gespeichert"
 
 #: mpvqc/qc/manager.py:453
 msgid "Imported a document and a subtitle file"

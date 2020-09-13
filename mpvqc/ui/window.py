@@ -326,7 +326,6 @@ class MpvqcWindow(Gtk.ApplicationWindow):
         def __on_file_name_changed(widget, value):
             self.__video_file_name = value
             self.__update_subtitle()
-            self.__popover_open.on_video_opened()
 
         def __on_file_path_changed(widget, value):
             self.__video_file_path = value

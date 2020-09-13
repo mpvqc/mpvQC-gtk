@@ -189,11 +189,18 @@ class State(ABC):
         """
 
         if self.__has_changes:
-            response = md.message_dialog_clear_unsaved_qc_document(parent=a)
-            if response == 0:  # Clear comments
-                pass
-            elif response == 1:  # Abort
-                return self.copy()
+            if bool(t.get_all_comments()):
+                response = md.message_dialog_unsaved_qc_document_clear_comments(parent=a)
+                if response == 0:  # Clear comments
+                    pass
+                elif response == 1:  # Abort
+                    return self.copy()
+            else:
+                response = md.message_dialog_unsaved_qc_document_proceed(parent=a)
+                if response == 0:  # Continue
+                    pass
+                elif response == 1:  # Abort
+                    return self.copy()
 
         t.clear_all_comments()
 

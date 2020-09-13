@@ -50,7 +50,7 @@ class QcManager(GObject.GObject):
         self.__m = video_widget
 
         # State
-        from mpvqc.qc.states import get_initial_state
+        from mpvqc.qc._states import get_initial_state
         self.__state = get_initial_state()
         self.__state_last_saved = None
         self.__during_state_change = False

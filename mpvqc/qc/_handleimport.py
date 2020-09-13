@@ -18,7 +18,7 @@
 
 from typing import NamedTuple, Optional, List, Tuple
 
-from mpvqc.qc import Comment, importer
+from mpvqc.qc import Comment, _importer
 
 
 class HandleImportResult(NamedTuple):
@@ -121,7 +121,7 @@ def do_import(
     docs_invalid: Optional[List[str]] = None
 
     if imp_docs:
-        videos, comments, docs_valid, docs_invalid = importer.get_qc_content(imp_docs)
+        videos, comments, docs_valid, docs_invalid = _importer.get_qc_content(imp_docs)
 
         if videos:
             vid_new_from_docs = videos[0]

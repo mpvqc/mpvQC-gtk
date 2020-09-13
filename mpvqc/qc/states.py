@@ -389,18 +389,23 @@ class _StateInitial(__StateSubtitleImportDelegate):
 
     def on_import_docs(self, message: str, docs: List[str], data: Data) -> 'State':
         if len(docs) == 1:
-            return self._state_saved(doc=docs[0], message=message, comments=data.comments)
+            return self._state_saved(doc=data.doc_new, message=message, comments=data.comments)
         return self._state_unsaved(doc=None, message=message, comments=data.comments)
 
     def on_import_vid(self, message: str, video: str, data: Data) -> 'State':
-        print("Current_vid_is_imported_vid", data.cur_vid_is_imported_vid)
         if data.cur_vid_is_imported_vid:
             return self.copy()
         return self._state_initial(vid=video, message=message, comments=data.comments)
 
     def on_import_docs_vid(self, message: str, docs: List[str], video: str, data: Data) -> 'State':
         if len(docs) == 1:
-            return self._state_saved(doc=docs[0], vid=video, message=message, comments=data.comments)
+            # If video was linked in the document
+            vid_linked_in_doc = data.is_new_vid_from_doc
+            # If video was linked in the document and imported separately and both match
+            vid_linked_in_doc_equals_vid_separately = data.vid_from_docs_equals_vid_from_user
+
+            if vid_linked_in_doc or vid_linked_in_doc_equals_vid_separately:
+                return self._state_saved(doc=data.doc_new, vid=video, message=message, comments=data.comments)
         return self._state_unsaved(doc=None, vid=video, message=message, comments=data.comments)
 
 

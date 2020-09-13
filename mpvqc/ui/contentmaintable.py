@@ -17,6 +17,7 @@
 
 
 import re
+from typing import Tuple
 
 from gi.repository import Gtk, Gdk, GObject, GLib
 
@@ -107,7 +108,7 @@ class ContentMainTable(Gtk.TreeView):
         # Class variables
         self.__scrollbar_position = None
 
-    def add_comments(self, comments):
+    def add_comments(self, comments: Tuple[Comment]):
         """
         Adds a list of comments to the table and scrolls to the last added comment.
 
@@ -115,7 +116,7 @@ class ContentMainTable(Gtk.TreeView):
         """
 
         if comments:
-            comments = comments[:]
+            comments = list(comments)
             last = comments.pop(-1)
 
             self.__fire_signal_blocked = True

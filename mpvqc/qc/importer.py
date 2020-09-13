@@ -70,7 +70,7 @@ def __find_comment(line):
     return None
 
 
-def get_qc_content(document_paths: Optional[List[str]]) -> Tuple[List[str], List[Comment], List[str], List[str]]:
+def get_qc_content(document_paths: Optional[List[str]]) -> Tuple[List[str], Tuple[Comment], List[str], List[str]]:
     """
     Reads qc information from the given paths.
 
@@ -109,6 +109,6 @@ def get_qc_content(document_paths: Optional[List[str]]) -> Tuple[List[str], List
     video_paths = [p for p in video_paths if p and path.exists(p)]
 
     # Sort comments by time
-    combined_comments = sorted(combined_comments, key=lambda x: x.comment_time)
+    combined_comments = tuple(sorted(combined_comments, key=lambda x: x.comment_time))
 
     return video_paths, combined_comments, valid_files, non_valid_files

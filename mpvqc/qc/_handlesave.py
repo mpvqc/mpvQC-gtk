@@ -18,7 +18,7 @@
 
 from typing import Optional, NamedTuple, Tuple
 
-from mpvqc.qc import Comment, exporter
+from mpvqc.qc import Comment, _exporter
 
 
 class HandleSaveResult(NamedTuple):
@@ -40,7 +40,7 @@ def do_save(
     if not doc:
         return HandleSaveResult(abort=True)
 
-    content = exporter.get_file_content(vid, comments)
-    exporter.write_qc_document(doc, content)
+    content = _exporter.get_file_content(vid, comments)
+    _exporter.write_qc_document(doc, content)
 
     return HandleSaveResult(doc_new=doc, vid_new=vid)

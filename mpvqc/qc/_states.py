@@ -23,12 +23,12 @@ from gi.repository import Gtk
 
 import mpvqc.dialogs as d
 import mpvqc.messagedialogs as md
-import mpvqc.qc.handleimport as hi
-import mpvqc.qc.handlesave as hs
-import mpvqc.qc.statemessages as sm
+import mpvqc.qc._handleimport as hi
+import mpvqc.qc._handlesave as hs
+import mpvqc.qc._statemessages as sm
 from mpvqc import get_settings
-from mpvqc.qc import Comment, exporter
-from mpvqc.qc.handleimport import HandleImportResultData as Data
+from mpvqc.qc import Comment, _exporter
+from mpvqc.qc._handleimport import HandleImportResultData as Data
 from mpvqc.ui.contentmainmpv import ContentMainMpv as MpvContainer
 from mpvqc.ui.contentmaintable import ContentMainTable as Table
 from mpvqc.ui.window import MpvqcWindow as AppWindow
@@ -241,8 +241,8 @@ class State(ABC):
         """
 
         if m.player.is_video_loaded():
-            content = exporter.get_file_content(self.__vid, self.__comments or [])
-            exporter.write_auto_save(video_path=self.__vid, file_content=content)
+            content = _exporter.get_file_content(self.__vid, self.__comments or [])
+            _exporter.write_auto_save(video_path=self.__vid, file_content=content)
 
     def on_import(
             self,

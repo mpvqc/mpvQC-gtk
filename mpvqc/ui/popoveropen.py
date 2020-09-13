@@ -90,13 +90,6 @@ class PopoverOpen(Gtk.Popover):
         get_settings().reset_latest_paths_recent_files()
         self.__update_recent_files_list()
 
-    def on_video_opened(self):
-        """
-        Called whenever a video was opened.
-        """
-
-        self.button_subtitle.set_sensitive(True)
-
     def on_recent_item_clicked(self, widget, row):
         """
         Invoked, when file in the recent file list was clicked.

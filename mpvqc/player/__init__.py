@@ -129,7 +129,7 @@ class MpvPlayer(_Observer):
     def __init__(self, **properties):
         super().__init__(**properties)
 
-        self.__cached_subtitles = []
+        self.__subtitle_cache = []
 
     def add_sub_files(self, sub_file):
         """
@@ -143,7 +143,7 @@ class MpvPlayer(_Observer):
         if self.is_video_loaded():
             self._mpv.command("sub-add", sub_file, "select")
         else:
-            self.__cached_subtitles.append(sub_file)
+            self.__subtitle_cache.append(sub_file)
 
     def button_action(self, key_string, action_type):
         """
@@ -338,6 +338,6 @@ class MpvPlayer(_Observer):
         return self._mpv.ffmpeg_version
 
     def __load_subtitle_files(self):
-        for subtitle in self.__cached_subtitles:
+        for subtitle in self.__subtitle_cache:
             self.add_sub_files(subtitle)
-        self.__cached_subtitles.clear()
+        self.__subtitle_cache.clear()

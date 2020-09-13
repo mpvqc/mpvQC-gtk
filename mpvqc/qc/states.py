@@ -71,7 +71,9 @@ class State(ABC):
         return self.__has_changes
 
     def copy(self) -> 'State':
-        """Returns a copy with document, video and comments copied. Never copies a message and a message duration"""
+        """
+        Returns a copy with document, video and comments copied. Never copies a message and a message duration
+        """
 
         doc = self.__doc
         vid = self.__vid
@@ -87,7 +89,9 @@ class State(ABC):
         raise RuntimeError("State not allowed", self.__class__)
 
     def copy_with_message(self, message: Optional[str] = "", duration: Optional[Duration] = Duration.LONG) -> 'State':
-        """Returns a copy with document, video and comments copied"""
+        """
+        Returns a copy with document, video and comments copied
+        """
 
         doc = self.__doc
         vid = self.__vid
@@ -173,11 +177,17 @@ class State(ABC):
         )
 
     def on_comments_modified(self, t: Table) -> 'State':
-        """Called when the comments table was modified: added row, modified row or deleted row"""
+        """
+        Called when the comments table was modified: added row, modified row or deleted row
+        """
+
         return self._state_unsaved(comments=t.get_all_comments())
 
     def on_create_new_document(self, a: AppWindow, t: Table, _: MpvContainer) -> 'State':
-        """Called when the user presses the 'New' button"""
+        """
+        Called when the user presses the 'New' button
+        """
+
         if self.__has_changes:
             response = md.message_dialog_clear_unsaved_qc_document(parent=a)
             if response == 0:  # Clear comments
@@ -190,7 +200,10 @@ class State(ABC):
         return self._state_initial(message=sm.get_new_doc_m(), duration=Duration.SHORT)
 
     def on_save_pressed(self, a: AppWindow, t: Table, m: MpvContainer) -> 'State':
-        """Called when the user presses the 'Save' button"""
+        """
+        Called when the user presses the 'Save' button
+        """
+
         if self.__doc is None:
             return self.on_save_as_pressed(a, t, m)
 
@@ -203,7 +216,10 @@ class State(ABC):
                                  duration=Duration.SHORT)
 
     def on_save_as_pressed(self, a: AppWindow, t: Table, m: MpvContainer) -> 'State':
-        """Called when the user presses the 'Save As...' button"""
+        """
+        Called when the user presses the 'Save As...' button
+        """
+
         m.player.pause()
         doc = d.dialog_save_qc_document(self.__vid, a)
         comments = t.get_all_comments()
@@ -220,7 +236,10 @@ class State(ABC):
                                  message=sm.get_save_m(as_new_name=True))
 
     def on_write_auto_save(self, _: AppWindow, __: Table, m: MpvContainer) -> None:
-        """Auto saves the current state"""
+        """
+        Auto saves the current state
+        """
+
         if m.player.is_video_loaded():
             content = exporter.get_file_content(self.__vid, self.__comments or [])
             exporter.write_auto_save(video_path=self.__vid, file_content=content)
@@ -253,7 +272,10 @@ class State(ABC):
                 md.message_dialog_imported_files_are_not_valid(not_valid_files=invalid_docs, parent=a)
 
         def _handle_comments(comments: Tuple[Comment]) -> bool:
-            """Returns True if abort import, False else"""
+            """
+            Returns True if abort import, False else
+            """
+
             if t.get_all_comments():
                 response = md.message_dialog_what_to_do_with_existing_comments()
                 if response == 0:  # Keep comments
@@ -267,7 +289,10 @@ class State(ABC):
             return False
 
         def _handle_vids(vid: str) -> bool:
-            """Returns True, if video actually was opened"""
+            """
+            Returns True, if video actually was opened
+            """
+
             do_open = vid and (s.import_open_video_automatically
                                or Gtk.ResponseType.YES == md.message_dialog_video_found_ask_to_open(file=vid, parent=a))
             if do_open:
@@ -315,7 +340,9 @@ class State(ABC):
             imp_vid: Optional[str],
             imp_subs: Optional[List[str]]
     ) -> 'State':
-        """Delegates the import to the specific methods based on what was imported"""
+        """
+        Delegates the import to the specific methods based on what was imported
+        """
 
         docs, vid, subs = bool(imp_docs), bool(imp_vid), bool(imp_subs)
         message = sm.get_import_m(imp_docs, imp_vid, imp_subs)

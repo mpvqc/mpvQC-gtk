@@ -70,10 +70,6 @@ class State(ABC):
     def has_changes(self) -> bool:
         return self.__has_changes
 
-    @property
-    def comments(self):
-        return self.__comments
-
     def copy(self) -> 'State':
         """
         Returns a copy with document, video and comments copied.
@@ -101,10 +97,10 @@ class State(ABC):
             duration: Optional[Duration] = Duration.LONG
     ) -> 'State':
         """
-        Returns an initial state.
-        If a parameter is None, the parameter will not be copied.
-        If a parameter is a value, that value will be used.
-        If a parameter is not specified, that parameter will be copied from the current value.
+        Returns an initial state based on the current state.
+        If a parameter is None, the parameter will be set to None.
+        If a parameter is a value, that value will be set.
+        If a parameter is not specified, the current state's value will be copied into the new state.
         Message and duration will not be copied from the current values.
         """
 
@@ -124,10 +120,10 @@ class State(ABC):
             duration: Optional[Duration] = Duration.LONG
     ) -> 'State':
         """
-        Returns a saved state.
-        If a parameter is None, the parameter will not be copied.
-        If a parameter is a value, that value will be used.
-        If a parameter is not specified, that parameter will be copied from the current value.
+        Returns a saved state based on the current state.
+        If a parameter is None, the parameter will be set to None.
+        If a parameter is a value, that value will be set.
+        If a parameter is not specified, the current state's value will be copied into the new state.
         Message and duration will not be copied from the current values.
         """
 
@@ -148,10 +144,10 @@ class State(ABC):
             duration: Optional[Duration] = Duration.LONG
     ) -> 'State':
         """
-        Returns an unsaved state.
-        If a parameter is None, the parameter will not be copied.
-        If a parameter is a value, that value will be used.
-        If a parameter is not specified, that parameter will be copied from the current value.
+        Returns an unsaved state based on the current state.
+        If a parameter is None, the parameter will be set to None.
+        If a parameter is a value, that value will be set.
+        If a parameter is not specified, the current state's value will be copied into the new state.
         Message and duration will not be copied from the current values.
         """
 
@@ -164,9 +160,11 @@ class State(ABC):
         )
 
     def on_comments_modified(self, t: Table) -> 'State':
+        """Called when the comments table was modified: added row, modified row or deleted row"""
         return self._state_unsaved(comments=t.get_all_comments())
 
     def on_create_new_document(self, a: AppWindow, t: Table, _: MpvContainer) -> 'State':
+        """Called when the user presses the 'New' button"""
         if self.__has_changes:
             response = md.message_dialog_clear_unsaved_qc_document(parent=a)
             if response == 0:  # Clear comments
@@ -179,6 +177,7 @@ class State(ABC):
         return self._state_initial(message=sm.get_new_doc_m(), duration=Duration.SHORT)
 
     def on_save_pressed(self, a: AppWindow, t: Table, m: MpvContainer) -> 'State':
+        """Called when the user presses the 'Save' button"""
         if self.__doc is None:
             return self.on_save_as_pressed(a, t, m)
 
@@ -191,15 +190,16 @@ class State(ABC):
                                  duration=Duration.SHORT)
 
     def on_save_as_pressed(self, a: AppWindow, t: Table, m: MpvContainer) -> 'State':
+        """Called when the user presses the 'Save As...' button"""
         m.player.pause()
         doc = d.dialog_save_qc_document(self.__vid, a)
         comments = t.get_all_comments()
         r = hs.do_save(doc, self.__vid, comments)
 
-        get_settings().latest_paths_recent_files_add(doc)
-
         if r.abort:
             return self.copy()
+
+        get_settings().latest_paths_recent_files_add(doc)
 
         return self._state_saved(doc=r.doc_new,
                                  vid=r.vid_new,
@@ -221,6 +221,11 @@ class State(ABC):
             t: Table,
             m: MpvContainer
     ) -> 'State':
+        """
+        Called when the user imports something
+        (no matter if it's by d&d or just by selecting something in the file manager).
+        """
+
         if not docs and not vids and not subs:
             return self.copy()
 
@@ -297,6 +302,7 @@ class State(ABC):
             imp_vid: Optional[str],
             imp_subs: Optional[List[str]]
     ) -> 'State':
+        """Delegates the import to the specific methods based on what was imported"""
 
         docs, vid, subs = bool(imp_docs), bool(imp_vid), bool(imp_subs)
         message = sm.get_import_m(imp_docs, imp_vid, imp_subs)
@@ -322,38 +328,47 @@ class State(ABC):
 
     @abstractmethod
     def on_import_docs(self, message: str, docs: List[str], data: Data) -> 'State':
+        """Called when only documents were imported and possibly linked videos were not imported"""
         pass
 
     @abstractmethod
     def on_import_vid(self, message: str, video: str, data: Data) -> 'State':
+        """Called when only a video was imported"""
         pass
 
     @abstractmethod
     def on_import_subs(self, message: str, subtitles: List[str], data: Data) -> 'State':
+        """Called when only subtitles were imported"""
         pass
 
     @abstractmethod
     def on_import_docs_vid(self, message: str, docs: List[str], video: str, data: Data) -> 'State':
+        """
+        Called when either only documents were imported and the linked video was imported
+        or when documents and a video was opened via drag and drop.
+        """
         pass
 
     @abstractmethod
     def on_import_docs_subs(self, message: str, docs: List[str], subs: List[str], data: Data) -> 'State':
+        """
+        Called when only documents were imported and possibly linked videos were not imported
+        and when subtitles were imported, too.
+        """
         pass
 
     @abstractmethod
     def on_import_vid_subs(self, message: str, video: str, subtitles: List[str], data: Data) -> 'State':
+        """Called when videos and subtitles were imported by drag and drop"""
         pass
 
     @abstractmethod
     def on_import_docs_vids_subs(self, message: str, docs: List[str], vid: str, subs: List[str], data: Data) -> 'State':
+        """
+        Called when all three were imported via drag and drop
+        or when documents were imported as well as their linked video and subtitles as well.
+        """
         pass
-
-    def print_debug(self):
-        print("Class     :", self.__class__)
-        print("Document  :", self.__doc)
-        print("Video     :", self.__vid)
-        print("Comments  :", len(self.__comments))
-        print("        * :", self.has_changes)
 
 
 class __StateSubtitleImportDelegate(State, ABC):
@@ -393,7 +408,7 @@ class _StateInitial(__StateSubtitleImportDelegate):
         return self._state_unsaved(doc=None, message=message, comments=data.comments)
 
     def on_import_vid(self, message: str, video: str, data: Data) -> 'State':
-        if data.cur_vid_is_imported_vid:
+        if data.is_cur_vid_is_imported_vid:
             return self.copy()
         return self._state_initial(vid=video, message=message, comments=data.comments)
 
@@ -402,7 +417,7 @@ class _StateInitial(__StateSubtitleImportDelegate):
             # If video was linked in the document
             vid_linked_in_doc = data.is_new_vid_from_doc
             # If video was linked in the document and imported separately and both match
-            vid_linked_in_doc_equals_vid_separately = data.vid_from_docs_equals_vid_from_user
+            vid_linked_in_doc_equals_vid_separately = data.is_vid_from_docs_equals_vid_from_user
 
             if vid_linked_in_doc or vid_linked_in_doc_equals_vid_separately:
                 return self._state_saved(doc=data.doc_new, vid=video, message=message, comments=data.comments)
@@ -426,9 +441,9 @@ class _StateSaved(__StateSubtitleImportDelegate):
         return self._state_unsaved(doc=None, message=message, comments=data.comments)
 
     def on_import_vid(self, message: str, video: str, data: Data) -> 'State':
-        if data.cur_vid_is_imported_vid:
+        if data.is_cur_vid_is_imported_vid:
             return self.copy()
-        return self._state_unsaved(vid=video, message=message, comments=data.comments)
+        return self._state_unsaved(doc=None, vid=video, message=message, comments=data.comments)
 
     def on_import_docs_vid(self, message: str, docs: List[str], video: str, data: Data) -> 'State':
         return self._state_unsaved(doc=None, vid=video, message=message, comments=data.comments)
@@ -451,7 +466,7 @@ class _StateUnsaved(__StateSubtitleImportDelegate):
         return self._state_unsaved(doc=None, message=message, comments=data.comments)
 
     def on_import_vid(self, message: str, video: str, data: Data) -> 'State':
-        if data.cur_vid_is_imported_vid:
+        if data.is_cur_vid_is_imported_vid:
             return self.copy()
         return self._state_unsaved(doc=None, vid=video, message=message, comments=data.comments)
 

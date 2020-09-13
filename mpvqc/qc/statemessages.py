@@ -75,6 +75,7 @@ def get_import_m(documents: Optional[List[str]] = None,
 
 
 def get_save_m(as_new_name: bool = False):
+    """Returns a localized message to write the save message in the statusbar"""
     if as_new_name:
         return _("Saved document as new file")
     else:
@@ -82,4 +83,5 @@ def get_save_m(as_new_name: bool = False):
 
 
 def get_new_doc_m():
+    """Returns a localized message to write the 'new doc created' message in the statusbar"""
     return _("Created new document")

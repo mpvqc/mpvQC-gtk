@@ -22,8 +22,13 @@ from mpvqc.qc import Comment, exporter
 
 
 class HandleSaveResult(NamedTuple):
+    # True if abort save
     abort: bool = False
+
+    # The new document path
     doc_new: Optional[str] = None
+
+    # The new video path used in the save
     vid_new: Optional[str] = None
 
 

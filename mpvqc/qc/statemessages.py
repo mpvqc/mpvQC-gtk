@@ -24,7 +24,10 @@ from typing import Optional, List
 def get_import_m(documents: Optional[List[str]] = None,
                  video: Optional[str] = None,
                  subtitles: Optional[List[str]] = None) -> str:
-    """Returns a localized message to summarize the import in the statusbar"""
+    """
+    Returns a localized message to summarize the import in the statusbar
+    """
+
     docs, vid, subs = bool(documents), bool(video), bool(subtitles)
     l_docs = 0 if not docs else len(documents)
     l_subs = 0 if not subs else len(subtitles)
@@ -75,7 +78,10 @@ def get_import_m(documents: Optional[List[str]] = None,
 
 
 def get_save_m(as_new_name: bool = False):
-    """Returns a localized message to write the save message in the statusbar"""
+    """
+    Returns a localized message to write the save message in the statusbar
+    """
+
     if as_new_name:
         return _("Saved document as new file")
     else:
@@ -83,5 +89,8 @@ def get_save_m(as_new_name: bool = False):
 
 
 def get_new_doc_m():
-    """Returns a localized message to write the 'new doc created' message in the statusbar"""
+    """
+    Returns a localized message to write the 'new doc created' message in the statusbar
+    """
+
     return _("Created new document")

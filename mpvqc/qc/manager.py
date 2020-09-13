@@ -62,7 +62,9 @@ class QcManager(GObject.GObject):
         self.reset_auto_save()
 
     def on_table_content_modified(self, *_):
-        """Called after the table content changed"""
+        """
+        Called after the table content changed
+        """
 
         if not self.__during_state_change:
             # Filling the table during a state change causes this method (event) being fired
@@ -72,14 +74,18 @@ class QcManager(GObject.GObject):
             self.__after_state_change()
 
     def request_new_document(self):
-        """Called when the user presses the 'New' button"""
+        """
+        Called when the user presses the 'New' button
+        """
 
         self.__before_stage_change()
         self.__state = self.__state.on_create_new_document(self.__a, self.__t, self.__m)
         self.__after_state_change()
 
     def request_open_qc_documents(self, paths: Optional[List[str]] = None):
-        """Called when the user presses the 'Open' button and then selects the documents to import"""
+        """
+        Called when the user presses the 'Open' button and then selects the documents to import
+        """
 
         if paths is None:
             paths = dialogs.dialog_open_qc_files(self.__a)
@@ -89,7 +95,9 @@ class QcManager(GObject.GObject):
         self.__after_state_change()
 
     def request_open_video(self, vid=None):
-        """Called when the user presses the 'Open' button and then selects the videos to import"""
+        """
+        Called when the user presses the 'Open' button and then selects the videos to import
+        """
 
         if vid is None:
             vid = dialogs.dialog_open_video(self.__a)
@@ -100,7 +108,9 @@ class QcManager(GObject.GObject):
         self.__after_state_change()
 
     def request_open_subtitles(self):
-        """Called when the user presses the 'Open' button and then selects the subtitles to import"""
+        """
+        Called when the user presses the 'Open' button and then selects the subtitles to import
+        """
 
         subs = dialogs.dialog_open_subtitle_files(self.__a)
 
@@ -109,14 +119,18 @@ class QcManager(GObject.GObject):
         self.__after_state_change()
 
     def request_save_qc_document(self):
-        """Called when the user presses the 'Save' button"""
+        """
+        Called when the user presses the 'Save' button
+        """
 
         self.__before_stage_change()
         self.__state = self.__state.on_save_pressed(self.__a, self.__t, self.__m)
         self.__after_state_change()
 
     def request_save_qc_document_as(self):
-        """Called when the user presses the 'Save As...' button"""
+        """
+        Called when the user presses the 'Save As...' button
+        """
 
         self.__before_stage_change()
         self.__state = self.__state.on_save_as_pressed(self.__a, self.__t, self.__m)
@@ -154,10 +168,14 @@ class QcManager(GObject.GObject):
         self.__after_state_change()
 
     def reset_auto_save(self):
-        """Sets up/resets auto save timer"""
+        """
+        Sets up/resets auto save timer
+        """
 
         def __do_auto_save():
-            """Function which triggers auto save"""
+            """
+            Function which triggers auto save
+            """
 
             self.__state.on_write_auto_save(self.__a, self.__t, self.__m)
             return True
@@ -170,11 +188,16 @@ class QcManager(GObject.GObject):
             self.__auto_save_timer = GLib.timeout_add(s.auto_save_interval * 1000, __do_auto_save)
 
     def __before_stage_change(self):
-        """Requires to be called before any state change originated from a user action except table changes"""
+        """
+        Requires to be called before any state change originated from a user action except table changes
+        """
+
         self.__during_state_change = True
 
     def __after_state_change(self):
-        """Called after the state has changed"""
+        """
+        Called after the state has changed
+        """
 
         if not self.__state.has_changes:
             self.__state_last_saved = self.__state.copy()

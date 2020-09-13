@@ -61,32 +61,50 @@ class HandleImportResultData:
 
     @property
     def doc_new(self) -> Optional[str]:
-        """Returns the new recommended document path. Only not None if exactly one valid document was imported"""
+        """
+        Returns the new recommended document path. Only not None if exactly one valid document was imported
+        """
+
         return self.__doc_new
 
     @property
     def vid_new(self) -> Optional[str]:
-        """Returns the new video to open"""
+        """
+        Returns the new video to open
+        """
+
         return self.__vid_new
 
     @vid_new.setter
     def vid_new(self, value) -> None:
-        """Sets the new video to open"""
+        """
+        Sets the new video to open
+        """
+
         self.__vid_new = value
 
     @property
     def is_cur_vid_is_imported_vid(self) -> bool:
-        """Returns True if the current video equals or the currently imported and opened video"""
+        """
+        Returns True if the current video equals or the currently imported and opened video
+        """
+
         return self.__vid_new and self.__vid_cur and self.__vid_new == self.__vid_cur
 
     @property
     def is_new_vid_from_doc(self) -> bool:
-        """Returns True if user imports a document (with video path) and that video is the recommended video to open"""
+        """
+        Returns True if user imports a document (with video path) and that video is the recommended video to open
+        """
+
         return self.__vid_new_docs and not self.__vid_new_user and self.__vid_new_docs == self.__vid_new
 
     @property
     def is_vid_from_docs_equals_vid_from_user(self) -> bool:
-        """Returns True if user imports 1 document (with video) and 1 video (by d&d) and both videos are equal"""
+        """
+        Returns True if user imports 1 document (with video) and 1 video (by d&d) and both videos are equal
+        """
+
         return self.__vid_new_docs and self.__vid_new_user and self.__vid_new_user == self.__vid_new_docs
 
 

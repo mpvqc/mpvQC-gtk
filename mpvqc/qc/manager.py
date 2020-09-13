@@ -35,7 +35,7 @@ class QcManager(GObject.GObject):
 
     def __init__(self, window, video_widget, table_widget):
         """
-        The qc manager will take care of the state of the current video and qc documents.
+        The qc manager will take care of the state of the current video and documents.
 
         :param window: the application window
         :param video_widget: a reference to the video widget (not the player!)
@@ -66,18 +66,20 @@ class QcManager(GObject.GObject):
 
         if not self.__during_state_change:
             # Filling the table during a state change causes this method (event) being fired
+            # So we block it to avoid multiple state change events
+            self.__before_stage_change()
             self.__state = self.__state.on_comments_modified(self.__t)
             self.__after_state_change()
 
     def request_new_document(self):
-        """Invokes the corresponding action while also taking into account the current qc state"""
+        """Called when the user presses the 'New' button"""
 
         self.__before_stage_change()
         self.__state = self.__state.on_create_new_document(self.__a, self.__t, self.__m)
         self.__after_state_change()
 
     def request_open_qc_documents(self, paths: Optional[List[str]] = None):
-        """Invokes the corresponding action while also taking into account the current qc state"""
+        """Called when the user presses the 'Open' button and then selects the documents to import"""
 
         if paths is None:
             paths = dialogs.dialog_open_qc_files(self.__a)
@@ -87,7 +89,7 @@ class QcManager(GObject.GObject):
         self.__after_state_change()
 
     def request_open_video(self, vid=None):
-        """Invokes the corresponding action while also taking into account the current qc state"""
+        """Called when the user presses the 'Open' button and then selects the videos to import"""
 
         if vid is None:
             vid = dialogs.dialog_open_video(self.__a)
@@ -98,7 +100,7 @@ class QcManager(GObject.GObject):
         self.__after_state_change()
 
     def request_open_subtitles(self):
-        """Invokes the corresponding action while also taking into account the current qc state"""
+        """Called when the user presses the 'Open' button and then selects the subtitles to import"""
 
         subs = dialogs.dialog_open_subtitle_files(self.__a)
 
@@ -107,14 +109,14 @@ class QcManager(GObject.GObject):
         self.__after_state_change()
 
     def request_save_qc_document(self):
-        """Invokes the corresponding action while also taking into account the current qc state"""
+        """Called when the user presses the 'Save' button"""
 
         self.__before_stage_change()
         self.__state = self.__state.on_save_pressed(self.__a, self.__t, self.__m)
         self.__after_state_change()
 
     def request_save_qc_document_as(self):
-        """Invokes the corresponding action while also taking into account the current qc state"""
+        """Called when the user presses the 'Save As...' button"""
 
         self.__before_stage_change()
         self.__state = self.__state.on_save_as_pressed(self.__a, self.__t, self.__m)
@@ -140,7 +142,7 @@ class QcManager(GObject.GObject):
     def do_open_drag_and_drop_data(self, vids, docs, subs):
         """
         Opens the given videos, text documents and subtitle documents.
-        If a video is passed in, the passed in video will be preferred over videos found in qc documents.
+        If a video is passed in, the passed in video will be preferred over videos found in documents.
 
         :param vids: a list with paths pointing to video files
         :param docs: a list with paths pointing to qc documents files
@@ -168,6 +170,7 @@ class QcManager(GObject.GObject):
             self.__auto_save_timer = GLib.timeout_add(s.auto_save_interval * 1000, __do_auto_save)
 
     def __before_stage_change(self):
+        """Requires to be called before any state change originated from a user action except table changes"""
         self.__during_state_change = True
 
     def __after_state_change(self):
@@ -183,7 +186,6 @@ class QcManager(GObject.GObject):
                 self.__state = self.__state_last_saved
 
         s = self.__state
-        self.__state.print_debug()
 
         if s.message:
             self.emit(STATUSBAR_UPDATE, s.message, s.duration.value)

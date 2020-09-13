@@ -71,10 +71,7 @@ class State(ABC):
         return self.__has_changes
 
     def copy(self) -> 'State':
-        """
-        Returns a copy with document, video and comments copied.
-        Never copies a message and a message duration.
-        """
+        """Returns a copy with document, video and comments copied. Never copies a message and a message duration"""
 
         doc = self.__doc
         vid = self.__vid
@@ -86,6 +83,22 @@ class State(ABC):
             return self._state_saved(doc, vid, comments)
         if isinstance(self, _StateUnsaved):
             return self._state_unsaved(doc, vid, comments)
+
+        raise RuntimeError("State not allowed", self.__class__)
+
+    def copy_with_message(self, message: Optional[str] = "", duration: Optional[Duration] = Duration.LONG) -> 'State':
+        """Returns a copy with document, video and comments copied"""
+
+        doc = self.__doc
+        vid = self.__vid
+        comments = self.__comments
+
+        if isinstance(self, _StateInitial):
+            return self._state_initial(vid=vid, comments=comments, message=message, duration=duration)
+        if isinstance(self, _StateSaved):
+            return self._state_saved(doc, vid, comments, message=message, duration=duration)
+        if isinstance(self, _StateUnsaved):
+            return self._state_unsaved(doc, vid, comments, message=message, duration=duration)
 
         raise RuntimeError("State not allowed", self.__class__)
 
@@ -377,8 +390,8 @@ class __StateSubtitleImportDelegate(State, ABC):
     So we delegate these methods to the ones without subtitles.
     """
 
-    def on_import_subs(self, _: str, __: List[str], ___: hi.HandleImportResultData) -> 'State':
-        return self.copy()
+    def on_import_subs(self, message: str, __: List[str], ___: hi.HandleImportResultData) -> 'State':
+        return self.copy_with_message(message=message)
 
     def on_import_docs_subs(self, message: str, docs: List[str], _: List[str], data: Data) -> 'State':
         return self.on_import_docs(message, docs, data)

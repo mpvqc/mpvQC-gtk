@@ -18,7 +18,7 @@
 
 import re
 from abc import ABCMeta, abstractmethod
-from locale import gettext as _
+from gettext import gettext as _
 
 from mpvqc import get_settings
 

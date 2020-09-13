@@ -16,7 +16,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-from locale import gettext as _
+from gettext import gettext as _
 from os import path
 from pathlib import Path
 from typing import List, Tuple

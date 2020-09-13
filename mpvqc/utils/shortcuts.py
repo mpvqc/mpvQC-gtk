@@ -23,7 +23,7 @@
 """
 
 from collections import defaultdict
-from locale import gettext as _
+from gettext import gettext as _
 
 from gi.repository import Gtk
 

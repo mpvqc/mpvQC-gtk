@@ -288,7 +288,7 @@ msgstr "Sicherungen automatisch anlegen"
 
 #: data/ui/prefpageimexport.ui:858
 msgid "Backup interval"
-msgstr "Sicherungsinterval"
+msgstr "Sicherungsintervall"
 
 #: data/ui/prefpageimexport.ui:946 data/ui/window.ui:104
 msgid "Open"

@@ -16,9 +16,10 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
+import platform
 from gettext import gettext as _
 
-from gi.repository import Gtk, Gio
+from gi.repository import Gtk
 
 from mpvqc import get_settings, get_app_paths
 from mpvqc.ui.input import InputPopover
@@ -117,4 +118,13 @@ class PreferencePageExport(Gtk.ScrolledWindow):
 
     @Gtk.Template.Callback()
     def on_button_open_backup_directory_clicked(self, widget):
-        Gio.app_info_launch_default_for_uri(uri="file:///" + str(get_app_paths().dir_backup))
+        directory = str(get_app_paths().dir_backup)
+        plat = platform.system()
+
+        if plat == "Windows":
+            import os
+            os.startfile(directory)
+        else:
+            from gi.repository import Gio
+            # The following code should even work on Windows, but it doesn't
+            Gio.app_info_launch_default_for_uri(uri="file:///" + directory)

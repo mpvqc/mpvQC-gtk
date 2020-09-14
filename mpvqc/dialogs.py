@@ -52,11 +52,9 @@ def dialog_open_video(parent=None):
     :return: the chosen video or None if user aborts
     """
 
-    dialog = Gtk.FileChooserDialog(title=_("Choose a video file"),
-                                   parent=parent,
-                                   action=Gtk.FileChooserAction.OPEN)
-    dialog.add_buttons(Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL)
-    dialog.add_buttons(Gtk.STOCK_OPEN, Gtk.ResponseType.OK)
+    dialog = Gtk.FileChooserNative.new(title=_("Choose a video file"),
+                                       parent=parent,
+                                       action=Gtk.FileChooserAction.OPEN)
     dialog.add_filter(filter_video)
     dialog.set_select_multiple(False)
 
@@ -65,7 +63,7 @@ def dialog_open_video(parent=None):
         dialog.set_current_folder(latest_directory)
 
     video = None
-    if dialog.run() == Gtk.ResponseType.OK:
+    if dialog.run() == Gtk.ResponseType.ACCEPT:
         video = dialog.get_filename()
 
         get_settings().latest_paths_import_video_directory = str(path.dirname(video))
@@ -82,11 +80,9 @@ def dialog_open_subtitle_files(parent=None):
     :return: the qc document paths or None if user aborts
     """
 
-    dialog = Gtk.FileChooserDialog(title=_("Choose subtitle files"),
-                                   parent=parent,
-                                   action=Gtk.FileChooserAction.OPEN)
-    dialog.add_buttons(Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL)
-    dialog.add_buttons(Gtk.STOCK_OPEN, Gtk.ResponseType.OK)
+    dialog = Gtk.FileChooserNative.new(title=_("Choose subtitle files"),
+                                       parent=parent,
+                                       action=Gtk.FileChooserAction.OPEN)
     dialog.add_filter(filter_subtitles)
     dialog.set_select_multiple(True)
 
@@ -95,7 +91,7 @@ def dialog_open_subtitle_files(parent=None):
         dialog.set_current_folder(latest_directory)
 
     subtitles = None
-    if dialog.run() == Gtk.ResponseType.OK:
+    if dialog.run() == Gtk.ResponseType.ACCEPT:
         subtitles = dialog.get_filenames()
 
         if subtitles:
@@ -113,11 +109,9 @@ def dialog_open_qc_files(parent=None):
     :return: the qc document paths or None if user aborts
     """
 
-    dialog = Gtk.FileChooserDialog(title=_("Choose documents"),
-                                   parent=parent,
-                                   action=Gtk.FileChooserAction.OPEN)
-    dialog.add_buttons(Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL)
-    dialog.add_buttons(Gtk.STOCK_OPEN, Gtk.ResponseType.OK)
+    dialog = Gtk.FileChooserNative.new(title=_("Choose documents"),
+                                       parent=parent,
+                                       action=Gtk.FileChooserAction.OPEN)
     dialog.add_filter(filter_qc)
     dialog.set_select_multiple(True)
 
@@ -126,7 +120,7 @@ def dialog_open_qc_files(parent=None):
         dialog.set_current_folder(latest_directory)
 
     qc_documents = None
-    if dialog.run() == Gtk.ResponseType.OK:
+    if dialog.run() == Gtk.ResponseType.ACCEPT:
         qc_documents = dialog.get_filenames()
 
         if qc_documents:
@@ -145,11 +139,9 @@ def dialog_save_qc_document(video_file, parent=None):
     :return: the file path to save under or None if user aborts
     """
 
-    dialog = Gtk.FileChooserDialog(title=_("Choose a file name"),
-                                   parent=parent,
-                                   action=Gtk.FileChooserAction.SAVE)
-    dialog.add_buttons(Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL)
-    dialog.add_buttons(Gtk.STOCK_SAVE, Gtk.ResponseType.ACCEPT)
+    dialog = Gtk.FileChooserNative.new(title=_("Choose a file name"),
+                                       parent=parent,
+                                       action=Gtk.FileChooserAction.SAVE)
     dialog.add_filter(filter_qc)
     dialog.set_current_name(generate_file_name_proposal(video_file))
     dialog.set_select_multiple(False)

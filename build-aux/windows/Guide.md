@@ -16,7 +16,7 @@
     mingw-w64-x86_64-mpv
     mingw-w64-x86_64-pkg-config
     mingw-w64-x86_64-python-gobject
-    mingw-w64-x86_64-python-pyopengl
+    mingw-w64-x86_64-glfw
     ```
 1. Clone mpvQC-gtk into `C:\msys64\home\<your username>` and `cd` into it
 

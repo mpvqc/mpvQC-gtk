@@ -21,9 +21,34 @@
 DIR_PKGDATA = "@DIR_PKGDATA@"
 DIR_LOCALE = "@DIR_LOCALE@"
 
-if __name__ == "__main__":
+
+def setup_internationalization():
+    import platform
     import gettext
     import locale
+
+    try:
+        locale.setlocale(locale.LC_ALL, '')
+    except locale.Error as error:
+        print(error, file=sys.stderr)
+
+    if platform.system() == "Windows":
+        import ctypes
+        import os
+        windll = ctypes.windll.kernel32
+        lang = locale.windows_locale[windll.GetUserDefaultUILanguage()]
+        os.environ['LANGUAGE'] = lang
+    else:
+        # Only available on Linux
+        # On Windows all ui files will be translated manually by our magic 'template.py' ;)
+        locale.bindtextdomain("mpvQC", DIR_LOCALE)
+        locale.textdomain("mpvQC")
+
+    gettext.bindtextdomain("mpvQC", DIR_LOCALE)
+    gettext.textdomain("mpvQC")
+
+
+if __name__ == "__main__":
     import os
     import signal
     import sys
@@ -36,12 +61,7 @@ if __name__ == "__main__":
     sys.path.insert(1, DIR_PKGDATA)
     signal.signal(signal.SIGINT, signal.SIG_DFL)
 
-    # Sets application internationalization
-    locale.bindtextdomain("mpvQC", DIR_LOCALE)
-    locale.textdomain("mpvQC")
-
-    gettext.bindtextdomain("mpvQC", DIR_LOCALE)
-    gettext.textdomain("mpvQC")
+    setup_internationalization()
 
     resource = Gio.Resource.load(os.path.join(DIR_PKGDATA, "mpvQC.gresource"))
     resource._register()

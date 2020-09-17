@@ -20,7 +20,7 @@ from gettext import gettext as _
 
 from gi.repository import Gtk, Gdk
 
-from mpvqc import get_settings, get_app, template_custom
+from mpvqc import get_settings, get_app, template
 from mpvqc.qc.manager import QcManager
 from mpvqc.ui.about import AboutDialog
 from mpvqc.ui.contentmainmpv import ContentMainMpv
@@ -37,27 +37,27 @@ from mpvqc.utils.shortcuts import ShortcutWindow
 from mpvqc.utils.signals import FILENAME_NO_EXT, PATH, STATUSBAR_UPDATE, QC_STATE_CHANGED
 
 
-@template_custom.TemplateTrans(resource_path='/data/ui/window.ui')
+@template.TemplateTrans(resource_path='/data/ui/window.ui')
 class MpvqcWindow(Gtk.ApplicationWindow):
     __gtype_name__ = 'MpvqcWindow'
 
-    stack_content = Gtk.Template.Child()  # Stack for content
-    stack_header_bar = Gtk.Template.Child()  # Stack for header bar
+    stack_content = template.TemplateTrans.Child()  # Stack for content
+    stack_header_bar = template.TemplateTrans.Child()  # Stack for header bar
 
-    header_bar_main = Gtk.Template.Child()  # Header bar for main view
-    header_bar_preferences = Gtk.Template.Child()  # Header bar for preferences view
+    header_bar_main = template.TemplateTrans.Child()  # Header bar for main view
+    header_bar_preferences = template.TemplateTrans.Child()  # Header bar for preferences view
 
-    content_main = Gtk.Template.Child()  # Content for main view
-    content_preferences = Gtk.Template.Child()  # Stack and content for preferences view
+    content_main = template.TemplateTrans.Child()  # Content for main view
+    content_preferences = template.TemplateTrans.Child()  # Stack and content for preferences view
 
-    preferences_stack_switcher = Gtk.Template.Child()
+    preferences_stack_switcher = template.TemplateTrans.Child()
 
-    content_main_pane = Gtk.Template.Child()  # Paned widget for video and table
+    content_main_pane = template.TemplateTrans.Child()  # Paned widget for video and table
 
-    button_open = Gtk.Template.Child()
-    button_preferences_restore = Gtk.Template.Child()
+    button_open = template.TemplateTrans.Child()
+    button_preferences_restore = template.TemplateTrans.Child()
 
-    button_dark_theme = Gtk.Template.Child()
+    button_dark_theme = template.TemplateTrans.Child()
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -156,24 +156,24 @@ class MpvqcWindow(Gtk.ApplicationWindow):
             nickname = s.export_qc_document_nick
         self.__status_bar.update_statusbar_message(None, _("Welcome back {}!").format(nickname))
 
-    @template_custom.TemplateTrans.Callback()
+    @template.TemplateTrans.Callback()
     def on_button_new_clicked(self, *widget):
         self.__qc_manager.request_new_document()
 
-    @template_custom.TemplateTrans.Callback()
+    @template.TemplateTrans.Callback()
     def on_button_open_clicked(self, widget):
         self.__popover_open.set_relative_to(self.button_open)
         self.__popover_open.popup()
 
-    @template_custom.TemplateTrans.Callback()
+    @template.TemplateTrans.Callback()
     def on_button_save_clicked(self, *widget):
         self.__qc_manager.request_save_qc_document()
 
-    @template_custom.TemplateTrans.Callback()
+    @template.TemplateTrans.Callback()
     def on_button_save_as_clicked(self, *widget):
         self.__qc_manager.request_save_qc_document_as()
 
-    @template_custom.TemplateTrans.Callback()
+    @template.TemplateTrans.Callback()
     def on_button_dark_theme_toggle_clicked(self, *data):
         s = get_settings()
         s.prefer_dark_theme = not s.prefer_dark_theme
@@ -181,7 +181,7 @@ class MpvqcWindow(Gtk.ApplicationWindow):
         self.button_dark_theme.set_property("active", s.prefer_dark_theme)
         Gtk.Settings.get_default().set_property("gtk-application-prefer-dark-theme", s.prefer_dark_theme)
 
-    @template_custom.TemplateTrans.Callback()
+    @template.TemplateTrans.Callback()
     def on_button_preferences_back_clicked(self, widget):
         self.stack_header_bar.set_visible_child(self.header_bar_main)
         self.stack_content.set_visible_child(self.content_main)
@@ -191,11 +191,11 @@ class MpvqcWindow(Gtk.ApplicationWindow):
         self.__update_subtitle()
         self.__table_widget.grab_focus()
 
-    @template_custom.TemplateTrans.Callback()
+    @template.TemplateTrans.Callback()
     def on_button_preferences_restore_default_clicked(self, widget, data=None):
         self.content_preferences.get_visible_child().on_restore_default_clicked()
 
-    @template_custom.TemplateTrans.Callback()
+    @template.TemplateTrans.Callback()
     def on_menu_shortcuts_clicked(self, *widget):
         self.__video_widget.player.pause()
         overlay = ShortcutWindow()
@@ -203,13 +203,13 @@ class MpvqcWindow(Gtk.ApplicationWindow):
         overlay.set_position(Gtk.WindowPosition.CENTER_ALWAYS)
         overlay.show_all()
 
-    @template_custom.TemplateTrans.Callback()
+    @template.TemplateTrans.Callback()
     def on_menu_preferences_clicked(self, *widget):
         self.__video_widget.player.pause()
         self.stack_header_bar.set_visible_child(self.header_bar_preferences)
         self.stack_content.set_visible_child(self.content_preferences)
 
-    @template_custom.TemplateTrans.Callback()
+    @template.TemplateTrans.Callback()
     def on_menu_about_clicked(self, *widget):
         self.__video_widget.player.pause()
         about = AboutDialog(application=self.get_application())
@@ -217,7 +217,7 @@ class MpvqcWindow(Gtk.ApplicationWindow):
         about.run()
         about.destroy()
 
-    @template_custom.TemplateTrans.Callback()
+    @template.TemplateTrans.Callback()
     def on_key_press_event(self, widget, event):
         no_mod, ctrl, alt, shift = keyboard.extract_modifiers(event.state)
         key = event.keyval

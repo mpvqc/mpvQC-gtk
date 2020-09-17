@@ -18,11 +18,11 @@
 
 from gi.repository import Gtk, GObject
 
-from mpvqc import get_settings, template_custom
+from mpvqc import get_settings, template
 from mpvqc.utils.signals import APPLY
 
 
-@template_custom.TemplateTrans(resource_path='/data/ui/popovertypeedit.ui')
+@template.TemplateTrans(resource_path='/data/ui/popovertypeedit.ui')
 class PopoverTypeEdit(Gtk.Popover):
     __gtype_name__ = 'PopoverTypeEdit'
 
@@ -30,7 +30,7 @@ class PopoverTypeEdit(Gtk.Popover):
         APPLY: (GObject.SignalFlags.RUN_FIRST, None, (str,))
     }
 
-    box = Gtk.Template.Child()
+    box = template.TemplateTrans.Child()
 
     def __init__(self, current_text, **properties):
         super().__init__(**properties)

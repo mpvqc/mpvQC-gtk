@@ -18,11 +18,11 @@
 
 from gi.repository import Gtk, GObject, Gdk
 
-from mpvqc import template_custom
+from mpvqc import template
 from mpvqc.utils.signals import APPLY
 
 
-@template_custom.TemplateTrans(resource_path='/data/ui/input.ui')
+@template.TemplateTrans(resource_path='/data/ui/input.ui')
 class InputPopover(Gtk.Popover):
     __gtype_name__ = 'InputPopover'
 
@@ -30,13 +30,13 @@ class InputPopover(Gtk.Popover):
         APPLY: (GObject.SignalFlags.RUN_FIRST, None, (str,))
     }
 
-    label_input = Gtk.Template.Child()
-    label_message = Gtk.Template.Child()
+    label_input = template.TemplateTrans.Child()
+    label_message = template.TemplateTrans.Child()
 
-    entry = Gtk.Template.Child()
-    button = Gtk.Template.Child()
+    entry = template.TemplateTrans.Child()
+    button = template.TemplateTrans.Child()
 
-    revealer = Gtk.Template.Child()
+    revealer = template.TemplateTrans.Child()
 
     def __init__(self, label, validator, current_text="", placeholder="", **kwargs):
         """
@@ -61,7 +61,7 @@ class InputPopover(Gtk.Popover):
         self.__update_message(*self.__validator.validate(current_text))
         self.revealer.show()
 
-    @template_custom.TemplateTrans.Callback()
+    @template.TemplateTrans.Callback()
     def on_button_clicked(self, widget=None, *data):
         """
         Invoked, when apply clicked or enter pressed.
@@ -73,7 +73,7 @@ class InputPopover(Gtk.Popover):
         self.emit(APPLY, self.entry.get_text())
         self.popdown()
 
-    @template_custom.TemplateTrans.Callback()
+    @template.TemplateTrans.Callback()
     def on_entry_text_changed(self, widget, *data):
         """
         Called whenever the text of the entry changes.
@@ -84,7 +84,7 @@ class InputPopover(Gtk.Popover):
 
         self.__update_message(*self.__validator.validate(widget.get_text()))
 
-    @template_custom.TemplateTrans.Callback()
+    @template.TemplateTrans.Callback()
     def on_entry_key_press_event(self, widget, event):
         """
         Listen to 'Enter' presses.

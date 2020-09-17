@@ -21,39 +21,39 @@ from gettext import gettext as _
 
 from gi.repository import Gtk
 
-from mpvqc import get_settings, get_app_paths, template_custom
+from mpvqc import get_settings, get_app_paths, template
 from mpvqc.ui.input import InputPopover
 from mpvqc.utils import list_header_func, list_header_nested_func
 from mpvqc.utils.signals import APPLY
 from mpvqc.utils.validators import NicknameValidator
 
 
-@template_custom.TemplateTrans(resource_path='/data/ui/prefpageimexport.ui')
+@template.TemplateTrans(resource_path='/data/ui/prefpageimexport.ui')
 class PreferencePageExport(Gtk.ScrolledWindow):
     __gtype_name__ = 'PreferencePageExport'
 
-    list_export_settings = Gtk.Template.Child()
-    list_export_settings_header = Gtk.Template.Child()
-    list_auto_save_interval = Gtk.Template.Child()
-    list_open_back_directory = Gtk.Template.Child()
+    list_export_settings = template.TemplateTrans.Child()
+    list_export_settings_header = template.TemplateTrans.Child()
+    list_auto_save_interval = template.TemplateTrans.Child()
+    list_open_back_directory = template.TemplateTrans.Child()
 
-    row_nick = Gtk.Template.Child()
-    label_nick = Gtk.Template.Child()
-    label_backup_directory_path: Gtk.Label = Gtk.Template.Child()
+    row_nick = template.TemplateTrans.Child()
+    label_nick = template.TemplateTrans.Child()
+    label_backup_directory_path: Gtk.Label = template.TemplateTrans.Child()
 
-    revealer_header_section: Gtk.Revealer = Gtk.Template.Child()
-    revealer_auto_save: Gtk.Revealer = Gtk.Template.Child()
+    revealer_header_section: Gtk.Revealer = template.TemplateTrans.Child()
+    revealer_auto_save: Gtk.Revealer = template.TemplateTrans.Child()
 
-    switch_append_nick: Gtk.Switch = Gtk.Template.Child()
-    switch_write_header: Gtk.Switch = Gtk.Template.Child()
-    switch_write_date: Gtk.Switch = Gtk.Template.Child()
-    switch_write_generator: Gtk.Switch = Gtk.Template.Child()
-    switch_write_nick: Gtk.Switch = Gtk.Template.Child()
-    switch_write_path: Gtk.Switch = Gtk.Template.Child()
-    switch_load_video_automatically: Gtk.Switch = Gtk.Template.Child()
-    switch_auto_save: Gtk.Switch = Gtk.Template.Child()
+    switch_append_nick: Gtk.Switch = template.TemplateTrans.Child()
+    switch_write_header: Gtk.Switch = template.TemplateTrans.Child()
+    switch_write_date: Gtk.Switch = template.TemplateTrans.Child()
+    switch_write_generator: Gtk.Switch = template.TemplateTrans.Child()
+    switch_write_nick: Gtk.Switch = template.TemplateTrans.Child()
+    switch_write_path: Gtk.Switch = template.TemplateTrans.Child()
+    switch_load_video_automatically: Gtk.Switch = template.TemplateTrans.Child()
+    switch_auto_save: Gtk.Switch = template.TemplateTrans.Child()
 
-    spin_btn_auto_save_interval: Gtk.SpinButton = Gtk.Template.Child()
+    spin_btn_auto_save_interval: Gtk.SpinButton = template.TemplateTrans.Child()
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -98,7 +98,7 @@ class PreferencePageExport(Gtk.ScrolledWindow):
         s.reset_auto_save_enabled()
         s.reset_auto_save_interval()
 
-    @template_custom.TemplateTrans.Callback()
+    @template.TemplateTrans.Callback()
     def on_export_row_activated(self, widget, row, *data):
         """
         Handles the editing of the nick.
@@ -116,7 +116,7 @@ class PreferencePageExport(Gtk.ScrolledWindow):
             pop.connect(APPLY, __apply)
             pop.popup()
 
-    @template_custom.TemplateTrans.Callback()
+    @template.TemplateTrans.Callback()
     def on_button_open_backup_directory_clicked(self, widget):
         directory = str(get_app_paths().dir_backup)
         plat = platform.system()

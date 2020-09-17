@@ -126,7 +126,7 @@ def write_auto_save(video_path, file_content):
     zip_path = path.join(get_app_paths().dir_backup, zip_name)
     zip_file = ZipFile(zip_path, "a" if path.isfile(zip_path) else "w", compression=ZIP_DEFLATED)
 
-    file_name = "{}-{}.txt".format(today.replace(":", "-").replace(" ", "_"), path.splitext(path.basename(video_path)))
+    file_name = "{}-{}.txt".format(today.replace(":", "-").replace(" ", "_"), path.splitext(path.basename(video_path))[0])
 
     try:
         zip_file.writestr(file_name, file_content)

@@ -24,18 +24,14 @@ from gettext import gettext as _
 from gi._gtktemplate import register_template, validate_resource_path, Template
 from gi.repository import GLib, Gio
 
-_PERFORM_MANUAL_TRANSLATION = bool(platform.system() == "Windows")
+_PERFORM_MANUAL_TRANSLATION = platform.system() == "Windows"
 
 
 class TemplateTrans(Template):
 
-    def __new__(cls, *args, **kwargs):
-        if not _PERFORM_MANUAL_TRANSLATION:
-            from gi.repository import Gtk
-            return Gtk.Template.__new__(cls)
-        return object.__new__(cls)
-
     def __call__(self, cls):
+        if not _PERFORM_MANUAL_TRANSLATION:
+            super(TemplateTrans, self).__call__(cls)
         if self.resource_path is not None:
             validate_resource_path(self.resource_path)
             element = Gio.resources_lookup_data(self.resource_path, Gio.ResourceLookupFlags.NONE) \

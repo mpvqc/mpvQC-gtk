@@ -18,15 +18,15 @@
 
 from gi.repository import Gtk, GdkPixbuf
 
-from mpvqc import get_app_metadata
+from mpvqc import get_app_metadata, template
 
 
-@Gtk.Template(resource_path='/data/ui/about.ui')
+@template.TemplateTrans(resource_path='/data/ui/about.ui')
 class AboutDialog(Gtk.AboutDialog):
     __gtype_name__ = 'AboutDialog'
 
-    label_version_ffmpeg: Gtk.Label = Gtk.Template.Child()
-    label_version_mpv: Gtk.Label = Gtk.Template.Child()
+    label_version_ffmpeg: Gtk.Label = template.TemplateTrans.Child()
+    label_version_mpv: Gtk.Label = template.TemplateTrans.Child()
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)

@@ -18,11 +18,11 @@
 
 from gi.repository import Gtk, GObject, Gdk
 
-from mpvqc import utils
+from mpvqc import utils, template
 from mpvqc.utils.signals import APPLY
 
 
-@Gtk.Template(resource_path='/data/ui/popovertimeedit.ui')
+@template.TemplateTrans(resource_path='/data/ui/popovertimeedit.ui')
 class PopoverTimeEdit(Gtk.Popover):
     __gtype_name__ = 'PopoverTimeEdit'
 
@@ -30,15 +30,15 @@ class PopoverTimeEdit(Gtk.Popover):
         APPLY: (GObject.SignalFlags.RUN_FIRST, None, (str,))
     }
 
-    box = Gtk.Template.Child()
-    label = Gtk.Template.Child()
+    box = template.TemplateTrans.Child()
+    label = template.TemplateTrans.Child()
 
-    button_plus = Gtk.Template.Child()
-    button_minus = Gtk.Template.Child()
-    button_apply = Gtk.Template.Child()
+    button_plus = template.TemplateTrans.Child()
+    button_minus = template.TemplateTrans.Child()
+    button_apply = template.TemplateTrans.Child()
 
-    scale = Gtk.Template.Child()
-    adjustment = Gtk.Template.Child()
+    scale = template.TemplateTrans.Child()
+    adjustment = template.TemplateTrans.Child()
 
     def __init__(self, table_widget, video_widget, current_time_str, **properties):
         super().__init__(**properties)
@@ -64,26 +64,26 @@ class PopoverTimeEdit(Gtk.Popover):
         self.label.set_text(cur_value_str)
         self.adjustment.set_value(cur_value_int)
 
-    @Gtk.Template.Callback()
+    @template.TemplateTrans.Callback()
     def on_button_plus_clicked(self, widget=None, data=None):
         self.adjustment.set_value(self.adjustment.get_value() + 1)
 
-    @Gtk.Template.Callback()
+    @template.TemplateTrans.Callback()
     def on_button_minus_clicked(self, widget=None, data=None):
         self.adjustment.set_value(self.adjustment.get_value() - 1)
 
-    @Gtk.Template.Callback()
+    @template.TemplateTrans.Callback()
     def on_button_apply_clicked(self, widget=None, data=None):
         self.emit(APPLY, self.label.get_text())
         self.popdown()
 
-    @Gtk.Template.Callback()
+    @template.TemplateTrans.Callback()
     def on_adjustment_value_changed(self, widget):
         formatted = utils.seconds_float_to_formatted_string_hours(widget.get_value(), short=False)
         self.label.set_text(formatted)
         self.__video_widget.player.position_jump(formatted)
 
-    @Gtk.Template.Callback()
+    @template.TemplateTrans.Callback()
     def on_key_press_event(self, widget, event):
         key = event.keyval
 
@@ -97,7 +97,7 @@ class PopoverTimeEdit(Gtk.Popover):
             self.on_button_apply_clicked()
             return True
 
-    @Gtk.Template.Callback()
+    @template.TemplateTrans.Callback()
     def on_scroll_event(self, widget, event):
         direction = event.direction
 

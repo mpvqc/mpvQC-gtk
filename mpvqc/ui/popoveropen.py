@@ -16,28 +16,28 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-from locale import gettext as _
+from gettext import gettext as _
 from os import path
 
 from gi.repository import Gtk, Gdk, Pango
 
-from mpvqc import get_settings
+from mpvqc import get_settings, template
 from mpvqc.utils import list_header_func, get_markup
 from mpvqc.utils.draganddrop import is_qc_document
 
 _RECENT_FILES_ROW_HEIGHT = 50
 
 
-@Gtk.Template(resource_path='/data/ui/popoveropen.ui')
+@template.TemplateTrans(resource_path='/data/ui/popoveropen.ui')
 class PopoverOpen(Gtk.Popover):
     __gtype_name__ = 'PopoverOpen'
 
-    button_subtitle = Gtk.Template.Child()
-    button_clear_recent_files = Gtk.Template.Child()
+    button_subtitle = template.TemplateTrans.Child()
+    button_clear_recent_files = template.TemplateTrans.Child()
 
-    revealer_recent_files = Gtk.Template.Child()
-    search_entry = Gtk.Template.Child()
-    scrolled_container = Gtk.Template.Child()
+    revealer_recent_files = template.TemplateTrans.Child()
+    search_entry = template.TemplateTrans.Child()
+    scrolled_container = template.TemplateTrans.Child()
 
     def __init__(self, parent, qc_manager, **kwargs):
         super().__init__(**kwargs)
@@ -64,27 +64,27 @@ class PopoverOpen(Gtk.Popover):
         self.__update_recent_files_list()
         super(PopoverOpen, self).popup()
 
-    @Gtk.Template.Callback()
+    @template.TemplateTrans.Callback()
     def on_button_qc_clicked(self, widget, *data):
         self.popdown()
         self.__qc_manager.request_open_qc_documents()
 
-    @Gtk.Template.Callback()
+    @template.TemplateTrans.Callback()
     def on_button_video_clicked(self, widget, *data):
         self.popdown()
         self.__qc_manager.request_open_video()
 
-    @Gtk.Template.Callback()
+    @template.TemplateTrans.Callback()
     def on_button_subtitle_clicked(self, widget, *data):
         self.popdown()
         self.__qc_manager.request_open_subtitles()
 
-    @Gtk.Template.Callback()
+    @template.TemplateTrans.Callback()
     def on_recent_files_search_changed(self, search_entry, *data):
         self.__current_search_query = search_entry.get_text()
         self.__list_recent_files.invalidate_filter()
 
-    @Gtk.Template.Callback()
+    @template.TemplateTrans.Callback()
     def on_button_clear_recent_files_clicked(self, widget, *data):
         self.revealer_recent_files.set_reveal_child(False)
         get_settings().reset_latest_paths_recent_files()

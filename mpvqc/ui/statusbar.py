@@ -16,31 +16,31 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-from locale import gettext as _
+from gettext import gettext as _
 
 from gi.repository import Gtk, GLib
 
-from mpvqc import get_settings
+from mpvqc import get_settings, template
 from mpvqc.ui.messagestack import MessageStack
 from mpvqc.utils import StatusbarMessageDuration, seconds_float_to_formatted_string_hours
 from mpvqc.utils.signals import TIME_POS, TIME_REMAINING, PERCENT_POS, DURATION
 
 
-@Gtk.Template(resource_path='/data/ui/statusbar.ui')
+@template.TemplateTrans(resource_path='/data/ui/statusbar.ui')
 class StatusBar(Gtk.Box):
     __gtype_name__ = 'StatusBar'
 
-    label_line = Gtk.Template.Child()
-    label_button_time = Gtk.Template.Child()
+    label_line = template.TemplateTrans.Child()
+    label_button_time = template.TemplateTrans.Child()
 
-    popover_time = Gtk.Template.Child()
+    popover_time = template.TemplateTrans.Child()
 
-    time_menu_default = Gtk.Template.Child()
-    time_menu_current = Gtk.Template.Child()
-    time_menu_remaining = Gtk.Template.Child()
-    time_menu_no = Gtk.Template.Child()
+    time_menu_default = template.TemplateTrans.Child()
+    time_menu_current = template.TemplateTrans.Child()
+    time_menu_remaining = template.TemplateTrans.Child()
+    time_menu_no = template.TemplateTrans.Child()
 
-    time_menu_percentage = Gtk.Template.Child()
+    time_menu_percentage = template.TemplateTrans.Child()
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -85,7 +85,7 @@ class StatusBar(Gtk.Box):
         self.connect("destroy", self.__on_destroy)
         self.__time_update_timer = None
 
-    @Gtk.Template.Callback()
+    @template.TemplateTrans.Callback()
     def on_label_button_time_clicked(self, *data):
         self.popover_time.set_relative_to(self.label_button_time)
         self.popover_time.popup()

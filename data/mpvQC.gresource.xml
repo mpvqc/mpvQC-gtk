@@ -3,7 +3,9 @@
     <gresource prefix="/data">
         <file>config/input.conf</file>
         <file>config/mpv.conf</file>
-        <file>css/style.css</file>
+        <file>css/style-general.css</file>
+        <file>css/style-linux.css</file>
+        <file>css/style-windows.css</file>
         <file>ui/about.ui</file>
         <file>ui/contentmainmpv.ui</file>
         <file>ui/contentmaintable.ui</file>

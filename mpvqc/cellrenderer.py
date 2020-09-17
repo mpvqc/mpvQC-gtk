@@ -15,7 +15,7 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-
+import platform
 from gi.repository import Gtk, Pango, Gdk
 
 from mpvqc import get_settings
@@ -35,7 +35,9 @@ class CellRendererTime(Gtk.CellRendererText):
     def __init__(self, **properties):
         super().__init__(**properties)
         self.set_padding(*_PADDING)
-        self.set_property("family", "monospace")
+
+        if platform.system() != "Windows":
+            self.set_property("family", "monospace")
 
 
 class CellRendererType(Gtk.CellRendererText):

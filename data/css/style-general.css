@@ -1,0 +1,12 @@
+.video-area {
+    background: black;
+}
+
+.statusbar-button {
+    border-radius: 0;
+    border: none;
+}
+
+#SearchFrame {
+    background-color: @theme_bg_color;
+}

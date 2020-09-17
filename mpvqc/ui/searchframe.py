@@ -16,27 +16,28 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-from locale import gettext as _
+from gettext import gettext as _
 
 from gi.repository import Gtk, Gdk, GLib
 
+from mpvqc import template
 from mpvqc.ui.contentmaintable import get_comment_markup_mode_default, get_comment_markup_mode_search
 from mpvqc.utils import keyboard, validate_text_insertion, get_pattern
 
 
-@Gtk.Template(resource_path='/data/ui/searchframe.ui')
+@template.TemplateTrans(resource_path='/data/ui/searchframe.ui')
 class SearchFrame(Gtk.Frame):
     __gtype_name__ = 'SearchFrame'
 
-    revealer: Gtk.Revealer = Gtk.Template.Child()
-    revealer_label_result: Gtk.Revealer = Gtk.Template.Child()
+    revealer: Gtk.Revealer = template.TemplateTrans.Child()
+    revealer_label_result: Gtk.Revealer = template.TemplateTrans.Child()
 
-    entry_search = Gtk.Template.Child()
+    entry_search = template.TemplateTrans.Child()
 
-    button_up = Gtk.Template.Child()
-    button_down = Gtk.Template.Child()
+    button_up = template.TemplateTrans.Child()
+    button_down = template.TemplateTrans.Child()
 
-    label_result = Gtk.Template.Child()
+    label_result = template.TemplateTrans.Child()
 
     def __init__(self, table_widget, **kwargs):
         super().__init__(**kwargs)
@@ -62,7 +63,7 @@ class SearchFrame(Gtk.Frame):
     def do_show_all(self):
         self.revealer.hide()
 
-    @Gtk.Template.Callback()
+    @template.TemplateTrans.Callback()
     def on_key_press_event(self, widget, event):
         no_mod, ctrl, alt, shift = keyboard.extract_modifiers(event.state)
         key = event.keyval
@@ -82,12 +83,12 @@ class SearchFrame(Gtk.Frame):
         elif self.__search_active and no_mod and (key == Gdk.KEY_Down or key == Gdk.KEY_Up):
             return True
 
-    @Gtk.Template.Callback()
+    @template.TemplateTrans.Callback()
     def on_search_changed(self, search_entry, *data):
         self.__table_widget.queue_draw()
         self.on_next_match(None)
 
-    @Gtk.Template.Callback()
+    @template.TemplateTrans.Callback()
     def on_previous_match(self, button, *data):
         """
         Either button up, CTRL + SHIFT + G or SHIFT + Enter is pressed.
@@ -95,7 +96,7 @@ class SearchFrame(Gtk.Frame):
 
         self.__highlight_next(top_to_bottom=False)
 
-    @Gtk.Template.Callback()
+    @template.TemplateTrans.Callback()
     def on_next_match(self, button, *data):
         """
         Either button down, CTRL + G or Enter is pressed.
@@ -103,7 +104,7 @@ class SearchFrame(Gtk.Frame):
 
         self.__highlight_next(top_to_bottom=True)
 
-    @Gtk.Template.Callback()
+    @template.TemplateTrans.Callback()
     def on_close_pressed(self, *_):
         self.__hide_search()
 

@@ -4,7 +4,8 @@
 
 ## Installation
 
-Currently this application only runs on Linux, but we have plans for a Windows version.
+Currently this application runs on Linux and on Windows (MSYS2).  
+Binaries for Windows will be provided once `v1.0` gets released.
 
 ### Arch/Manjaro
 
@@ -53,8 +54,8 @@ Access the keyboard shortcut menu via menu or via shortcut `CTRL + F1`.
 
 ## FAQ
 
-* Are there plans for a Windows version?
-  > Yes, but we don't have a date for that yet
+* Are there plans for Windows Binaries?
+  > Yes, we will provide binaries with `v1.0`
 * How can I contribute code to the project?
   > Please read the **development section** from the [contributing guide](CONTRIBUTING.md)  
   > Then create or select an issue or tackle one of the todos in the code

@@ -16,6 +16,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
+import os
 import platform
 import sys
 import xml.etree.ElementTree as ET
@@ -23,7 +24,7 @@ from gettext import gettext as _
 
 from gi.repository import GLib, GObject, Gio
 
-_PERFORM_MANUAL_TRANSLATION = platform.system() == "Windows"
+_PERFORM_MANUAL_TRANSLATION = platform.system() == "Windows" and not os.environ['LANGUAGE'].startswith("en")
 
 
 def connect_func(builder, obj, signal_name, handler_name,

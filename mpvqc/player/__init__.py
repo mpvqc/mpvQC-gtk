@@ -78,7 +78,7 @@ class _Observer:
         Connects a handler to a mpv property.
         Run 'man mpv > manual.txt' for a complete guide of all available properties.
 
-        *Save to call this function before initialize(...).*
+        **Save to call this function before initialize(...).**
 
         :param mpv_property: e.g. 'time-pos'
         :param handler: a function which then will be called every time mpv_property changes
@@ -97,7 +97,7 @@ class _Observer:
         """
         Connects a handler from a mpv property.
 
-        *Save to call this function before initialize(...).*
+        **Save to call this function before initialize(...).**
 
         :param mpv_property: the property (e.g. 'time-pos') the handler has subscribed
         :param handler: the previous registered handler
@@ -107,12 +107,12 @@ class _Observer:
         observer.remove_callback(handler)
         observer.mpv_unregister(self._mpv)
 
-    def initialize(self, mpv: MPV):
+    def initialize(self, mpv_bindings: MPV):
         """
         Initializes the player and registers all unregistered observers.
         """
 
-        self._mpv = mpv
+        self._mpv = mpv_bindings
 
         for observer in self._observers.values():
             observer.mpv_register(self._mpv)
@@ -126,14 +126,24 @@ class MpvPlayer(_Observer):
     the initialization of the low level mpv bindings.
     """
 
+    def __init__(self, **properties):
+        super().__init__(**properties)
+
+        self.__subtitle_cache = []
+
     def add_sub_files(self, sub_file):
         """
-        Add sub file to current video.
+        Add sub file to current video or cache it until initialization.
+
+        **Save to call this function before initialize(...).**
 
         :param sub_file: {path} The sub file to add
         """
 
-        self._mpv.command("sub-add", sub_file, "select")
+        if self.is_video_loaded():
+            self._mpv.command("sub-add", sub_file, "select")
+        else:
+            self.__subtitle_cache.append(sub_file)
 
     def button_action(self, key_string, action_type):
         """
@@ -166,9 +176,15 @@ class MpvPlayer(_Observer):
     def is_video_loaded(self):
         """
         Returns whether the player has a video to play.
+
+        **Save to call this function before initialize(...).**
         """
 
-        return bool(self.video_file_current())
+        # noinspection PyBroadException
+        try:
+            return bool(self.video_file_current())
+        except Exception:
+            return False
 
     def mouse_action(self, btn_idx, action_type):
         """
@@ -199,6 +215,7 @@ class MpvPlayer(_Observer):
         """
 
         self._mpv.command("loadfile", url, "replace")
+        self.__load_subtitle_files()
 
         if play:
             self.play()
@@ -212,6 +229,7 @@ class MpvPlayer(_Observer):
         """
 
         self._mpv.command("loadfile", video, "replace")
+        self.__load_subtitle_files()
 
         if play:
             self.play()
@@ -318,3 +336,8 @@ class MpvPlayer(_Observer):
         """
 
         return self._mpv.ffmpeg_version
+
+    def __load_subtitle_files(self):
+        for subtitle in self.__subtitle_cache:
+            self.add_sub_files(subtitle)
+        self.__subtitle_cache.clear()

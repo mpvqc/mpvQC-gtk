@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.36.0 -->
 <interface>
   <requires lib="gtk+" version="3.20"/>
   <template class="SearchFrame" parent="GtkFrame">
@@ -63,7 +63,6 @@
                     <property name="primary_icon_name">edit-find-symbolic</property>
                     <property name="primary_icon_activatable">False</property>
                     <property name="primary_icon_sensitive">False</property>
-                    <property name="placeholder_text" translatable="yes" context="Search entry placeholder text" comments="Search entry placeholder text">Find in comments</property>
                     <signal name="next-match" handler="on_next_match" swapped="no"/>
                     <signal name="previous-match" handler="on_previous_match" swapped="no"/>
                     <signal name="search-changed" handler="on_search_changed" swapped="no"/>
@@ -142,7 +141,6 @@
                     <property name="can_focus">False</property>
                     <property name="halign">start</property>
                     <property name="valign">center</property>
-                    <property name="label"/>
                   </object>
                 </child>
               </object>

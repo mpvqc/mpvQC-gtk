@@ -326,7 +326,6 @@ class MpvqcWindow(Gtk.ApplicationWindow):
         def __on_file_name_changed(widget, value):
             self.__video_file_name = value
             self.__update_subtitle()
-            self.__popover_open.on_video_opened()
 
         def __on_file_path_changed(widget, value):
             self.__video_file_path = value
@@ -335,12 +334,12 @@ class MpvqcWindow(Gtk.ApplicationWindow):
         mpv.connect(FILENAME_NO_EXT, __on_file_name_changed)
         mpv.connect(PATH, __on_file_path_changed)
 
-    def __update_title(self, widget, status):
+    def __update_title(self, widget, has_changes):
         """
         Updates the title hinting to the current document state.
         """
 
-        self.header_bar_main.set_title("{}mpvQC".format("" if status else "*"))
+        self.header_bar_main.set_title("{}mpvQC".format("*" if has_changes else ""))
 
     def __update_subtitle(self):
         value = get_settings().header_subtitle_format

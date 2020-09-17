@@ -7,6 +7,12 @@
 Currently this application runs on Linux and on Windows (MSYS2).  
 Binaries for Windows will be provided once `v1.0` gets released.
 
+### Arch/Manjaro
+
+Install the AUR package: [https://aur.archlinux.org/packages/mpvqc-gtk-git/](https://aur.archlinux.org/packages/mpvqc-gtk-git/)
+
+### Other distributions
+
 **Install**
 
 <!-- 

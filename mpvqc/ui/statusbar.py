@@ -82,6 +82,7 @@ class StatusBar(Gtk.Box):
         self.time_menu_percentage.connect("clicked", self.__on_percentage_item_clicked)
 
         # Set up timer
+        self.connect("destroy", self.__on_destroy)
         self.__time_update_timer = None
 
     @template.TemplateTrans.Callback()
@@ -242,3 +243,6 @@ class StatusBar(Gtk.Box):
         elif self.__comment_selected and self.__comment_count:
             selected = self.__comment_selected.zfill(len(self.__comment_count))
             self.label_line.set_text(_("{}/{}").format(selected, self.__comment_count))
+
+    def __on_destroy(self, *_):
+        GLib.source_remove(self.__time_update_timer)

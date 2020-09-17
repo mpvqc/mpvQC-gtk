@@ -63,7 +63,7 @@ _FILE_FILTERS = _FileFilters()
 
 def generate_file_name_proposal(video_file):
     nick = "_" + get_settings().export_qc_document_nick if get_settings().export_append_nick else ""
-    video = video_file if video_file else _("untitled")
+    video = path.splitext(path.basename(video_file))[0] if video_file else _("untitled")
     return "[QC]_{0}{1}.txt".format(video, nick)
 
 
@@ -157,7 +157,7 @@ def dialog_save_qc_document(video_file, parent=None):
     """
     Dialog which is used to save a qc document.
 
-    :param video_file: the name of the video (no path and without extension)
+    :param video_file: the file path of the video
     :param parent: the parent widget
     :return: the file path to save under or None if user aborts
     """

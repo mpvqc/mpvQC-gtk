@@ -18,7 +18,7 @@
 
 from gettext import gettext as _
 
-from gi.repository import Gtk, Gdk
+from gi.repository import Gtk, Gdk, GLib
 
 from mpvqc import template
 from mpvqc.ui.contentmaintable import get_comment_markup_mode_default, get_comment_markup_mode_search
@@ -29,8 +29,8 @@ from mpvqc.utils import keyboard, validate_text_insertion, get_pattern
 class SearchFrame(Gtk.Frame):
     __gtype_name__ = 'SearchFrame'
 
-    revealer = template.TemplateTrans.Child()
-    revealer_label_result = template.TemplateTrans.Child()
+    revealer: Gtk.Revealer = template.TemplateTrans.Child()
+    revealer_label_result: Gtk.Revealer = template.TemplateTrans.Child()
 
     entry_search = template.TemplateTrans.Child()
 
@@ -53,11 +53,15 @@ class SearchFrame(Gtk.Frame):
         self.revealer.set_reveal_child(False)
 
         self.entry_search.connect("key-press-event", self.on_key_press_event)
+        self.entry_search.connect("focus-out-event", self.on_focus_out_event)
         self.entry_search.connect("insert-text", validate_text_insertion)
 
         self.__recent_query = ""
         self.__search_active = False
         self.__current_matches = None
+
+    def do_show_all(self):
+        self.revealer.hide()
 
     @template.TemplateTrans.Callback()
     def on_key_press_event(self, widget, event):
@@ -65,16 +69,18 @@ class SearchFrame(Gtk.Frame):
         key = event.keyval
 
         if ctrl and key == Gdk.KEY_f:
-            self.toggle_search()
+            self.__toggle_search()
             return True
         elif no_mod and key == Gdk.KEY_Escape:
-            self.hide_search()
+            self.__hide_search()
             return True
         elif no_mod and key == Gdk.KEY_Return:
             self.__highlight_next(top_to_bottom=True)
             return True
         elif shift and key == Gdk.KEY_Return:
             self.__highlight_next(top_to_bottom=False)
+            return True
+        elif self.__search_active and no_mod and (key == Gdk.KEY_Down or key == Gdk.KEY_Up):
             return True
 
     @template.TemplateTrans.Callback()
@@ -99,42 +105,55 @@ class SearchFrame(Gtk.Frame):
         self.__highlight_next(top_to_bottom=True)
 
     @template.TemplateTrans.Callback()
-    def on_close_pressed(self, *data):
-        self.hide_search()
+    def on_close_pressed(self, *_):
+        self.__hide_search()
 
-    def hide_search(self):
+    def on_focus_out_event(self, *_):
+        self.__hide_search()
+
+    def clear_current_matches(self, *widget, has_changes):
+        """
+        Clears the current matches to force a complete research.
+        """
+
+        if has_changes:
+            self.__current_matches = None
+
+    def __hide_search(self):
         """
         Hides the the search if is revealed.
         """
 
         if self.revealer.get_child_revealed():
+            def hide_completely():
+                self.revealer.hide()
+                return False
+
             self.revealer.set_reveal_child(False)
+            GLib.timeout_add(self.revealer.get_transition_duration(), hide_completely)
             self.__table_widget.grab_focus()
             self.__search_active = False
             self.__table_widget.queue_draw()
 
-    def toggle_search(self):
+    def __show_search(self):
+        self.__search_active = True
+        self.__table_widget.queue_draw()
+        self.revealer.show()
+        self.revealer.set_reveal_child(True)
+        self.entry_search.grab_focus()
+
+    def __toggle_search(self):
         """
         When the user presses CTRL + f.
         """
 
         if self.revealer.get_child_revealed():
             if self.entry_search.has_focus():
-                self.hide_search()
+                self.__hide_search()
             else:
                 self.entry_search.grab_focus()
         else:
-            self.__search_active = True
-            self.__table_widget.queue_draw()
-            self.revealer.set_reveal_child(True)
-            self.entry_search.grab_focus()
-
-    def clear_current_matches(self, *widget):
-        """
-        Clears the current matches to force a complete research.
-        """
-
-        self.__current_matches = None
+            self.__show_search()
 
     def __update_all_matches(self, is_new_query):
         """

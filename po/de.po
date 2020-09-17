@@ -20,8 +20,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
-"POT-Creation-Date: 2020-09-02 21:26+0200\n"
-"PO-Revision-Date: 2020-09-02 21:27+0200\n"
+"POT-Creation-Date: 2020-09-13 11:58+0200\n"
+"PO-Revision-Date: 2020-09-13 11:58+0200\n"
 "Last-Translator: Elias Müller <elias.mueller@mailbox.org>\n"
 "Language-Team: \n"
 "Language: de\n"
@@ -50,8 +50,8 @@ msgstr ""
 "Qualitätsberichten zu Videodateien."
 
 #: data/com.github.mpvqc.mpvQC.appdata.xml:16
-msgid "Initial release"
-msgstr "Erstmalige Veröffentlichung"
+msgid "Initial Linux release"
+msgstr "Erstmalige Linux-Veröffentlichung"
 
 #: data/com.github.mpvqc.mpvQC.gschema.xml:7
 msgid "Display additional information in the header bar"
@@ -194,11 +194,11 @@ msgstr "Dokumente öffnen"
 msgid "Open video files"
 msgstr "Videos öffnen"
 
-#: data/ui/popoveropen.ui:75
+#: data/ui/popoveropen.ui:74
 msgid "Open subtitle files"
 msgstr "Untertitel öffnen"
 
-#: data/ui/popoveropen.ui:151
+#: data/ui/popoveropen.ui:150
 msgid "Clear history"
 msgstr "Verlauf löschen"
 
@@ -256,7 +256,7 @@ msgstr "Export"
 
 #: data/ui/prefpageimexport.ui:192
 msgid "Nickname"
-msgstr "Nicknamen"
+msgstr "Nickname"
 
 #: data/ui/prefpageimexport.ui:297
 msgid "Write meta data section"
@@ -288,7 +288,7 @@ msgstr "Sicherungen automatisch anlegen"
 
 #: data/ui/prefpageimexport.ui:858
 msgid "Backup interval"
-msgstr "Sicherungsinterval"
+msgstr "Sicherungsintervall"
 
 #: data/ui/prefpageimexport.ui:946 data/ui/window.ui:104
 msgid "Open"
@@ -408,7 +408,7 @@ msgstr "Zurücksetzen"
 
 #: data/ui/window.ui:207
 msgid "Restore the default settings on this page"
-msgstr "Standardeinstellugen auf dieser Seite wiederherstellen"
+msgstr "Standardeinstellungen auf dieser Seite wiederherstellen"
 
 #: data/ui/window.ui:243
 msgid "Save As..."
@@ -468,7 +468,7 @@ msgstr "Nicht verwendbare Dateien"
 
 #: mpvqc/messagedialogs.py:34
 msgid "The following files are not compatible with this application:"
-msgstr "Die follgenden Dateien sind nicht mit dieser Anwendung kompatibel:"
+msgstr "Die folgenden Dateien sind nicht mit dieser Anwendung kompatibel:"
 
 #: mpvqc/messagedialogs.py:56
 msgid "Video found"
@@ -502,11 +502,12 @@ msgstr "Import abbrechen"
 msgid "Delete existing comments"
 msgstr "Existierende Anmerkungen entfernen"
 
-#: mpvqc/messagedialogs.py:108
+#: mpvqc/messagedialogs.py:108 mpvqc/messagedialogs.py:135
 msgid "You have unsaved changes. Do you really want to proceed?"
 msgstr "Sie haben ungespeicherte Änderungen. Möchten Sie wirklich fortfahren?"
 
 #: mpvqc/messagedialogs.py:109 mpvqc/messagedialogs.py:136
+#: mpvqc/messagedialogs.py:163
 msgid "All unsaved changes will be lost."
 msgstr "Ungespeicherte Änderungen gehen verloren."
 
@@ -515,100 +516,105 @@ msgid "Delete comments"
 msgstr "Anmerkungen entfernen"
 
 #: mpvqc/messagedialogs.py:112 mpvqc/messagedialogs.py:139
+#: mpvqc/messagedialogs.py:166
 msgid "Abort"
 msgstr "Abbrechen"
 
-#: mpvqc/messagedialogs.py:134
+#: mpvqc/messagedialogs.py:134 mpvqc/messagedialogs.py:161
 msgid "Unsaved changes"
 msgstr "Ungespeicherte Änderungen"
 
-#: mpvqc/messagedialogs.py:135
+#: mpvqc/messagedialogs.py:138
+msgid "Continue"
+msgstr "Fortfahren"
+
+#: mpvqc/messagedialogs.py:162
 msgid "You have unsaved changes. Do you really want to quit?"
 msgstr "Sie haben ungespeicherte Änderungen. Möchten Sie wirklich beenden?"
 
-#: mpvqc/messagedialogs.py:138
+#: mpvqc/messagedialogs.py:165
 msgid "Leave without saving"
 msgstr "Ohne Speichern beenden"
 
-#: mpvqc/qc/manager.py:379
-msgid "Created new document"
-msgstr "Neues Dokument erstellen"
-
-#: mpvqc/qc/manager.py:388
-msgid "Imported video file {}"
-msgstr "Videodatei {} importiert"
-
-#: mpvqc/qc/manager.py:399
+#: mpvqc/qc/_statemessages.py:38
 msgid "Imported subtitle file {}"
 msgstr "Untertiteldatei {} importiert"
 
-#: mpvqc/qc/manager.py:401
+#: mpvqc/qc/_statemessages.py:40
 msgid "Imported {} subtitle files"
 msgstr "{} Untertiteldateien importiert"
 
-#: mpvqc/qc/manager.py:413
-msgid "Imported document file {}"
-msgstr "Dokument {} importiert"
+#: mpvqc/qc/_statemessages.py:42
+msgid "Imported video file {}"
+msgstr "Videodatei {} importiert"
 
-#: mpvqc/qc/manager.py:415
-msgid "Imported {} document files"
-msgstr "{} Dokumente importiert"
-
-#: mpvqc/qc/manager.py:424
-msgid "Saved document"
-msgstr "Dokument gespeichert"
-
-#: mpvqc/qc/manager.py:431
-msgid "Saved document as new file"
-msgstr "Dokument unter anderem Namen gespeichert"
-
-#: mpvqc/qc/manager.py:453
-msgid "Imported a document and a subtitle file"
-msgstr "Ein Dokument und eine Untertiteldatei importiert"
-
-#: mpvqc/qc/manager.py:455
-msgid "Imported a document and {} subtitle files"
-msgstr "Ein Dokument und {} Untertiteldateien importiert"
-
-#: mpvqc/qc/manager.py:457
-msgid "Imported {} documents and a subtitle file"
-msgstr "{} Dokumente und eine Untertiteldatei importiert"
-
-#: mpvqc/qc/manager.py:459
-msgid "Imported {} documents and {} subtitle files"
-msgstr "{} Dokumente und {} Untertiteldateien importiert"
-
-#: mpvqc/qc/manager.py:467
+#: mpvqc/qc/_statemessages.py:45
 msgid "Imported a video and a subtitle file"
 msgstr "Eine Video- und eine Untertiteldatei importiert"
 
-#: mpvqc/qc/manager.py:469
+#: mpvqc/qc/_statemessages.py:47
 msgid "Imported a video and {} subtitle files"
 msgstr "Eine Video- und {} Untertiteldateien importiert"
 
-#: mpvqc/qc/manager.py:472
+#: mpvqc/qc/_statemessages.py:50
+msgid "Imported document file {}"
+msgstr "Dokument {} importiert"
+
+#: mpvqc/qc/_statemessages.py:52
+msgid "Imported {} document files"
+msgstr "{} Dokumente importiert"
+
+#: mpvqc/qc/_statemessages.py:55
+msgid "Imported a document and a subtitle file"
+msgstr "Ein Dokument und eine Untertiteldatei importiert"
+
+#: mpvqc/qc/_statemessages.py:57
+msgid "Imported a document and {} subtitle files"
+msgstr "Ein Dokument und {} Untertiteldateien importiert"
+
+#: mpvqc/qc/_statemessages.py:59
+msgid "Imported {} documents and a subtitle file"
+msgstr "{} Dokumente und eine Untertiteldatei importiert"
+
+#: mpvqc/qc/_statemessages.py:61
+msgid "Imported {} documents and {} subtitle files"
+msgstr "{} Dokumente und {} Untertiteldateien importiert"
+
+#: mpvqc/qc/_statemessages.py:64
 msgid "Imported a video and a document file"
 msgstr "Eine Videodatei und ein Dokument importiert"
 
-#: mpvqc/qc/manager.py:474
+#: mpvqc/qc/_statemessages.py:66
 msgid "Imported a video and {} document files"
 msgstr "Eine Videodatei und {} Dokumente importiert"
 
-#: mpvqc/qc/manager.py:477
+#: mpvqc/qc/_statemessages.py:69
 msgid "Imported a video, a document and a subtitle file"
 msgstr "Eine Video-, Dokument- und Untertiteldatei importiert"
 
-#: mpvqc/qc/manager.py:479
+#: mpvqc/qc/_statemessages.py:71
 msgid "Imported a video, a document and {} subtitle files"
 msgstr "Eine Videodatei, ein Dokument und {} Untertiteldateien importiert"
 
-#: mpvqc/qc/manager.py:482
+#: mpvqc/qc/_statemessages.py:73
 msgid "Imported a video, {} documents and a subtitle file"
 msgstr "Eine Videodatei, {} Dokumente und eine Untertiteldatei importiert"
 
-#: mpvqc/qc/manager.py:484
+#: mpvqc/qc/_statemessages.py:75
 msgid "Imported a video, {} documents and {} subtitle files"
 msgstr "Eine Videodatei, {} Dokumente und {} Untertiteldateien importiert"
+
+#: mpvqc/qc/_statemessages.py:86
+msgid "Saved document as new file"
+msgstr "Dokument unter neuem Namen gespeichert"
+
+#: mpvqc/qc/_statemessages.py:88
+msgid "Saved document"
+msgstr "Dokument gespeichert"
+
+#: mpvqc/qc/_statemessages.py:96
+msgid "Created new document"
+msgstr "Neues Dokument erstellt"
 
 #: mpvqc/settings.py:106
 msgid "Translation"
@@ -638,7 +644,7 @@ msgstr "Typeset"
 msgid "Hint"
 msgstr "Hinweis"
 
-#: mpvqc/ui/popoveropen.py:228
+#: mpvqc/ui/popoveropen.py:221
 msgid "No files found"
 msgstr "Keine Dateien gefunden"
 
@@ -678,11 +684,11 @@ msgstr "Neuer Nickname:"
 msgid "Enter nickname"
 msgstr "Nicknamen eingeben"
 
-#: mpvqc/ui/searchframe.py:209
+#: mpvqc/ui/searchframe.py:210
 msgid "{} of {}"
 msgstr "{} von {}"
 
-#: mpvqc/ui/searchframe.py:213
+#: mpvqc/ui/searchframe.py:214
 msgid "Phrase not found"
 msgstr "Ausdruck nicht gefunden"
 
@@ -724,7 +730,7 @@ msgstr "Anwendung beenden"
 
 #: mpvqc/utils/shortcuts.py:116
 msgid "Display shortcuts"
-msgstr "Tastenkürzel enzeigen"
+msgstr "Tastenkürzel anzeigen"
 
 #: mpvqc/utils/shortcuts.py:122
 msgid "Enter/leave fullscreen mode"
@@ -788,7 +794,7 @@ msgstr "Screenshot anfertigen"
 
 #: mpvqc/utils/shortcuts.py:167
 msgid "Render subtitles at window/video resolution"
-msgstr "Untertitel in Fenster-/Videauflösung rendern"
+msgstr "Untertitel in Fenster-/Videoauflösung rendern"
 
 #: mpvqc/utils/shortcuts.py:170
 msgid "Display statistics of the currently played video"

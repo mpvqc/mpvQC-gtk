@@ -97,7 +97,7 @@ def message_dialog_what_to_do_with_existing_comments(parent=None):
     return response
 
 
-def message_dialog_clear_unsaved_qc_document(parent=None):
+def message_dialog_unsaved_qc_document_clear_comments(parent=None):
     """
     Displays a message box asking the user if he wants to really clear comments that are not saved.
 
@@ -115,6 +115,33 @@ def message_dialog_clear_unsaved_qc_document(parent=None):
                                destroy_with_parent=True,
                                text=message)
     dialog.add_button(*choice_delete)
+    dialog.add_button(*choice_abort)
+    dialog.set_title(title)
+    dialog.show_all()
+
+    response = dialog.run()
+    dialog.destroy()
+    return response
+
+
+def message_dialog_unsaved_qc_document_proceed(parent=None):
+    """
+    Displays a message box asking the user if he wants to continue with his action even if some changes will be lost.
+
+    :param parent: the parent widget to attach to dialog to
+    """
+
+    title = _("Unsaved changes")
+    message = _("You have unsaved changes. Do you really want to proceed?") + "\n" \
+              + _("All unsaved changes will be lost.")
+
+    choice_continue = (_("Continue"), 0)
+    choice_abort = (_("Abort"), 1)
+
+    dialog = Gtk.MessageDialog(transient_for=parent,
+                               destroy_with_parent=True,
+                               text=message)
+    dialog.add_button(*choice_continue)
     dialog.add_button(*choice_abort)
     dialog.set_title(title)
     dialog.show_all()

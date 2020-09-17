@@ -18,17 +18,19 @@
 
 from datetime import datetime
 from os import linesep, path
+from typing import Optional, Tuple
 from zipfile import ZipFile, ZIP_DEFLATED
 
 from mpvqc import get_settings, get_app_paths, get_app_metadata
+from mpvqc.qc import Comment
 
 
-def __prepare_file_content(b_header,
-                           b_date, v_date,
-                           b_generator, v_generator,
-                           b_nick, v_nick,
-                           b_path, v_path,
-                           comments):
+def __prepare_file_content(b_header: bool,
+                           b_date: bool, v_date: str,
+                           b_generator: bool, v_generator: str,
+                           b_nick: bool, v_nick: str,
+                           b_path: bool, v_path: str,
+                           comments: Tuple[Comment]):
     """
     Builds the qc file content using the given arguments.
 
@@ -64,7 +66,7 @@ def __prepare_file_content(b_header,
             "# total lines: {2}").format(d_header, comments_joined, comments_size)
 
 
-def get_file_content(video_path, comments):
+def get_file_content(video_path: Optional[str], comments: Tuple[Comment]):
     """
     Will take into account all user settings provided as arguments to build and return the qc file content.
 
@@ -110,11 +112,11 @@ def write_qc_document(file_path, file_content):
         f.write(file_content)
 
 
-def write_auto_save(video_file, file_content):
+def write_auto_save(video_path, file_content):
     """
     Writes a qc file into the auto save zip.
 
-    :param video_file: the name of the current video file
+    :param video_path: the name of the current video file
     :param file_content: the content to write
     """
 
@@ -124,7 +126,7 @@ def write_auto_save(video_file, file_content):
     zip_path = path.join(get_app_paths().dir_backup, zip_name)
     zip_file = ZipFile(zip_path, "a" if path.isfile(zip_path) else "w", compression=ZIP_DEFLATED)
 
-    file_name = "{}-{}.txt".format(today.replace(":", "-").replace(" ", "_"), video_file)
+    file_name = "{}-{}.txt".format(today.replace(":", "-").replace(" ", "_"), path.splitext(path.basename(video_path))[0])
 
     try:
         zip_file.writestr(file_name, file_content)

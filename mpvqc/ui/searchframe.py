@@ -20,11 +20,12 @@ from gettext import gettext as _
 
 from gi.repository import Gtk, Gdk
 
+from mpvqc import template_custom
 from mpvqc.ui.contentmaintable import get_comment_markup_mode_default, get_comment_markup_mode_search
 from mpvqc.utils import keyboard, validate_text_insertion, get_pattern
 
 
-@Gtk.Template(resource_path='/data/ui/searchframe.ui')
+@template_custom.TemplateTrans(resource_path='/data/ui/searchframe.ui')
 class SearchFrame(Gtk.Frame):
     __gtype_name__ = 'SearchFrame'
 
@@ -58,7 +59,7 @@ class SearchFrame(Gtk.Frame):
         self.__search_active = False
         self.__current_matches = None
 
-    @Gtk.Template.Callback()
+    @template_custom.TemplateTrans.Callback()
     def on_key_press_event(self, widget, event):
         no_mod, ctrl, alt, shift = keyboard.extract_modifiers(event.state)
         key = event.keyval
@@ -76,12 +77,12 @@ class SearchFrame(Gtk.Frame):
             self.__highlight_next(top_to_bottom=False)
             return True
 
-    @Gtk.Template.Callback()
+    @template_custom.TemplateTrans.Callback()
     def on_search_changed(self, search_entry, *data):
         self.__table_widget.queue_draw()
         self.on_next_match(None)
 
-    @Gtk.Template.Callback()
+    @template_custom.TemplateTrans.Callback()
     def on_previous_match(self, button, *data):
         """
         Either button up, CTRL + SHIFT + G or SHIFT + Enter is pressed.
@@ -89,7 +90,7 @@ class SearchFrame(Gtk.Frame):
 
         self.__highlight_next(top_to_bottom=False)
 
-    @Gtk.Template.Callback()
+    @template_custom.TemplateTrans.Callback()
     def on_next_match(self, button, *data):
         """
         Either button down, CTRL + G or Enter is pressed.
@@ -97,7 +98,7 @@ class SearchFrame(Gtk.Frame):
 
         self.__highlight_next(top_to_bottom=True)
 
-    @Gtk.Template.Callback()
+    @template_custom.TemplateTrans.Callback()
     def on_close_pressed(self, *data):
         self.hide_search()
 

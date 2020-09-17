@@ -18,7 +18,7 @@
 
 from gi.repository import Gtk, Gdk, GObject
 
-from mpvqc import get_settings
+from mpvqc import get_settings, template_custom
 from mpvqc.player.container import get_mpv_widget
 from mpvqc.utils import keyboard
 from mpvqc.utils.input import MouseButton, ActionType
@@ -26,7 +26,7 @@ from mpvqc.utils.keyboard import KEY_MAPPINGS
 from mpvqc.utils.signals import CREATE_NEW_COMMENT
 
 
-@Gtk.Template(resource_path='/data/ui/contentmainmpv.ui')
+@template_custom.TemplateTrans(resource_path='/data/ui/contentmainmpv.ui')
 class ContentMainMpv(Gtk.EventBox):
     __gtype_name__ = 'ContentMainMpv'
 
@@ -49,13 +49,13 @@ class ContentMainMpv(Gtk.EventBox):
     def player(self):
         return self.__mpv
 
-    @Gtk.Template.Callback()
+    @template_custom.TemplateTrans.Callback()
     def on_mouse_move_event(self, widget, event):
         scale_factor = self.get_scale_factor()
         self.__mpv.mouse_move(int(event.x * scale_factor), int(event.y * scale_factor))
         return True
 
-    @Gtk.Template.Callback()
+    @template_custom.TemplateTrans.Callback()
     def on_scroll_event(self, widget, event):
         direction = event.direction
 
@@ -67,7 +67,7 @@ class ContentMainMpv(Gtk.EventBox):
             return False
         return True
 
-    @Gtk.Template.Callback()
+    @template_custom.TemplateTrans.Callback()
     def on_button_press_event(self, widget, event):
         btn = event.button
         typ = event.type
@@ -102,7 +102,7 @@ class ContentMainMpv(Gtk.EventBox):
             return True
         return False
 
-    @Gtk.Template.Callback()
+    @template_custom.TemplateTrans.Callback()
     def on_button_release_event(self, widget, event):
         btn = event.button
 

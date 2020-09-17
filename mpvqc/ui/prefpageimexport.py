@@ -21,14 +21,14 @@ from gettext import gettext as _
 
 from gi.repository import Gtk
 
-from mpvqc import get_settings, get_app_paths
+from mpvqc import get_settings, get_app_paths, template_custom
 from mpvqc.ui.input import InputPopover
 from mpvqc.utils import list_header_func, list_header_nested_func
 from mpvqc.utils.signals import APPLY
 from mpvqc.utils.validators import NicknameValidator
 
 
-@Gtk.Template(resource_path='/data/ui/prefpageimexport.ui')
+@template_custom.TemplateTrans(resource_path='/data/ui/prefpageimexport.ui')
 class PreferencePageExport(Gtk.ScrolledWindow):
     __gtype_name__ = 'PreferencePageExport'
 
@@ -98,7 +98,7 @@ class PreferencePageExport(Gtk.ScrolledWindow):
         s.reset_auto_save_enabled()
         s.reset_auto_save_interval()
 
-    @Gtk.Template.Callback()
+    @template_custom.TemplateTrans.Callback()
     def on_export_row_activated(self, widget, row, *data):
         """
         Handles the editing of the nick.
@@ -116,7 +116,7 @@ class PreferencePageExport(Gtk.ScrolledWindow):
             pop.connect(APPLY, __apply)
             pop.popup()
 
-    @Gtk.Template.Callback()
+    @template_custom.TemplateTrans.Callback()
     def on_button_open_backup_directory_clicked(self, widget):
         directory = str(get_app_paths().dir_backup)
         plat = platform.system()

@@ -18,10 +18,10 @@
 
 from gi.repository import Gtk, GdkPixbuf
 
-from mpvqc import get_app_metadata
+from mpvqc import get_app_metadata, template_custom
 
 
-@Gtk.Template(resource_path='/data/ui/about.ui')
+@template_custom.TemplateTrans(resource_path='/data/ui/about.ui')
 class AboutDialog(Gtk.AboutDialog):
     __gtype_name__ = 'AboutDialog'
 

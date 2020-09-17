@@ -20,13 +20,13 @@ from gettext import gettext as _
 
 from gi.repository import Gtk, GLib
 
-from mpvqc import get_settings
+from mpvqc import get_settings, template_custom
 from mpvqc.ui.messagestack import MessageStack
 from mpvqc.utils import StatusbarMessageDuration, seconds_float_to_formatted_string_hours
 from mpvqc.utils.signals import TIME_POS, TIME_REMAINING, PERCENT_POS, DURATION
 
 
-@Gtk.Template(resource_path='/data/ui/statusbar.ui')
+@template_custom.TemplateTrans(resource_path='/data/ui/statusbar.ui')
 class StatusBar(Gtk.Box):
     __gtype_name__ = 'StatusBar'
 
@@ -84,7 +84,7 @@ class StatusBar(Gtk.Box):
         # Set up timer
         self.__time_update_timer = None
 
-    @Gtk.Template.Callback()
+    @template_custom.TemplateTrans.Callback()
     def on_label_button_time_clicked(self, *data):
         self.popover_time.set_relative_to(self.label_button_time)
         self.popover_time.popup()

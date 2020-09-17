@@ -18,11 +18,11 @@
 
 from gi.repository import Gtk, GObject
 
-from mpvqc import get_settings
+from mpvqc import get_settings, template_custom
 from mpvqc.utils.signals import APPLY
 
 
-@Gtk.Template(resource_path='/data/ui/popovertypeedit.ui')
+@template_custom.TemplateTrans(resource_path='/data/ui/popovertypeedit.ui')
 class PopoverTypeEdit(Gtk.Popover):
     __gtype_name__ = 'PopoverTypeEdit'
 

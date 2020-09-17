@@ -20,6 +20,7 @@ import re
 
 from gi.repository import Gtk, Gdk, GObject, GLib
 
+from mpvqc import template_custom
 from mpvqc.cellrenderer import CellRendererSeek, CellRendererTime, CellRendererType, CellRendererComment
 from mpvqc.qc import Comment
 from mpvqc.ui.popovertimeedit import PopoverTimeEdit
@@ -56,7 +57,7 @@ def get_comment_markup_mode_search(raw_comment, query):
     return get_markup(raw_comment, query, "<span weight='heavy'>", "</span>")[0]
 
 
-@Gtk.Template(resource_path='/data/ui/contentmaintable.ui')
+@template_custom.TemplateTrans(resource_path='/data/ui/contentmaintable.ui')
 class ContentMainTable(Gtk.TreeView):
     __gtype_name__ = 'ContentMainTable'
 
@@ -178,7 +179,7 @@ class ContentMainTable(Gtk.TreeView):
 
         GLib.timeout_add(90, __set_scrollbar_position)
 
-    @Gtk.Template.Callback()
+    @template_custom.TemplateTrans.Callback()
     def on_button_press_event(self, widget, event):
         path, path_iter, col = self.__get_path_at_position(event)
         btn = event.button

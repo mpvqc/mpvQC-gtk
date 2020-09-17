@@ -18,10 +18,11 @@
 
 from gi.repository import Gtk, GLib
 
+from mpvqc import template_custom
 from mpvqc.utils import StatusbarMessageDuration
 
 
-@Gtk.Template(resource_path='/data/ui/messagestack.ui')
+@template_custom.TemplateTrans(resource_path='/data/ui/messagestack.ui')
 class MessageStack(Gtk.Stack):
     __gtype_name__ = 'MessageStack'
 

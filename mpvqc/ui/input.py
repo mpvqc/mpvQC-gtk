@@ -18,10 +18,11 @@
 
 from gi.repository import Gtk, GObject, Gdk
 
+from mpvqc import template_custom
 from mpvqc.utils.signals import APPLY
 
 
-@Gtk.Template(resource_path='/data/ui/input.ui')
+@template_custom.TemplateTrans(resource_path='/data/ui/input.ui')
 class InputPopover(Gtk.Popover):
     __gtype_name__ = 'InputPopover'
 
@@ -60,7 +61,7 @@ class InputPopover(Gtk.Popover):
         self.__update_message(*self.__validator.validate(current_text))
         self.revealer.show()
 
-    @Gtk.Template.Callback()
+    @template_custom.TemplateTrans.Callback()
     def on_button_clicked(self, widget=None, *data):
         """
         Invoked, when apply clicked or enter pressed.
@@ -72,7 +73,7 @@ class InputPopover(Gtk.Popover):
         self.emit(APPLY, self.entry.get_text())
         self.popdown()
 
-    @Gtk.Template.Callback()
+    @template_custom.TemplateTrans.Callback()
     def on_entry_text_changed(self, widget, *data):
         """
         Called whenever the text of the entry changes.
@@ -83,7 +84,7 @@ class InputPopover(Gtk.Popover):
 
         self.__update_message(*self.__validator.validate(widget.get_text()))
 
-    @Gtk.Template.Callback()
+    @template_custom.TemplateTrans.Callback()
     def on_entry_key_press_event(self, widget, event):
         """
         Listen to 'Enter' presses.

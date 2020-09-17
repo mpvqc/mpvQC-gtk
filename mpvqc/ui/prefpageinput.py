@@ -18,10 +18,10 @@
 
 from gi.repository import Gtk
 
-from mpvqc import get_settings
+from mpvqc import get_settings, template_custom
 
 
-@Gtk.Template(resource_path='/data/ui/prefpageinput.ui')
+@template_custom.TemplateTrans(resource_path='/data/ui/prefpageinput.ui')
 class PreferencePageInput(Gtk.ScrolledWindow):
     __gtype_name__ = 'PreferencePageInput'
 
@@ -44,7 +44,7 @@ class PreferencePageInput(Gtk.ScrolledWindow):
 
         self.__set_initial_values()
 
-    @Gtk.Template.Callback()
+    @template_custom.TemplateTrans.Callback()
     def on_input_text_buffer_changed(self, widget, *data):
         start_iter = self.input_text_buffer.get_start_iter()
         end_iter = self.input_text_buffer.get_end_iter()

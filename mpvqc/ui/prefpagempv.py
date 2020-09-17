@@ -18,16 +18,16 @@
 
 from gi.repository import Gtk
 
-from mpvqc import get_settings
+from mpvqc import get_settings, template_custom
 
 
-@Gtk.Template(resource_path='/data/ui/prefpagempv.ui')
+@template_custom.TemplateTrans(resource_path='/data/ui/prefpagempv.ui')
 class PreferencePageMpv(Gtk.ScrolledWindow):
     __gtype_name__ = 'PreferencePageMpv'
 
     # todo replace gtk text view with gtk source view
 
-    mpv_text_buffer = Gtk.Template.Child()
+    mpv_text_buffer = template_custom.TemplateTrans.Child()
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -44,7 +44,7 @@ class PreferencePageMpv(Gtk.ScrolledWindow):
 
         self.__set_initial_values()
 
-    @Gtk.Template.Callback()
+    @template_custom.TemplateTrans.Callback()
     def on_mpv_text_buffer_changed(self, widget, *data):
         start_iter = self.mpv_text_buffer.get_start_iter()
         end_iter = self.mpv_text_buffer.get_end_iter()

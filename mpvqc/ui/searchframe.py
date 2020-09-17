@@ -111,7 +111,7 @@ class SearchFrame(Gtk.Frame):
     def on_focus_out_event(self, *_):
         self.__hide_search()
 
-    def clear_current_matches(self, *widget, has_changes):
+    def clear_current_matches(self, widget, has_changes):
         """
         Clears the current matches to force a complete research.
         """

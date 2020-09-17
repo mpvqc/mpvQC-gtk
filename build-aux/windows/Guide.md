@@ -10,13 +10,13 @@
     meson
     mingw-w64-x86_64-appstream-glib
     mingw-w64-x86_64-desktop-file-utils
-    mingw-w64-x86_64-ftgl
     mingw-w64-x86_64-gtk3
     mingw-w64-x86_64-meson
     mingw-w64-x86_64-mpv
     mingw-w64-x86_64-pkg-config
     mingw-w64-x86_64-python-gobject
     mingw-w64-x86_64-glfw
+    mingw-w64-x86_64-python
     ```
 1. Clone mpvQC-gtk into `C:\msys64\home\<your username>` and `cd` into it
 

@@ -31,7 +31,7 @@ class TemplateTrans(Template):
 
     def __call__(self, cls):
         if not _PERFORM_MANUAL_TRANSLATION:
-            super(TemplateTrans, self).__call__(cls)
+            return super(TemplateTrans, self).__call__(cls)
         if self.resource_path is not None:
             validate_resource_path(self.resource_path)
             element = Gio.resources_lookup_data(self.resource_path, Gio.ResourceLookupFlags.NONE) \

@@ -11,7 +11,7 @@ destdir = environ.get('DESTDIR', '')
 if not destdir:
     print('Updating icon cache...')
     if platform.system() == "Windows":
-        call(['gtk-update-icon-cache-3.0', '-qtf', path.join(datadir, 'icons', 'hicolor')])
+        call(['gtk-update-icon-cache-3.0.exe', '-qtf', path.join(datadir, 'icons', 'hicolor')])
     else:
         call(['gtk-update-icon-cache', '-qtf', path.join(datadir, 'icons', 'hicolor')])
 

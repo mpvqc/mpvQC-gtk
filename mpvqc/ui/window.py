@@ -16,164 +16,184 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-from gettext import gettext as _
-
 from gi.repository import Gtk, Gdk
 
 from mpvqc import get_settings, get_app, template
-from mpvqc.qc.manager import QcManager
 from mpvqc.ui.about import AboutDialog
-from mpvqc.ui.contentmainmpv import ContentMainMpv
-from mpvqc.ui.contentmaintable import ContentMainTable
-from mpvqc.ui.popoveropen import PopoverOpen
-from mpvqc.ui.prefpagegeneral import PreferencePageGeneral
-from mpvqc.ui.prefpageimexport import PreferencePageExport
-from mpvqc.ui.prefpageinput import PreferencePageInput
-from mpvqc.ui.prefpagempv import PreferencePageMpv
-from mpvqc.ui.searchframe import SearchFrame
-from mpvqc.ui.statusbar import StatusBar
 from mpvqc.utils import draganddrop, keyboard
 from mpvqc.utils.shortcuts import ShortcutWindow
-from mpvqc.utils.signals import FILENAME_NO_EXT, PATH, STATUSBAR_UPDATE, QC_STATE_CHANGED
+from mpvqc.utils.signals import FILENAME_NO_EXT, PATH
 
 
 @template.TemplateTrans(resource_path='/data/ui/window.ui')
 class MpvqcWindow(Gtk.ApplicationWindow):
     __gtype_name__ = 'MpvqcWindow'
 
-    stack_content = template.TemplateTrans.Child()  # Stack for content
-    stack_header_bar = template.TemplateTrans.Child()  # Stack for header bar
+    _stack_header = template.TemplateTrans.Child()
+    _stack_content = template.TemplateTrans.Child()
 
-    header_bar_main = template.TemplateTrans.Child()  # Header bar for main view
-    header_bar_preferences = template.TemplateTrans.Child()  # Header bar for preferences view
-
-    content_main = template.TemplateTrans.Child()  # Content for main view
-    content_preferences = template.TemplateTrans.Child()  # Stack and content for preferences view
-
-    preferences_stack_switcher = template.TemplateTrans.Child()
-
-    content_main_pane = template.TemplateTrans.Child()  # Paned widget for video and table
-
-    button_open = template.TemplateTrans.Child()
-    button_preferences_restore = template.TemplateTrans.Child()
-
-    button_dark_theme = template.TemplateTrans.Child()
+    # header_bar_main = template.TemplateTrans.Child()  # Header bar for main view
+    # header_bar_preferences = template.TemplateTrans.Child()  # Header bar for preferences view
+    #
+    # content_main = template.TemplateTrans.Child()  # Content for main view
+    # content_preferences = template.TemplateTrans.Child()  # Stack and content for preferences view
+    #
+    # preferences_stack_switcher = template.TemplateTrans.Child()
+    #
+    # content_main_pane = template.TemplateTrans.Child()  # Paned widget for video and table
+    #
+    # button_open = template.TemplateTrans.Child()
+    # button_preferences_restore = template.TemplateTrans.Child()
+    #
+    # button_dark_theme = template.TemplateTrans.Child()
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.init_template()
+
         s = get_settings()
 
-        # Size and theme settings
         self.set_default_size(s.app_window_width, s.app_window_height)
-        self.button_dark_theme.set_property("role", Gtk.ButtonRole.CHECK)
-        self.button_dark_theme.set_property("active", s.prefer_dark_theme)
-        Gtk.Settings.get_default().set_property("gtk-application-prefer-dark-theme", s.prefer_dark_theme)
 
-        # Widgets loaded from UI templates
-        self.__video_widget = ContentMainMpv(self)
-        self.__table_widget = ContentMainTable(self.__video_widget)
-        self.__qc_manager = QcManager(self, self.__video_widget, self.__table_widget)
-        self.__popover_open = PopoverOpen(self, self.__qc_manager)
-        self.__status_bar = StatusBar()
-        self.__search_frame = SearchFrame(self.__table_widget)
+        from mpvqc.ui.contentmain import ContentMain
+        content_main = ContentMain()
+        from mpvqc.ui.contentpref import ContentPref
+        content_pref = ContentPref()
 
-        # Populate preferences stack from UI templates
-        self.__preferences_page_general = PreferencePageGeneral()
-        self.__preferences_page_export = PreferencePageExport()
-        self.__preferences_page_input = PreferencePageInput()
-        self.__preferences_page_mpv = PreferencePageMpv()
+        self._stack_header.add_named(content_main.header_bar, 'MainHeaderBar')
+        self._stack_header.add_named(content_pref.header_bar, 'PrefHeaderBar')
 
-        self.__preferences_page_general.show_all()
-        self.__preferences_page_export.show_all()
-        self.__preferences_page_input.show_all()
-        self.__preferences_page_mpv.show_all()
+        self._stack_content.add_named(content_main, 'MainStack')
+        self._stack_content.add_named(content_pref, 'PrefStack')
 
-        self.content_preferences.add_titled(self.__preferences_page_general, "General", _("General"))
-        self.content_preferences.add_titled(self.__preferences_page_export, "Import/Export", _("Im-/Export"))
-        self.content_preferences.add_titled(self.__preferences_page_input, "input.conf", _("Input"))
-        self.content_preferences.add_titled(self.__preferences_page_mpv, "mpv.conf", _("Video"))
+        self._stack_header.set_visible_child(content_main.header_bar)
+        self._stack_content.set_visible_child(content_main)
 
-        self.content_preferences.set_visible_child(self.__preferences_page_general)
+        self.__header_bar_main = content_main.header_bar
+        self.__header_bar_pref = content_pref.header_bar
 
-        # Pack widgets -> Container for table
-        self.table_container = Gtk.ScrolledWindow()
-        self.table_container.add(self.__table_widget)
-        self.table_container.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.AUTOMATIC)
-        self.table_container.show_all()
+        self.__content_main = content_main
+        self.__content_pref = content_pref
 
-        # Pack widgets -> Overlay using container table as main child and search revealer as overlay
-        self.table_container_overlay = Gtk.Overlay()
-        self.table_container_overlay.add(self.table_container)
-        self.table_container_overlay.add_overlay(self.__search_frame)
-        self.table_container_overlay.show_all()
+    def show_pref(self) -> None:
+        """Opens the preference view"""
 
-        # Pack1: EventBox { Label { "mpv drawing area" }}
-        # Pack2: Overlay { ScrolledWindow { TreeView }}
-        self.content_main_pane.pack1(self.__video_widget, resize=True, shrink=True)
-        self.content_main_pane.pack2(self.table_container_overlay, resize=True, shrink=False)
-        self.content_main.pack_start(self.__status_bar, expand=False, fill=True, padding=0)
+        # todo Pause video
+        self._stack_header.set_visible_child(self.__header_bar_pref)
+        self._stack_content.set_visible_child(self.__content_pref)
 
-        # Set up drag and drop
-        target = Gtk.TargetEntry.new(target="text/uri-list", flags=Gtk.TargetFlags.OTHER_APP, info=0)
-        self.content_main_pane.drag_dest_set(Gtk.DestDefaults.ALL, [target], Gdk.DragAction.COPY)
-        self.content_main_pane.connect("drag-data-received", self.__on_drag_data_received)
+        # s = get_settings()
 
-        # Set video size
-        self.content_main_pane.set_position(s.app_window_video_height)
+        # # Size and theme settings
+        # self.set_default_size(s.app_window_width, s.app_window_height)
+        # self.button_dark_theme.set_property("role", Gtk.ButtonRole.CHECK)
+        # self.button_dark_theme.set_property("active", s.prefer_dark_theme)
+        # Gtk.Settings.get_default().set_property("gtk-application-prefer-dark-theme", s.prefer_dark_theme)
+        #
+        # # Widgets loaded from UI templates
+        # self.__video_widget = ContentMainMpv(self)
+        # self.__table_widget = ContentMainTable(self.__video_widget)
+        # self.__qc_manager = QcManager(self, self.__video_widget, self.__table_widget)
+        # self.__popover_open = PopoverOpen(self, self.__qc_manager)
+        # self.__status_bar = StatusBar()
+        # self.__search_frame = SearchFrame(self.__table_widget)
+        #
+        # # Populate preferences stack from UI templates
+        # self.__preferences_page_general = PreferencePageGeneral()
+        # self.__preferences_page_export = PreferencePageExport()
+        # self.__preferences_page_input = PreferencePageInput()
+        # self.__preferences_page_mpv = PreferencePageMpv()
+        #
+        # self.__preferences_page_general.show_all()
+        # self.__preferences_page_export.show_all()
+        # self.__preferences_page_input.show_all()
+        # self.__preferences_page_mpv.show_all()
+        #
+        # self.content_preferences.add_titled(self.__preferences_page_general, "General", _("General"))
+        # self.content_preferences.add_titled(self.__preferences_page_export, "Import/Export", _("Im-/Export"))
+        # self.content_preferences.add_titled(self.__preferences_page_input, "input.conf", _("Input"))
+        # self.content_preferences.add_titled(self.__preferences_page_mpv, "mpv.conf", _("Video"))
+        #
+        # self.content_preferences.set_visible_child(self.__preferences_page_general)
+        #
+        # # Pack widgets -> Container for table
+        # self.table_container = Gtk.ScrolledWindow()
+        # self.table_container.add(self.__table_widget)
+        # self.table_container.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.AUTOMATIC)
+        # self.table_container.show_all()
+        #
+        # # Pack widgets -> Overlay using container table as main child and search revealer as overlay
+        # self.table_container_overlay = Gtk.Overlay()
+        # self.table_container_overlay.add(self.table_container)
+        # self.table_container_overlay.add_overlay(self.__search_frame)
+        # self.table_container_overlay.show_all()
+        #
+        # # Pack1: EventBox { Label { "mpv drawing area" }}
+        # # Pack2: Overlay { ScrolledWindow { TreeView }}
+        # self.content_main_pane.pack1(self.__video_widget, resize=True, shrink=True)
+        # self.content_main_pane.pack2(self.table_container_overlay, resize=True, shrink=False)
+        # self.content_main.pack_start(self.__status_bar, expand=False, fill=True, padding=0)
+        #
+        # # Set up drag and drop
+        # target = Gtk.TargetEntry.new(target="text/uri-list", flags=Gtk.TargetFlags.OTHER_APP, info=0)
+        # self.content_main_pane.drag_dest_set(Gtk.DestDefaults.ALL, [target], Gdk.DragAction.COPY)
+        # self.content_main_pane.connect("drag-data-received", self.__on_drag_data_received)
+        #
+        # # Set video size
+        # self.content_main_pane.set_position(s.app_window_video_height)
+        #
+        # # Set up remaining connections
+        # # 1. Set up player as soon as possible
+        # self.__video_widget.connect("realize", self.__status_bar.on_mpv_player_realized)
+        # self.__video_widget.connect("realize", self.__on_mpv_player_realized)
+        # # 2. All key events are first handled in the mpv widget,
+        # # and then if not consumed they will be delegated to the table widget.
+        # self.__table_widget.connect("key-press-event", self.__video_widget.on_key_press_event)
+        # self.__table_widget.connect("key-press-event", self.__table_widget.on_key_press_event)
+        # self.__table_widget.connect("key-press-event", self.__search_frame.on_key_press_event)
+        # # 3. Selection change and model change events for status bar and qc manager
+        # self.__table_widget.get_selection().connect("changed", self.__status_bar.on_comments_selection_change)
+        # self.__table_widget.get_model().connect("row-changed", self.__status_bar.on_comments_row_changed)
+        # self.__table_widget.get_model().connect("row-deleted", self.__status_bar.on_comments_row_changed)
+        # self.__table_widget.get_model().connect("row-inserted", self.__status_bar.on_comments_row_changed)
+        # self.__qc_manager.connect(STATUSBAR_UPDATE, self.__status_bar.update_statusbar_message)
+        # self.__qc_manager.connect(QC_STATE_CHANGED, self.__update_title)
+        # self.__qc_manager.connect(QC_STATE_CHANGED, self.__search_frame.clear_current_matches)
+        #
+        # # Class variables
+        # self.__is_fullscreen = False
+        # self.__full_screen_handler = None
+        # self.__video_file_name = ""
+        # self.__video_file_path = ""
+        #
+        # # Shortcuts
+        # self.__set_up_keyboard_shortcuts()
+        #
+        # # Welcome message
+        # if s.export_qc_document_nick == "nickname":
+        #     nickname = _("nickname")
+        # else:
+        #     nickname = s.export_qc_document_nick
+        # self.__status_bar.update_statusbar_message(None, _("Welcome back {}!").format(nickname))
 
-        # Set up remaining connections
-        # 1. Set up player as soon as possible
-        self.__video_widget.connect("realize", self.__status_bar.on_mpv_player_realized)
-        self.__video_widget.connect("realize", self.__on_mpv_player_realized)
-        # 2. All key events are first handled in the mpv widget,
-        # and then if not consumed they will be delegated to the table widget.
-        self.__table_widget.connect("key-press-event", self.__video_widget.on_key_press_event)
-        self.__table_widget.connect("key-press-event", self.__table_widget.on_key_press_event)
-        self.__table_widget.connect("key-press-event", self.__search_frame.on_key_press_event)
-        # 3. Selection change and model change events for status bar and qc manager
-        self.__table_widget.get_selection().connect("changed", self.__status_bar.on_comments_selection_change)
-        self.__table_widget.get_model().connect("row-changed", self.__status_bar.on_comments_row_changed)
-        self.__table_widget.get_model().connect("row-deleted", self.__status_bar.on_comments_row_changed)
-        self.__table_widget.get_model().connect("row-inserted", self.__status_bar.on_comments_row_changed)
-        self.__qc_manager.connect(STATUSBAR_UPDATE, self.__status_bar.update_statusbar_message)
-        self.__qc_manager.connect(QC_STATE_CHANGED, self.__update_title)
-        self.__qc_manager.connect(QC_STATE_CHANGED, self.__search_frame.clear_current_matches)
-
-        # Class variables
-        self.__is_fullscreen = False
-        self.__full_screen_handler = None
-        self.__video_file_name = ""
-        self.__video_file_path = ""
-
-        # Shortcuts
-        self.__set_up_keyboard_shortcuts()
-
-        # Welcome message
-        if s.export_qc_document_nick == "nickname":
-            nickname = _("nickname")
-        else:
-            nickname = s.export_qc_document_nick
-        self.__status_bar.update_statusbar_message(None, _("Welcome back {}!").format(nickname))
-
-    @template.TemplateTrans.Callback()
+    # @template.TemplateTrans.Callback()
     def on_button_new_clicked(self, *widget):
         self.__qc_manager.request_new_document()
 
-    @template.TemplateTrans.Callback()
+    # @template.TemplateTrans.Callback()
     def on_button_open_clicked(self, widget):
         self.__popover_open.set_relative_to(self.button_open)
         self.__popover_open.popup()
 
-    @template.TemplateTrans.Callback()
+    # @template.TemplateTrans.Callback()
     def on_button_save_clicked(self, *widget):
         self.__qc_manager.request_save_qc_document()
 
-    @template.TemplateTrans.Callback()
+    # @template.TemplateTrans.Callback()
     def on_button_save_as_clicked(self, *widget):
         self.__qc_manager.request_save_qc_document_as()
 
-    @template.TemplateTrans.Callback()
+    # @template.TemplateTrans.Callback()
     def on_button_dark_theme_toggle_clicked(self, *data):
         s = get_settings()
         s.prefer_dark_theme = not s.prefer_dark_theme
@@ -181,7 +201,7 @@ class MpvqcWindow(Gtk.ApplicationWindow):
         self.button_dark_theme.set_property("active", s.prefer_dark_theme)
         Gtk.Settings.get_default().set_property("gtk-application-prefer-dark-theme", s.prefer_dark_theme)
 
-    @template.TemplateTrans.Callback()
+    # @template.TemplateTrans.Callback()
     def on_button_preferences_back_clicked(self, widget):
         self.stack_header_bar.set_visible_child(self.header_bar_main)
         self.stack_content.set_visible_child(self.content_main)
@@ -191,11 +211,11 @@ class MpvqcWindow(Gtk.ApplicationWindow):
         self.__update_subtitle()
         self.__table_widget.grab_focus()
 
-    @template.TemplateTrans.Callback()
+    # @template.TemplateTrans.Callback()
     def on_button_preferences_restore_default_clicked(self, widget, data=None):
         self.content_preferences.get_visible_child().on_restore_default_clicked()
 
-    @template.TemplateTrans.Callback()
+    # @template.TemplateTrans.Callback()
     def on_menu_shortcuts_clicked(self, *widget):
         self.__video_widget.player.pause()
         overlay = ShortcutWindow()
@@ -203,13 +223,7 @@ class MpvqcWindow(Gtk.ApplicationWindow):
         overlay.set_position(Gtk.WindowPosition.CENTER_ALWAYS)
         overlay.show_all()
 
-    @template.TemplateTrans.Callback()
-    def on_menu_preferences_clicked(self, *widget):
-        self.__video_widget.player.pause()
-        self.stack_header_bar.set_visible_child(self.header_bar_preferences)
-        self.stack_content.set_visible_child(self.content_preferences)
-
-    @template.TemplateTrans.Callback()
+    # @template.TemplateTrans.Callback()
     def on_menu_about_clicked(self, *widget):
         self.__video_widget.player.pause()
         about = AboutDialog(application=self.get_application())
@@ -217,7 +231,7 @@ class MpvqcWindow(Gtk.ApplicationWindow):
         about.run()
         about.destroy()
 
-    @template.TemplateTrans.Callback()
+    # @template.TemplateTrans.Callback()
     def on_key_press_event(self, widget, event):
         no_mod, ctrl, alt, shift = keyboard.extract_modifiers(event.state)
         key = event.keyval

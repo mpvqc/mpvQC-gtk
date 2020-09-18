@@ -81,6 +81,7 @@ class PreferencePageExport(Gtk.ScrolledWindow):
         s.bind_auto_save_enabled(self.revealer_auto_save, "reveal-child")
         s.bind_auto_save_interval(self.spin_btn_auto_save_interval, "value")
 
+    # noinspection PyMethodMayBeStatic
     def on_restore_default_clicked(self):
         """
         Called whenever the user presses restore and this preference page is visible.
@@ -99,13 +100,13 @@ class PreferencePageExport(Gtk.ScrolledWindow):
         s.reset_auto_save_interval()
 
     @template.TemplateTrans.Callback()
-    def on_export_row_activated(self, widget, row, *data):
+    def on_export_row_activated(self, __, row, *___):
         """
         Handles the editing of the nick.
         """
 
         if row == self.row_nick:
-            def __apply(widget, new_value):
+            def __apply(____, new_value):
                 self.label_nick.set_text(new_value)
 
             pop = InputPopover(label=_("New nickname:"),
@@ -117,7 +118,7 @@ class PreferencePageExport(Gtk.ScrolledWindow):
             pop.popup()
 
     @template.TemplateTrans.Callback()
-    def on_button_open_backup_directory_clicked(self, widget):
+    def on_button_open_backup_directory_clicked(self, _):
         directory = str(get_app_paths().dir_backup)
         plat = platform.system()
 

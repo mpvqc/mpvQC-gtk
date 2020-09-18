@@ -45,7 +45,7 @@ class PreferencePageMpv(Gtk.ScrolledWindow):
         self.__set_initial_values()
 
     @template.TemplateTrans.Callback()
-    def on_mpv_text_buffer_changed(self, widget, *data):
+    def on_mpv_text_buffer_changed(self, *_):
         start_iter = self.mpv_text_buffer.get_start_iter()
         end_iter = self.mpv_text_buffer.get_end_iter()
         get_settings().config_file_mpv_content = self.mpv_text_buffer.get_text(start_iter, end_iter, True)

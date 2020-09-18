@@ -60,19 +60,21 @@ KEY_MAPPINGS = {
 }
 
 
-def extract_modifiers(mod):
+def extract_modifiers(state):
     """
     Extracts modifiers from a key press event.
+    Ctrl, alt and shift are True if they are pressed during the event of parameter state.
 
-    :param mod: event.state of a key press event
+    :param state: event.state of a key press event
     :return: a list with values set to true as [no, ctrl, alt, shift]
     """
 
-    ctrl = mod & Gdk.ModifierType.CONTROL_MASK
-    shift = mod & Gdk.ModifierType.SHIFT_MASK
-    alt = mod & Gdk.ModifierType.MOD1_MASK
+    ctrl = state & Gdk.ModifierType.CONTROL_MASK
+    shift = state & Gdk.ModifierType.SHIFT_MASK
+    super = state & Gdk.ModifierType.SUPER_MASK
+    alt = state & Gdk.ModifierType.MOD1_MASK
     no = not ctrl and not shift and not alt
-    return no, ctrl, alt, shift
+    return no, bool(ctrl), bool(alt), bool(shift)
 
 
 def command_generator(ctrl, alt, shift, key_str, mod_required=False, is_char=False):

@@ -115,6 +115,18 @@ __ALL_SHORTCUTS = (
              accelerator=_CTRL + "F1",
              description=_("Display shortcuts")),
     #
+    # Comments
+    #
+    Shortcut(_GROUP_COMMENTS,
+             accelerator="e",
+             description=_("Open context menu")),
+    Shortcut(_GROUP_COMMENTS,
+             accelerator="BackSpace Return",
+             description=_("Edit selected comment")),
+    Shortcut(_GROUP_COMMENTS,
+             accelerator="Delete",
+             description=_("Delete selected comment")),
+    #
     # Video
     #
     Shortcut(_GROUP_VIDEO,
@@ -168,18 +180,6 @@ __ALL_SHORTCUTS = (
     Shortcut(_GROUP_VIDEO,
              accelerator="i",
              description=_("Display statistics of the currently played video")),
-    #
-    # Comments
-    #
-    Shortcut(_GROUP_COMMENTS,
-             accelerator="e",
-             description=_("Open context menu")),
-    Shortcut(_GROUP_COMMENTS,
-             accelerator="BackSpace Return",
-             description=_("Edit selected comment")),
-    Shortcut(_GROUP_COMMENTS,
-             accelerator="Delete",
-             description=_("Delete selected comment")),
     #
     # Search
     #

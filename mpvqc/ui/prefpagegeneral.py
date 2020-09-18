@@ -119,12 +119,12 @@ class PreferencePageGeneral(Gtk.ScrolledWindow):
         self.list_ct.set_header_func(list_header_func, None)
 
     @template.TemplateTrans.Callback()
-    def on_ct_add_button_clicked(self, widget):
+    def on_ct_add_button_clicked(self, __):
         """
         When user clicks on the 'plus' button.
         """
 
-        def __apply(widget, new_value):
+        def __apply(___, new_value):
             self.__ct_add_item(text=new_value, position=0)
             self.list_ct.select_row(self.list_ct.get_row_at_index(0))
             self.__update_comment_type_setting()
@@ -138,7 +138,7 @@ class PreferencePageGeneral(Gtk.ScrolledWindow):
         pop.popup()
 
     @template.TemplateTrans.Callback()
-    def on_ct_remove_button_clicked(self, widget):
+    def on_ct_remove_button_clicked(self, _):
         """
         When user clicks on the 'minus' button.
         """
@@ -147,7 +147,7 @@ class PreferencePageGeneral(Gtk.ScrolledWindow):
         self.__update_comment_type_setting()
 
     @template.TemplateTrans.Callback()
-    def on_ct_edit_button_clicked(self, widget):
+    def on_ct_edit_button_clicked(self, __):
         """
         When user clicks on the 'edit' button.
         """
@@ -159,7 +159,7 @@ class PreferencePageGeneral(Gtk.ScrolledWindow):
         current_label = row.get_children()[0].get_children()[0]
         current_text = item.text
 
-        def __apply(widget, new_value):
+        def __apply(___, new_value):
             current_label.set_text(new_value)
             item.text = new_value
             self.__update_comment_type_setting()
@@ -174,7 +174,7 @@ class PreferencePageGeneral(Gtk.ScrolledWindow):
         pop.popup()
 
     @template.TemplateTrans.Callback()
-    def on_ct_up_button_clicked(self, widget):
+    def on_ct_up_button_clicked(self, _):
         """
         When user clicks on the 'go-up' button.
         """
@@ -190,7 +190,7 @@ class PreferencePageGeneral(Gtk.ScrolledWindow):
         self.__update_comment_type_setting()
 
     @template.TemplateTrans.Callback()
-    def on_ct_down_button_clicked(self, widget):
+    def on_ct_down_button_clicked(self, _):
         """
         When user clicks on the 'go-down' button.
         """
@@ -206,7 +206,7 @@ class PreferencePageGeneral(Gtk.ScrolledWindow):
         self.__update_comment_type_setting()
 
     @template.TemplateTrans.Callback()
-    def on_ct_list_row_selected(self, widget, row):
+    def on_ct_list_row_selected(self, _, row):
         """
         When the selection of a row changes.
         """

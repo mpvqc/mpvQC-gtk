@@ -19,7 +19,9 @@
 from gi.repository import Gtk, Gdk, GObject
 
 from mpvqc import get_settings, template
-from mpvqc.player.container import get_mpv_widget
+from mpvqc.player.container import get_mpv_widget, MpvPlayer
+from mpvqc.ui.contentmain import ContentMain
+from mpvqc.ui.window import MpvqcWindow
 from mpvqc.utils import keyboard
 from mpvqc.utils.input import MouseButton, ActionType
 from mpvqc.utils.keyboard import KEY_MAPPINGS
@@ -34,29 +36,30 @@ class ContentMainMpv(Gtk.EventBox):
         CREATE_NEW_COMMENT: (GObject.SignalFlags.RUN_FIRST, None, (str, str,)),
     }
 
-    def __init__(self, parent, **kwargs):
+    def __init__(self, content_main: ContentMain, mpvqc_window: MpvqcWindow, **kwargs):
         super().__init__(**kwargs)
+        self.__content_main = content_main
+        self.__mpvqc_window = mpvqc_window
         self.init_template()
-        self.__parent = parent
 
-        self.__container = get_mpv_widget(self)
-        self.__container.show()
-        self.add(self.__container)
+        container = get_mpv_widget(self)
+        container.show()
+        self.add(container)
 
-        self.__mpv = self.__container.player
+        self.__mpv = container.player
 
     @property
-    def player(self):
+    def player(self) -> MpvPlayer:
         return self.__mpv
 
     @template.TemplateTrans.Callback()
-    def on_mouse_move_event(self, widget, event):
+    def on_mouse_move_event(self, _, event) -> bool:
         scale_factor = self.get_scale_factor()
         self.__mpv.mouse_move(int(event.x * scale_factor), int(event.y * scale_factor))
         return True
 
     @template.TemplateTrans.Callback()
-    def on_scroll_event(self, widget, event):
+    def on_scroll_event(self, _, event) -> bool:
         direction = event.direction
 
         if direction == Gdk.ScrollDirection.UP:
@@ -68,11 +71,11 @@ class ContentMainMpv(Gtk.EventBox):
         return True
 
     @template.TemplateTrans.Callback()
-    def on_button_press_event(self, widget, event):
+    def on_button_press_event(self, _, event) -> bool:
         btn = event.button
         typ = event.type
 
-        self.__parent.focus_table_widget()
+        self.__content_main.focus_table_widget()
 
         # todo in future: Double and triple-clicks result in a sequence of events being received.
         #  For double-clicks the order of events will be:
@@ -82,8 +85,8 @@ class ContentMainMpv(Gtk.EventBox):
         # GDK_2BUTTON_PRESS
         # GDK_BUTTON_RELEASE
 
-        if typ == Gdk.EventType.DOUBLE_BUTTON_PRESS and btn == MouseButton.LEFT:
-            self.__parent.toggle_fullscreen()
+        if typ == Gdk.EventType.DOUBLE_BUTTON_PRESS and btn == MouseButton.LEFT and self.player.is_video_loaded():
+            self.__mpvqc_window.toggle_fullscreen()
             return True
         elif typ == Gdk.EventType.BUTTON_PRESS:
             if btn == MouseButton.LEFT:
@@ -91,8 +94,8 @@ class ContentMainMpv(Gtk.EventBox):
             elif btn == MouseButton.MIDDLE:
                 self.__mpv.mouse_action(1, ActionType.PRESS)
             elif btn == MouseButton.RIGHT:
-                self.__parent.unfullscreen()
-                self.create_context_menu(btn, event.time)
+                self.__mpvqc_window.unfullscreen()
+                self.__create_context_menu(btn, event.time)
             elif btn == MouseButton.BACK:
                 self.__mpv.mouse_action(5, ActionType.PRESS)
             elif btn == MouseButton.FORWARD:
@@ -103,7 +106,7 @@ class ContentMainMpv(Gtk.EventBox):
         return False
 
     @template.TemplateTrans.Callback()
-    def on_button_release_event(self, widget, event):
+    def on_button_release_event(self, _: Gtk.Widget, event) -> bool:
         btn = event.button
 
         if btn == MouseButton.LEFT:
@@ -112,7 +115,8 @@ class ContentMainMpv(Gtk.EventBox):
             return False
         return True
 
-    def on_key_press_event(self, widget, event, is_fullscreen=False):
+    def on_key_press_event(self, _: Gtk.Widget, event: Gdk.EventKey, is_fullscreen: bool = False) -> bool:
+
         no_mod, ctrl, alt, shift = keyboard.extract_modifiers(event.state)
         key = event.keyval
         cmd = ""
@@ -129,14 +133,14 @@ class ContentMainMpv(Gtk.EventBox):
 
         # Handled by this widget
         if no_mod and key == Gdk.KEY_f and self.player.is_video_loaded():
-            self.__parent.toggle_fullscreen()
+            self.__mpvqc_window.toggle_fullscreen()
             return True
         elif no_mod and key == Gdk.KEY_e and self.player.is_video_loaded():
-            self.__parent.unfullscreen()
-            self.create_context_menu(key, event.time)
+            self.__mpvqc_window.unfullscreen()
+            self.__create_context_menu(key, event.time)
             return True
         elif no_mod and key == Gdk.KEY_Escape:
-            self.__parent.unfullscreen()
+            self.__mpvqc_window.unfullscreen()
             return True
         elif key in KEY_MAPPINGS:
             cmd = keyboard.command_generator(ctrl, alt, shift, *KEY_MAPPINGS[key])
@@ -153,7 +157,7 @@ class ContentMainMpv(Gtk.EventBox):
             return True
         return False
 
-    def create_context_menu(self, button, time):
+    def __create_context_menu(self, button, time) -> None:
         """
         Creates a new context menu filled with all current comment types.
 
@@ -166,7 +170,7 @@ class ContentMainMpv(Gtk.EventBox):
 
         self.__mpv.pause()
 
-        def __on_clicked(value):
+        def __on_clicked(value) -> None:
             self.emit(CREATE_NEW_COMMENT, self.__mpv.position_current()[1], value.get_label())
 
         menu = Gtk.Menu()

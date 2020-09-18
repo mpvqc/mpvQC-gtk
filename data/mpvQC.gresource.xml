@@ -7,8 +7,10 @@
         <file>css/style-linux.css</file>
         <file>css/style-windows.css</file>
         <file>ui/about.ui</file>
+        <file>ui/contentmain.ui</file>
         <file>ui/contentmainmpv.ui</file>
         <file>ui/contentmaintable.ui</file>
+        <file>ui/contentpref.ui</file>
         <file>ui/input.ui</file>
         <file>ui/messagestack.ui</file>
         <file>ui/popoveropen.ui</file>

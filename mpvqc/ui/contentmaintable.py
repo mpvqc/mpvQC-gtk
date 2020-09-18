@@ -35,7 +35,7 @@ PLAY_ICON = "media-playback-start-symbolic"
 _REGEX_URLS = re.compile(r"((https?://|www\.).*?\..*?[^\s]+)")
 
 
-def get_comment_markup_mode_default(raw_comment):
+def get_comment_markup_mode_default(raw_comment) -> str:
     """
     Returns the markup for a comment **if search mode is not active**.
 
@@ -46,7 +46,7 @@ def get_comment_markup_mode_default(raw_comment):
     return _REGEX_URLS.sub(r"{}\1{}".format("<i>", "</i>"), raw_comment)
 
 
-def get_comment_markup_mode_search(raw_comment, query):
+def get_comment_markup_mode_search(raw_comment, query) -> str:
     """
     Returns the markup for a comment **if search mode is active**.
 
@@ -109,7 +109,7 @@ class ContentMainTable(Gtk.TreeView):
         # Class variables
         self.__scrollbar_position = None
 
-    def add_comments(self, comments: Tuple[Comment]):
+    def add_comments(self, comments: Tuple[Comment]) -> None:
         """
         Adds a list of comments to the table and scrolls to the last added comment.
 
@@ -128,7 +128,7 @@ class ContentMainTable(Gtk.TreeView):
             self.__add_comment(last.comment_time, last.comment_type, last.comment_note, start_editing=False)
             self.__renderer_type.recalculate_preferred_width()
 
-    def get_all_comments(self):
+    def get_all_comments(self) -> Tuple[Comment]:
         """
         Returns all the comments in the table.
 
@@ -145,7 +145,7 @@ class ContentMainTable(Gtk.TreeView):
             iterator = self.__model.iter_next(iterator)
         return tuple(items)
 
-    def clear_all_comments(self):
+    def clear_all_comments(self) -> None:
         """
         Deletes all comments from the table.
         """
@@ -155,7 +155,7 @@ class ContentMainTable(Gtk.TreeView):
         self.__fire_signal_blocked = False
         self.__fire_signal_not_up_to_date()
 
-    def highlight_row(self, tree_path):
+    def highlight_row(self, tree_path) -> None:
         """
         Select row of tree_path.
         """
@@ -163,17 +163,17 @@ class ContentMainTable(Gtk.TreeView):
         self.set_cursor_on_cell(tree_path, self.__column_comment, self.__renderer_comment, start_editing=False)
         self.row_activated(tree_path, column=self.__column_comment)
 
-    def set_comment_cell_data_func(self, func):
+    def set_comment_cell_data_func(self, func) -> None:
         """
         Specify the cell data func to use for the comments.
         """
 
         self.__column_comment.set_cell_data_func(self.__renderer_comment, func)
 
-    def before_hide(self):
+    def before_hide(self) -> None:
         self.__scrollbar_position = self.get_vadjustment().get_value()
 
-    def after_show(self):
+    def after_show(self) -> None:
         # Workaround to restore the scroll bar position
         def __set_scrollbar_position():
             if self.__scrollbar_position:
@@ -182,7 +182,7 @@ class ContentMainTable(Gtk.TreeView):
         GLib.timeout_add(90, __set_scrollbar_position)
 
     @template.TemplateTrans.Callback()
-    def on_button_press_event(self, widget, event):
+    def on_button_press_event(self, _, event) -> bool:
         path, path_iter, col = self.__get_path_at_position(event)
         btn = event.button
 
@@ -204,7 +204,8 @@ class ContentMainTable(Gtk.TreeView):
                     return True
         return False
 
-    def on_key_press_event(self, widget, event):
+    def on_key_press_event(self, _: Gtk.Widget, event: Gdk.EventKey) -> bool:
+
         no_mod, ctrl, alt, shift = keyboard.extract_modifiers(event.state)
         key = event.keyval
 
@@ -217,11 +218,6 @@ class ContentMainTable(Gtk.TreeView):
         elif ctrl and key == Gdk.KEY_c:
             self.__do_with_selected(self.__do_selected_copy_to_clipboard)
             return True
-        elif ctrl and key == Gdk.KEY_f:
-            # Handled in search revealer
-            return False
-        elif no_mod and key == Gdk.KEY_Escape:
-            return False
         return False
 
     def __add_comment(self, c_time, c_type, c_comm="", start_editing=True):
@@ -238,7 +234,7 @@ class ContentMainTable(Gtk.TreeView):
         path = self.__model.get_path(c_comm)
         self.set_cursor_on_cell(path, self.__column_comment, self.__renderer_comment, start_editing)
 
-    def __add_comment_from_context_menu(self, widget, time, comment_type):
+    def __add_comment_from_context_menu(self, _, time, comment_type):
         """
         Adds a comment from the context menu.
 

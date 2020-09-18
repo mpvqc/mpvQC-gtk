@@ -86,16 +86,15 @@ class StatusBar(Gtk.Box):
         self.__time_update_timer = None
 
     @template.TemplateTrans.Callback()
-    def on_label_button_time_clicked(self, *data):
+    def on_label_button_time_clicked(self, *_):
         self.popover_time.set_relative_to(self.label_button_time)
         self.popover_time.popup()
 
-    def on_mpv_player_realized(self, widget, *data):
+    def on_mpv_player_realized(self, widget, *_):
         """
         As soon as the player is ready, connect signals to obtain info about player time and state.
 
         :param widget: the mpv widget (not player!)
-        :param data: not relevant, passed in by event
         """
 
         mpv = widget.player
@@ -136,13 +135,12 @@ class StatusBar(Gtk.Box):
             self.__comment_selected = str(int(rows[0].to_string()) + 1)
             self.__on_line_label_update()
 
-    def on_comments_row_changed(self, model, idx, *data):
+    def on_comments_row_changed(self, model, idx, *_):
         """
         Called whenever a row of the table widget has changed.
 
         :param model: passed in from event
         :param idx: passed in from event
-        :param data: passed in from event
         """
 
         model_length = len(model)
@@ -154,13 +152,9 @@ class StatusBar(Gtk.Box):
 
         self.__on_line_label_update()
 
-    def update_statusbar_message(self, widget, message, sb_message_duration=StatusbarMessageDuration.SHORT):
+    def update_statusbar_message(self, _, message: str, sb_message_duration=StatusbarMessageDuration.SHORT):
         """
         Updates the current statusbar message.
-
-        :param widget: event data, else None
-        :param message: a string to display at the stack
-        :param sb_message_duration: time of the duration to display the message
         """
 
         def __display():
@@ -188,7 +182,7 @@ class StatusBar(Gtk.Box):
             else:
                 entry.set_property("active", False)
 
-    def __on_percentage_item_clicked(self, *data):
+    def __on_percentage_item_clicked(self, *_):
         """
         Updates the percentage setting. With the next timeout the setting gets applied.
 
@@ -200,7 +194,7 @@ class StatusBar(Gtk.Box):
         get_settings().status_bar_percentage = new_value
         self.time_menu_percentage.set_property("active", new_value)
 
-    def __on_video_timer_timeout(self, *data):
+    def __on_video_timer_timeout(self, *_):
         """
         Updates the status bar periodically.
         Kick off in 'on_mpv_player_realized'

@@ -65,15 +65,15 @@ class PopoverTimeEdit(Gtk.Popover):
         self.adjustment.set_value(cur_value_int)
 
     @template.TemplateTrans.Callback()
-    def on_button_plus_clicked(self, widget=None, data=None):
+    def on_button_plus_clicked(self, *_):
         self.adjustment.set_value(self.adjustment.get_value() + 1)
 
     @template.TemplateTrans.Callback()
-    def on_button_minus_clicked(self, widget=None, data=None):
+    def on_button_minus_clicked(self, *_):
         self.adjustment.set_value(self.adjustment.get_value() - 1)
 
     @template.TemplateTrans.Callback()
-    def on_button_apply_clicked(self, widget=None, data=None):
+    def on_button_apply_clicked(self, *_):
         self.emit(APPLY, self.label.get_text())
         self.popdown()
 
@@ -84,7 +84,7 @@ class PopoverTimeEdit(Gtk.Popover):
         self.__video_widget.player.position_jump(formatted)
 
     @template.TemplateTrans.Callback()
-    def on_key_press_event(self, widget, event):
+    def on_key_press_event(self, _: Gtk.Widget, event: Gdk.EventKey) -> bool:
         key = event.keyval
 
         if key == Gdk.KEY_Up:
@@ -98,7 +98,7 @@ class PopoverTimeEdit(Gtk.Popover):
             return True
 
     @template.TemplateTrans.Callback()
-    def on_scroll_event(self, widget, event):
+    def on_scroll_event(self, _, event):
         direction = event.direction
 
         if direction == Gdk.ScrollDirection.UP:

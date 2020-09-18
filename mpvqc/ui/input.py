@@ -62,35 +62,28 @@ class InputPopover(Gtk.Popover):
         self.revealer.show()
 
     @template.TemplateTrans.Callback()
-    def on_button_clicked(self, widget=None, *data):
+    def on_button_clicked(self, *_):
         """
         Invoked, when apply clicked or enter pressed.
-
-        :param widget: passed in by event
-        :param data: passed in by event
         """
 
         self.emit(APPLY, self.entry.get_text())
         self.popdown()
 
     @template.TemplateTrans.Callback()
-    def on_entry_text_changed(self, widget, *data):
+    def on_entry_text_changed(self, widget, *_):
         """
         Called whenever the text of the entry changes.
 
         :param widget: the widget whose text has changed
-        :param data: passed in by event
         """
 
         self.__update_message(*self.__validator.validate(widget.get_text()))
 
     @template.TemplateTrans.Callback()
-    def on_entry_key_press_event(self, widget, event):
+    def on_entry_key_press_event(self, _, event):
         """
         Listen to 'Enter' presses.
-
-        :param widget: passed in by event
-        :param event: key press event
         """
 
         if event.keyval == Gdk.KEY_Return and self.button.get_sensitive():

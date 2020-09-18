@@ -51,7 +51,7 @@ class PopoverTypeEdit(Gtk.Popover):
         if text_unknown:
             self.__create_additional_entry(current_text)
 
-    def __on_item_clicked(self, widget, data=None):
+    def __on_item_clicked(self, widget, *_):
         self.emit(APPLY, widget.get_property("text"))
         self.popdown()
 

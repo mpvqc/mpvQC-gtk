@@ -11,97 +11,60 @@
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <child>
-          <placeholder/>
+          <object class="GtkBox" id="_box">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="orientation">vertical</property>
+            <child>
+              <object class="GtkPaned" id="_paned">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="orientation">vertical</property>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+              </object>
+              <packing>
+                <property name="expand">True</property>
+                <property name="fill">True</property>
+                <property name="position">0</property>
+              </packing>
+            </child>
+            <child>
+              <placeholder/>
+            </child>
+          </object>
+          <packing>
+            <property name="name">page0</property>
+            <property name="title" translatable="yes">page0</property>
+          </packing>
         </child>
       </object>
       <packing>
-        <property name="expand">False</property>
+        <property name="expand">True</property>
         <property name="fill">True</property>
         <property name="position">0</property>
       </packing>
     </child>
   </template>
-  <object class="GtkHeaderBar" id="_header_bar">
+  <object class="GtkOverlay" id="_overlay">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
-    <property name="show_close_button">True</property>
     <child>
-      <object class="GtkButtonBox">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="layout_style">start</property>
-        <child>
-          <object class="GtkButton" id="button_new">
-            <property name="label" translatable="yes">New</property>
-            <property name="visible">True</property>
-            <property name="can_focus">True</property>
-            <property name="receives_default">True</property>
-            <property name="tooltip_text" translatable="yes">Create a new document</property>
-            <signal name="clicked" handler="on_button_new_clicked" swapped="no"/>
-          </object>
-          <packing>
-            <property name="expand">True</property>
-            <property name="fill">True</property>
-            <property name="position">0</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkButton" id="button_open">
-            <property name="label" translatable="yes">Open</property>
-            <property name="name">OpenButton</property>
-            <property name="visible">True</property>
-            <property name="can_focus">True</property>
-            <property name="receives_default">True</property>
-            <property name="tooltip_text" translatable="yes">Open document, video or subtitle files</property>
-            <property name="image">image1</property>
-            <property name="image_position">right</property>
-            <property name="always_show_image">True</property>
-            <signal name="clicked" handler="on_button_open_clicked" swapped="no"/>
-          </object>
-          <packing>
-            <property name="expand">True</property>
-            <property name="fill">True</property>
-            <property name="position">1</property>
-          </packing>
-        </child>
-        <style>
-          <class name="linked"/>
-        </style>
-      </object>
+      <placeholder/>
     </child>
+  </object>
+  <object class="GtkScrolledWindow" id="_scrolled_window">
+    <property name="visible">True</property>
+    <property name="can_focus">True</property>
+    <property name="is_focus">True</property>
+    <property name="hscrollbar_policy">never</property>
+    <property name="shadow_type">in</property>
     <child>
-      <object class="GtkMenuButton" id="menubutton1">
-        <property name="visible">True</property>
-        <property name="can_focus">True</property>
-        <property name="receives_default">True</property>
-        <property name="direction">none</property>
-        <property name="popover">popover_menu</property>
-        <child>
-          <object class="GtkImage">
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="icon_name">open-menu-symbolic</property>
-          </object>
-        </child>
-      </object>
-      <packing>
-        <property name="pack_type">end</property>
-        <property name="position">1</property>
-      </packing>
-    </child>
-    <child>
-      <object class="GtkButton">
-        <property name="label" translatable="yes">Save</property>
-        <property name="visible">True</property>
-        <property name="can_focus">True</property>
-        <property name="receives_default">True</property>
-        <property name="tooltip_text" translatable="yes">Save current document</property>
-        <signal name="clicked" handler="on_button_save_clicked" swapped="no"/>
-      </object>
-      <packing>
-        <property name="pack_type">end</property>
-        <property name="position">2</property>
-      </packing>
+      <placeholder/>
     </child>
   </object>
   <object class="GtkImage" id="image1">
@@ -115,8 +78,6 @@
       <object class="GtkBox">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="margin_left">10</property>
-        <property name="margin_right">10</property>
         <property name="margin_start">10</property>
         <property name="margin_end">10</property>
         <property name="margin_top">10</property>
@@ -125,10 +86,10 @@
         <child>
           <object class="GtkModelButton">
             <property name="visible">True</property>
-            <property name="can_focus">True</property>
+            <property name="can_focus">False</property>
             <property name="receives_default">True</property>
             <property name="text" translatable="yes">Save As...</property>
-            <signal name="clicked" handler="on_button_save_as_clicked" swapped="no"/>
+            <signal name="clicked" handler="_on_button_save_as_clicked" swapped="no"/>
           </object>
           <packing>
             <property name="expand">False</property>
@@ -150,7 +111,7 @@
         <child>
           <object class="GtkModelButton" id="_button_dark_theme">
             <property name="visible">True</property>
-            <property name="can_focus">True</property>
+            <property name="can_focus">False</property>
             <property name="receives_default">True</property>
             <property name="text" translatable="yes">Dark Theme</property>
             <signal name="clicked" handler="_on_button_dark_theme_toggle_clicked" swapped="no"/>
@@ -175,7 +136,7 @@
         <child>
           <object class="GtkModelButton" id="menu_preferences">
             <property name="visible">True</property>
-            <property name="can_focus">True</property>
+            <property name="can_focus">False</property>
             <property name="receives_default">True</property>
             <property name="text" translatable="yes">Preferences</property>
             <signal name="clicked" handler="_on_menu_preferences_clicked" swapped="no"/>
@@ -190,10 +151,10 @@
           <object class="GtkModelButton">
             <property name="name">menu_shortcuts</property>
             <property name="visible">True</property>
-            <property name="can_focus">True</property>
+            <property name="can_focus">False</property>
             <property name="receives_default">True</property>
             <property name="text" translatable="yes">Keyboard Shortcuts</property>
-            <signal name="clicked" handler="on_menu_shortcuts_clicked" swapped="no"/>
+            <signal name="clicked" handler="_on_menu_shortcuts_clicked" swapped="no"/>
           </object>
           <packing>
             <property name="expand">False</property>
@@ -204,10 +165,10 @@
         <child>
           <object class="GtkModelButton" id="menu_about">
             <property name="visible">True</property>
-            <property name="can_focus">True</property>
+            <property name="can_focus">False</property>
             <property name="receives_default">True</property>
             <property name="text" translatable="yes">About</property>
-            <signal name="clicked" handler="on_menu_about_clicked" swapped="no"/>
+            <signal name="clicked" handler="_on_menu_about_clicked" swapped="no"/>
           </object>
           <packing>
             <property name="expand">False</property>
@@ -216,6 +177,90 @@
           </packing>
         </child>
       </object>
+    </child>
+  </object>
+  <object class="GtkHeaderBar" id="_header_bar">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="title" translatable="yes">mpvQC</property>
+    <property name="show_close_button">True</property>
+    <child>
+      <object class="GtkButtonBox">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="layout_style">start</property>
+        <child>
+          <object class="GtkButton" id="button_new">
+            <property name="label" translatable="yes">New</property>
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="receives_default">True</property>
+            <property name="tooltip_text" translatable="yes">Create a new document</property>
+            <signal name="clicked" handler="_on_button_new_clicked" swapped="no"/>
+          </object>
+          <packing>
+            <property name="expand">True</property>
+            <property name="fill">True</property>
+            <property name="position">0</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkButton" id="_button_open">
+            <property name="label" translatable="yes">Open</property>
+            <property name="name">OpenButton</property>
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="receives_default">True</property>
+            <property name="tooltip_text" translatable="yes">Open document, video or subtitle files</property>
+            <property name="image">image1</property>
+            <property name="image_position">right</property>
+            <property name="always_show_image">True</property>
+            <signal name="clicked" handler="_on_button_open_clicked" swapped="no"/>
+          </object>
+          <packing>
+            <property name="expand">True</property>
+            <property name="fill">True</property>
+            <property name="position">1</property>
+          </packing>
+        </child>
+        <style>
+          <class name="linked"/>
+        </style>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuButton" id="menubutton1">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="receives_default">True</property>
+        <property name="direction">none</property>
+        <property name="popover">popover_menu</property>
+        <child>
+          <object class="GtkImage">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="icon_name">open-menu-symbolic</property>
+          </object>
+        </child>
+      </object>
+      <packing>
+        <property name="pack_type">end</property>
+        <property name="position">1</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkButton">
+        <property name="label" translatable="yes">Save</property>
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="receives_default">True</property>
+        <property name="tooltip_text" translatable="yes">Save current document</property>
+        <signal name="clicked" handler="_on_button_save_clicked" swapped="no"/>
+      </object>
+      <packing>
+        <property name="pack_type">end</property>
+        <property name="position">2</property>
+      </packing>
     </child>
   </object>
 </interface>

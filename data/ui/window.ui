@@ -5,8 +5,9 @@
   <template class="MpvqcWindow" parent="GtkApplicationWindow">
     <property name="can_focus">False</property>
     <property name="events">GDK_KEY_PRESS_MASK | GDK_STRUCTURE_MASK</property>
-    <property name="default_width">1400</property>
-    <property name="default_height">650</property>
+    <property name="default_width">1280</property>
+    <property name="default_height">720</property>
+    <property name="gravity">center</property>
     <signal name="key-press-event" handler="on_key_press_event" swapped="no"/>
     <child>
       <object class="GtkStack" id="_stack_content">
@@ -15,15 +16,7 @@
         <property name="transition_duration">300</property>
         <property name="transition_type">slide-left-right</property>
         <child>
-          <object class="GtkLabel">
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="label" translatable="yes">window</property>
-          </object>
-          <packing>
-            <property name="name">page0</property>
-            <property name="title" translatable="yes">page0</property>
-          </packing>
+          <placeholder/>
         </child>
       </object>
     </child>

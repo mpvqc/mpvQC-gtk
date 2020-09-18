@@ -45,7 +45,7 @@ class PreferencePageInput(Gtk.ScrolledWindow):
         self.__set_initial_values()
 
     @template.TemplateTrans.Callback()
-    def on_input_text_buffer_changed(self, widget, *data):
+    def on_input_text_buffer_changed(self, *_):
         start_iter = self.input_text_buffer.get_start_iter()
         end_iter = self.input_text_buffer.get_end_iter()
         get_settings().config_file_input_content = self.input_text_buffer.get_text(start_iter, end_iter, True)

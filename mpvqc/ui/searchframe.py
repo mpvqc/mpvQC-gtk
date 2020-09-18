@@ -64,7 +64,8 @@ class SearchFrame(Gtk.Frame):
         self.revealer.hide()
 
     @template.TemplateTrans.Callback()
-    def on_key_press_event(self, widget, event):
+    def on_key_press_event(self, _: Gtk.Widget, event: Gdk.EventKey) -> bool:
+
         no_mod, ctrl, alt, shift = keyboard.extract_modifiers(event.state)
         key = event.keyval
 
@@ -84,12 +85,12 @@ class SearchFrame(Gtk.Frame):
             return True
 
     @template.TemplateTrans.Callback()
-    def on_search_changed(self, search_entry, *data):
+    def on_search_changed(self, *_):
         self.__table_widget.queue_draw()
         self.on_next_match(None)
 
     @template.TemplateTrans.Callback()
-    def on_previous_match(self, button, *data):
+    def on_previous_match(self, *_):
         """
         Either button up, CTRL + SHIFT + G or SHIFT + Enter is pressed.
         """
@@ -97,7 +98,7 @@ class SearchFrame(Gtk.Frame):
         self.__highlight_next(top_to_bottom=False)
 
     @template.TemplateTrans.Callback()
-    def on_next_match(self, button, *data):
+    def on_next_match(self, *_):
         """
         Either button down, CTRL + G or Enter is pressed.
         """
@@ -111,7 +112,7 @@ class SearchFrame(Gtk.Frame):
     def on_focus_out_event(self, *_):
         self.__hide_search()
 
-    def clear_current_matches(self, widget, has_changes):
+    def clear_current_matches(self, _, has_changes):
         """
         Clears the current matches to force a complete research.
         """
@@ -236,7 +237,7 @@ class SearchFrame(Gtk.Frame):
                 self.revealer_label_result.set_reveal_child(False)
                 self.label_result.set_text("")
 
-    def __comment_type_cell_data_func(self, tree_column, cell, tree_model, tree_iter, *data):
+    def __comment_type_cell_data_func(self, _, cell, tree_model, tree_iter, *__):
         """
         Specify how text in the tree view is highlighted.
         """

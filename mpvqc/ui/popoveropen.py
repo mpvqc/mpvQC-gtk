@@ -19,7 +19,7 @@
 from gettext import gettext as _
 from os import path
 
-from gi.repository import Gtk, Gdk, Pango
+from gi.repository import Gtk, Pango
 
 from mpvqc import get_settings, template
 from mpvqc.utils import list_header_func, get_markup
@@ -39,9 +39,8 @@ class PopoverOpen(Gtk.Popover):
     search_entry = template.TemplateTrans.Child()
     scrolled_container = template.TemplateTrans.Child()
 
-    def __init__(self, parent, qc_manager, **kwargs):
+    def __init__(self, qc_manager, **kwargs):
         super().__init__(**kwargs)
-        self.__parent = parent
         self.init_template()
         self.__qc_manager = qc_manager
 
@@ -57,40 +56,37 @@ class PopoverOpen(Gtk.Popover):
         # Search query
         self.__current_search_query = ""
 
-        # Keyboard shortcuts
-        self.__set_up_keyboard_shortcuts()
-
     def popup(self):
         self.__update_recent_files_list()
         super(PopoverOpen, self).popup()
 
     @template.TemplateTrans.Callback()
-    def on_button_qc_clicked(self, widget, *data):
+    def on_button_qc_clicked(self, *_):
         self.popdown()
         self.__qc_manager.request_open_qc_documents()
 
     @template.TemplateTrans.Callback()
-    def on_button_video_clicked(self, widget, *data):
+    def on_button_video_clicked(self, *_):
         self.popdown()
         self.__qc_manager.request_open_video()
 
     @template.TemplateTrans.Callback()
-    def on_button_subtitle_clicked(self, widget, *data):
+    def on_button_subtitle_clicked(self, *_):
         self.popdown()
         self.__qc_manager.request_open_subtitles()
 
     @template.TemplateTrans.Callback()
-    def on_recent_files_search_changed(self, search_entry, *data):
+    def on_recent_files_search_changed(self, search_entry, *_):
         self.__current_search_query = search_entry.get_text()
         self.__list_recent_files.invalidate_filter()
 
     @template.TemplateTrans.Callback()
-    def on_button_clear_recent_files_clicked(self, widget, *data):
+    def on_button_clear_recent_files_clicked(self, *_):
         self.revealer_recent_files.set_reveal_child(False)
         get_settings().reset_latest_paths_recent_files()
         self.__update_recent_files_list()
 
-    def on_recent_item_clicked(self, widget, row):
+    def on_recent_item_clicked(self, _, row):
         """
         Invoked, when file in the recent file list was clicked.
         """
@@ -105,7 +101,7 @@ class PopoverOpen(Gtk.Popover):
                 else:
                     self.__qc_manager.request_open_video(file_path)
 
-    def __list_filter_func(self, row, *second):
+    def __list_filter_func(self, row, *_):
         """
         Methods gets called whenever 'invalidate_filter' got called.
 
@@ -148,7 +144,7 @@ class PopoverOpen(Gtk.Popover):
                 row = create_row(
                     file_type=0 if is_qc_document(recent_file) else 1,
                     file_name=path.basename(recent_file),
-                    path=recent_file
+                    file_path=recent_file
                 )
                 self.__list_recent_files.add(row)
 
@@ -156,33 +152,13 @@ class PopoverOpen(Gtk.Popover):
         else:
             self.revealer_recent_files.set_reveal_child(False)
 
-    def __set_up_keyboard_shortcuts(self):
-        """
-        Sets up keyboard shortcuts relevant in this widget's context.
-        """
 
-        a = Gtk.AccelGroup()
-        a.connect(
-            accel_key=Gdk.KEY_o,
-            accel_mods=Gdk.ModifierType.CONTROL_MASK,
-            accel_flags=Gtk.AccelFlags.VISIBLE,
-            closure=self.on_button_qc_clicked
-        )
-        a.connect(
-            accel_key=Gdk.KEY_o,
-            accel_mods=Gdk.ModifierType.CONTROL_MASK | Gdk.ModifierType.SHIFT_MASK,
-            accel_flags=Gtk.AccelFlags.VISIBLE,
-            closure=self.on_button_video_clicked
-        )
-        self.__parent.add_accel_group(accel_group=a)
-
-
-def create_row(file_type, file_name, path: str):
+def create_row(file_type, file_name, file_path: str):
     """
     This method is used to create a new row in the comment type list widget.
 
     :param file_name: the file name
-    :param path: the path
+    :param file_path: the path
     :param file_type: 0 if document, 1 if video
     :return: the new widget
     """
@@ -204,7 +180,7 @@ def create_row(file_type, file_name, path: str):
 
     row = Gtk.ListBoxRow()
     row.add(box)
-    row.set_tooltip_text(str(path))
+    row.set_tooltip_text(str(file_path))
     row.set_size_request(width=-1, height=_RECENT_FILES_ROW_HEIGHT)
     row.set_can_focus(False)
 

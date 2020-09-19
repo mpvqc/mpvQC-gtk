@@ -219,6 +219,9 @@ class ContentMainTable(Gtk.TreeView):
         elif ctrl and key == Gdk.KEY_c:
             self.__do_with_selected(self.__do_selected_copy_to_clipboard)
             return True
+        elif key == Gdk.KEY_space and not self.__video_widget.player.is_video_loaded():
+            # Avoid editing comments if video is not loaded using spacebar
+            return True
         return False
 
     def __add_comment(self, c_time, c_type, c_comm="", start_editing=True):

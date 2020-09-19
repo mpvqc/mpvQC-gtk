@@ -88,9 +88,9 @@ class ContentMain(Gtk.Box):
         self.__video_widget.connect("realize", self.__status_bar.on_mpv_player_realized)
         self.__video_widget.connect("realize", self.__on_mpv_player_realized)
         # Connect events: Key event order
-        self.__table_widget.connect("key-press-event", self.__video_widget.on_key_press_event)
-        self.__table_widget.connect("key-press-event", self.__table_widget.on_key_press_event)
         self.__table_widget.connect("key-press-event", self.__search_frame.on_key_press_event)
+        self.__table_widget.connect("key-press-event", self.__table_widget.on_key_press_event)
+        self.__table_widget.connect("key-press-event", self.__video_widget.on_key_press_event)
         # Connect events: Statusbar
         self.__table_widget.get_selection().connect("changed", self.__status_bar.on_comments_selection_change)
         self.__table_widget.get_model().connect("row-changed", self.__status_bar.on_comments_row_changed)

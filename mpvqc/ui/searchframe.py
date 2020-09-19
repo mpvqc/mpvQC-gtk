@@ -65,6 +65,7 @@ class SearchFrame(Gtk.Frame):
 
     @template.TemplateTrans.Callback()
     def on_key_press_event(self, _: Gtk.Widget, event: Gdk.EventKey) -> bool:
+        """Returns True if handled, False else"""
 
         no_mod, ctrl, alt, shift = keyboard.extract_modifiers(event.state)
         key = event.keyval
@@ -72,17 +73,20 @@ class SearchFrame(Gtk.Frame):
         if ctrl and key == Gdk.KEY_f:
             self.__toggle_search()
             return True
-        elif no_mod and key == Gdk.KEY_Escape:
-            self.__hide_search()
-            return True
-        elif no_mod and key == Gdk.KEY_Return:
-            self.__highlight_next(top_to_bottom=True)
-            return True
-        elif shift and key == Gdk.KEY_Return:
-            self.__highlight_next(top_to_bottom=False)
-            return True
-        elif self.__search_active and no_mod and (key == Gdk.KEY_Down or key == Gdk.KEY_Up):
-            return True
+
+        if self.__search_active:
+            if no_mod and key == Gdk.KEY_Escape:
+                self.__hide_search()
+                return True
+            elif no_mod and key == Gdk.KEY_Return:
+                self.__highlight_next(top_to_bottom=True)
+                return True
+            elif shift and key == Gdk.KEY_Return:
+                self.__highlight_next(top_to_bottom=False)
+                return True
+            elif no_mod and (key == Gdk.KEY_Down or key == Gdk.KEY_Up):
+                return True
+        return False
 
     @template.TemplateTrans.Callback()
     def on_search_changed(self, *_):

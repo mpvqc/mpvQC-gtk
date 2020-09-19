@@ -205,6 +205,7 @@ class ContentMainTable(Gtk.TreeView):
         return False
 
     def on_key_press_event(self, _: Gtk.Widget, event: Gdk.EventKey) -> bool:
+        """Returns True if handled, False else"""
 
         no_mod, ctrl, alt, shift = keyboard.extract_modifiers(event.state)
         key = event.keyval

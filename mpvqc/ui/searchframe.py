@@ -52,7 +52,7 @@ class SearchFrame(Gtk.Frame):
         self.set_property("halign", Gtk.Align.END)
         self.revealer.set_reveal_child(False)
 
-        self.entry_search.connect("key-press-event", self.on_key_press_event)
+        self.entry_search.connect("key-press-event", self._on_key_press_event)
         self.entry_search.connect("focus-out-event", self.on_focus_out_event)
         self.entry_search.connect("insert-text", validate_text_insertion)
 
@@ -64,28 +64,23 @@ class SearchFrame(Gtk.Frame):
         self.revealer.hide()
 
     @template.TemplateTrans.Callback()
-    def on_key_press_event(self, _: Gtk.Widget, event: Gdk.EventKey) -> bool:
+    def _on_key_press_event(self, _: Gtk.Widget, event: Gdk.EventKey) -> bool:
         """Returns True if handled, False else"""
 
         no_mod, ctrl, alt, shift = keyboard.extract_modifiers(event.state)
         key = event.keyval
 
-        if ctrl and key == Gdk.KEY_f:
-            self.__toggle_search()
+        if no_mod and key == Gdk.KEY_Escape:
+            self.__hide_search()
             return True
-
-        if self.__search_active:
-            if no_mod and key == Gdk.KEY_Escape:
-                self.__hide_search()
-                return True
-            elif no_mod and key == Gdk.KEY_Return:
-                self.__highlight_next(top_to_bottom=True)
-                return True
-            elif shift and key == Gdk.KEY_Return:
-                self.__highlight_next(top_to_bottom=False)
-                return True
-            elif no_mod and (key == Gdk.KEY_Down or key == Gdk.KEY_Up):
-                return True
+        elif no_mod and key == Gdk.KEY_Return:
+            self.__highlight_next(top_to_bottom=True)
+            return True
+        elif shift and key == Gdk.KEY_Return:
+            self.__highlight_next(top_to_bottom=False)
+            return True
+        elif no_mod and (key == Gdk.KEY_Down or key == Gdk.KEY_Up):
+            return True
         return False
 
     @template.TemplateTrans.Callback()
@@ -147,7 +142,7 @@ class SearchFrame(Gtk.Frame):
         self.revealer.set_reveal_child(True)
         self.entry_search.grab_focus()
 
-    def __toggle_search(self):
+    def toggle_search(self):
         """
         When the user presses CTRL + f.
         """

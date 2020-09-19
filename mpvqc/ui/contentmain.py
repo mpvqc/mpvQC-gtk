@@ -88,7 +88,6 @@ class ContentMain(Gtk.Box):
         self.__video_widget.connect("realize", self.__status_bar.on_mpv_player_realized)
         self.__video_widget.connect("realize", self.__on_mpv_player_realized)
         # Connect events: Key event order
-        self.__table_widget.connect("key-press-event", self.__search_frame.on_key_press_event)
         self.__table_widget.connect("key-press-event", self.__table_widget.on_key_press_event)
         self.__table_widget.connect("key-press-event", self.__video_widget.on_key_press_event)
         # Connect events: Statusbar
@@ -187,6 +186,7 @@ class ContentMain(Gtk.Box):
             if alt and key == Gdk.KEY_s:  # CTRL + ALT + s
                 self._on_menu_preferences_clicked()
                 return True
+
             if key == Gdk.KEY_n:  # CTRL + n
                 self._on_button_new_clicked()
                 return True
@@ -207,6 +207,9 @@ class ContentMain(Gtk.Box):
                 return True
             if key == Gdk.KEY_F1:  # CTRL + F1
                 self._on_menu_shortcuts_clicked()
+                return True
+            if key == Gdk.KEY_f:  # CTRL + f
+                self.__search_frame.toggle_search()
                 return True
 
         if self.__is_fullscreen:

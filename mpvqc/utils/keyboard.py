@@ -105,4 +105,7 @@ def command_generator(ctrl, alt, shift, key_str, mod_required=False, is_char=Fal
             key_str = key_str.lower()
         shift = None
 
-    return "+".join([x for x in [shift, ctrl, alt, key_str] if x])
+    if key_str:
+        return "+".join([x for x in [shift, ctrl, alt, key_str] if x])
+    else:
+        return ""

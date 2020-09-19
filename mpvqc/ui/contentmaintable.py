@@ -239,7 +239,6 @@ class ContentMainTable(Gtk.TreeView):
         """
         Adds a comment from the context menu.
 
-        :param widget: not relevant, data from event
         :param time: the time of the video currently
         :param comment_type: the comment type to add
         """

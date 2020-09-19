@@ -116,6 +116,7 @@ class ContentMainMpv(Gtk.EventBox):
         return True
 
     def on_key_press_event(self, _: Gtk.Widget, event: Gdk.EventKey, is_fullscreen: bool = False) -> bool:
+        """Returns True if handled, False else"""
 
         no_mod, ctrl, alt, shift = keyboard.extract_modifiers(event.state)
         key = event.keyval
@@ -126,8 +127,6 @@ class ContentMainMpv(Gtk.EventBox):
                 or key == Gdk.KEY_Delete \
                 or key == Gdk.KEY_Return \
                 or key == Gdk.KEY_BackSpace \
-                or ctrl and key == Gdk.KEY_c \
-                or ctrl and key == Gdk.KEY_f \
                 or no_mod and key == Gdk.KEY_Escape and not is_fullscreen:
             return False
 

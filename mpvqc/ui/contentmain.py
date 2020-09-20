@@ -20,6 +20,7 @@ import time
 
 from gi.repository import Gtk, Gdk, GObject, GLib
 
+import mpvqc.utils.signals as signals
 from mpvqc import template, get_settings
 from mpvqc.qc.manager import QcManager
 from mpvqc.ui.about import AboutDialog
@@ -30,7 +31,6 @@ from mpvqc.ui.statusbar import StatusBar
 from mpvqc.ui.window import MpvqcWindow
 from mpvqc.utils import draganddrop, keyboard
 from mpvqc.utils.shortcuts import ShortcutWindow
-from mpvqc.utils.signals import MPVQC_FILENAME_NO_EXT, MPVQC_PATH, MPVQC_STATUSBAR_UPDATE, MPVQC_QC_STATE_CHANGED, MPVQC_NEW_VIDEO_LOADED
 
 
 @template.TemplateTrans(resource_path='/data/ui/contentmain.ui')
@@ -39,7 +39,7 @@ class ContentMain(Gtk.Box):
 
     __gsignals__ = {
         # Signals, that there was a new video loaded:  p1 'video width' ; p2 'video height'
-        MPVQC_NEW_VIDEO_LOADED: (GObject.SignalFlags.RUN_FIRST, None, (int, int))
+        signals.MPVQC_NEW_VIDEO_LOADED: (GObject.SignalFlags.RUN_FIRST, None, (int, int))
     }
 
     _header_bar: Gtk.HeaderBar = template.TemplateTrans.Child()
@@ -96,9 +96,9 @@ class ContentMain(Gtk.Box):
         self.__table_widget.get_model().connect("row-deleted", self.__status_bar.on_comments_row_changed)
         self.__table_widget.get_model().connect("row-inserted", self.__status_bar.on_comments_row_changed)
         # Connect events: QC-Manager
-        self.__qc_manager.connect(MPVQC_STATUSBAR_UPDATE, self.__status_bar.update_statusbar_message)
-        self.__qc_manager.connect(MPVQC_QC_STATE_CHANGED, self.__update_title)
-        self.__qc_manager.connect(MPVQC_QC_STATE_CHANGED, self.__search_frame.clear_current_matches)
+        self.__qc_manager.connect(signals.MPVQC_STATUSBAR_UPDATE, self.__status_bar.update_statusbar_message)
+        self.__qc_manager.connect(signals.MPVQC_QC_STATE_CHANGED, self.__update_title)
+        self.__qc_manager.connect(signals.MPVQC_QC_STATE_CHANGED, self.__search_frame.clear_current_matches)
 
         # Class variables
         self.__is_fullscreen = False
@@ -277,13 +277,13 @@ class ContentMain(Gtk.Box):
                 time.sleep(0.05)
             self.__fire_event_new_video_loaded()
 
-        mpv.connect(MPVQC_FILENAME_NO_EXT, __on_file_name_changed)
-        mpv.connect(MPVQC_PATH, __on_file_path_changed)
+        mpv.connect(signals.MPVQC_FILENAME_NO_EXT, __on_file_name_changed)
+        mpv.connect(signals.MPVQC_PATH, __on_file_path_changed)
 
     def __fire_event_new_video_loaded(self):
         player = self.__video_widget.player
         self.emit(
-            MPVQC_NEW_VIDEO_LOADED,
+            signals.MPVQC_NEW_VIDEO_LOADED,
             player.video_width(),
             player.video_height(),
         )

@@ -18,8 +18,8 @@
 
 from gi.repository import Gtk, GObject
 
+import mpvqc.utils.signals as signals
 from mpvqc import get_settings, template
-from mpvqc.utils.signals import MPVQC_APPLY
 
 
 @template.TemplateTrans(resource_path='/data/ui/popovertypeedit.ui')
@@ -27,7 +27,7 @@ class PopoverTypeEdit(Gtk.Popover):
     __gtype_name__ = 'PopoverTypeEdit'
 
     __gsignals__ = {
-        MPVQC_APPLY: (GObject.SignalFlags.RUN_FIRST, None, (str,))
+        signals.MPVQC_APPLY: (GObject.SignalFlags.RUN_FIRST, None, (str,))
     }
 
     box = template.TemplateTrans.Child()
@@ -52,7 +52,7 @@ class PopoverTypeEdit(Gtk.Popover):
             self.__create_additional_entry(current_text)
 
     def __on_item_clicked(self, widget, *_):
-        self.emit(MPVQC_APPLY, widget.get_property("text"))
+        self.emit(signals.MPVQC_APPLY, widget.get_property("text"))
         self.popdown()
 
     def __create_new_button(self, label):

@@ -21,6 +21,7 @@ from typing import Tuple
 
 from gi.repository import Gtk, Gdk, GObject, GLib
 
+import mpvqc.utils.signals as signals
 from mpvqc import template
 from mpvqc.cellrenderer import CellRendererSeek, CellRendererTime, CellRendererType, CellRendererComment
 from mpvqc.qc import Comment
@@ -28,7 +29,6 @@ from mpvqc.ui.popovertimeedit import PopoverTimeEdit
 from mpvqc.ui.popovertypeedit import PopoverTypeEdit
 from mpvqc.utils import keyboard, get_markup
 from mpvqc.utils.input import MouseButton
-from mpvqc.utils.signals import MPVQC_APPLY, MPVQC_CREATE_NEW_COMMENT, MPVQC_TABLE_CONTENT_CHANGED
 
 PLAY_ICON = "media-playback-start-symbolic"
 
@@ -63,7 +63,7 @@ class ContentMainTable(Gtk.TreeView):
     __gtype_name__ = 'ContentMainTable'
 
     __gsignals__ = {
-        MPVQC_TABLE_CONTENT_CHANGED: (GObject.SignalFlags.RUN_FIRST, None, (bool,)),
+        signals.MPVQC_TABLE_CONTENT_CHANGED: (GObject.SignalFlags.RUN_FIRST, None, (bool,)),
     }
 
     def __init__(self, video_widget, **kwargs):
@@ -99,7 +99,7 @@ class ContentMainTable(Gtk.TreeView):
 
         # Connect signals
         self.get_selection().connect("changed", self.__on_selection_changed)
-        self.__video_widget.connect(MPVQC_CREATE_NEW_COMMENT, self.__add_comment_from_context_menu)
+        self.__video_widget.connect(signals.MPVQC_CREATE_NEW_COMMENT, self.__add_comment_from_context_menu)
 
         self.__model.connect("row-changed", self.__fire_signal_not_up_to_date)
         self.__model.connect("row-deleted", self.__fire_signal_not_up_to_date)
@@ -271,7 +271,7 @@ class ContentMainTable(Gtk.TreeView):
             self.__on_selection_changed()
 
         pop = PopoverTimeEdit(self, self.__video_widget, self.__model.get_value(path_iter, 1))
-        pop.connect(MPVQC_APPLY, __set_value)
+        pop.connect(signals.MPVQC_APPLY, __set_value)
         pop.set_pointing_to(self.get_cell_area(path, col))
         pop.set_relative_to(self)
         pop.popup()
@@ -290,7 +290,7 @@ class ContentMainTable(Gtk.TreeView):
             self.__on_selection_changed()
 
         pop = PopoverTypeEdit(self.__model.get_value(path_iter, 2))
-        pop.connect(MPVQC_APPLY, __set_value)
+        pop.connect(signals.MPVQC_APPLY, __set_value)
         pop.set_pointing_to(self.get_cell_area(path, col))
         pop.set_relative_to(self)
         pop.popup()
@@ -372,4 +372,4 @@ class ContentMainTable(Gtk.TreeView):
         """
 
         if not self.__fire_signal_blocked:
-            self.emit(MPVQC_TABLE_CONTENT_CHANGED, False)
+            self.emit(signals.MPVQC_TABLE_CONTENT_CHANGED, False)

@@ -75,8 +75,6 @@ class ContentMain(Gtk.Box):
         self._paned.pack2(self._overlay, resize=True, shrink=False)
         self._box.pack_start(self.__status_bar, expand=False, fill=True, padding=0)
 
-        self._paned.set_position(s.app_window_video_height)
-
         # Set up drag and drop
         target = Gtk.TargetEntry.new(target="text/uri-list", flags=Gtk.TargetFlags.OTHER_APP, info=0)
         self._paned.drag_dest_set(Gtk.DestDefaults.ALL, [target], Gdk.DragAction.COPY)
@@ -123,10 +121,6 @@ class ContentMain(Gtk.Box):
         """Returns True, if can quit (state is saved), False else"""
 
         return self.__qc_manager.request_quit_application()
-
-    @property
-    def allocated_table_height(self) -> int:
-        return self._paned.get_position()
 
     @template.TemplateTrans.Callback()
     def _on_button_new_clicked(self, *_) -> None:

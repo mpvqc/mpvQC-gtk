@@ -216,10 +216,6 @@ class Settings:
         self.__latest_paths_import_subtitle_directory = _Str("latest-paths-import-subtitle-directory", s)
         self.__latest_paths_recent_files = _PathList("latest-paths-recent-files", s, keep_max=10)
 
-        self.__app_window_width = _Int("app-window-width", s)
-        self.__app_window_height = _Int("app-window-height", s)
-        self.__app_window_video_height = _Int("app-window-video-height", s)
-
         self.__config_input = _ConfigFile(resource_path=app_resource_base_path + "/config/input.conf")
         self.__config_mpv = _ConfigFile(resource_path=app_resource_base_path + "/config/mpv.conf")
 
@@ -493,42 +489,6 @@ class Settings:
 
     def reset_latest_paths_recent_files(self) -> None:
         self.__latest_paths_recent_files.reset()
-
-    #
-    # App window width
-    #
-
-    @property
-    def app_window_width(self) -> int:
-        return self.__app_window_width.get()
-
-    @app_window_width.setter
-    def app_window_width(self, value) -> None:
-        self.__app_window_width.set(value)
-
-    #
-    # App window height
-    #
-
-    @property
-    def app_window_height(self) -> int:
-        return self.__app_window_height.get()
-
-    @app_window_height.setter
-    def app_window_height(self, value) -> None:
-        self.__app_window_height.set(value)
-
-    #
-    # App window video height
-    #
-
-    @property
-    def app_window_video_height(self) -> int:
-        return self.__app_window_video_height.get()
-
-    @app_window_video_height.setter
-    def app_window_video_height(self, value) -> None:
-        self.__app_window_video_height.set(value)
 
     #
     # Config file: input.conf

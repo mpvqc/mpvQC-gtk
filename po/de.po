@@ -20,8 +20,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
-"POT-Creation-Date: 2020-09-20 10:09+0200\n"
-"PO-Revision-Date: 2020-09-20 10:09+0200\n"
+"POT-Creation-Date: 2020-09-20 17:50+0200\n"
+"PO-Revision-Date: 2020-09-20 17:54+0200\n"
 "Last-Translator: Elias Müller <elias.mueller@mailbox.org>\n"
 "Language-Team: \n"
 "Language: de\n"
@@ -37,7 +37,7 @@ msgstr ""
 
 #. Translators: Do not translate application name
 #: data/com.github.mpvqc.mpvQC.appdata.xml:8
-#: data/com.github.mpvqc.mpvQC.desktop:3 data/ui/contentmain.ui:175
+#: data/com.github.mpvqc.mpvQC.desktop:3 data/ui/contentmain.ui:176
 msgid "mpvQC"
 msgstr "mpvQC"
 
@@ -162,18 +162,6 @@ msgstr "Standardverzeichnis für den Untertitelimport"
 msgid "Set the list of all recent files"
 msgstr "Liste mit zuletzt verwendeten Dateien"
 
-#: data/com.github.mpvqc.mpvQC.gschema.xml:141
-msgid "Set the app window width"
-msgstr "Fensterbreite der Anwendung"
-
-#: data/com.github.mpvqc.mpvQC.gschema.xml:147
-msgid "Set the app window height"
-msgstr "Fensterhöhe der Anwendung"
-
-#: data/com.github.mpvqc.mpvQC.gschema.xml:153
-msgid "Set the video height"
-msgstr "Videohöhe"
-
 #: data/ui/about.ui:58
 msgid "mpv version:"
 msgstr "mpv-Version:"
@@ -182,47 +170,47 @@ msgstr "mpv-Version:"
 msgid "ffmpeg version:"
 msgstr "ffmpeg-Version:"
 
-#: data/ui/contentmain.ui:81
+#: data/ui/contentmain.ui:82
 msgid "Save As..."
 msgstr "Speichern unter ..."
 
-#: data/ui/contentmain.ui:106
+#: data/ui/contentmain.ui:107
 msgid "Dark Theme"
 msgstr "Dunkles Theme"
 
-#: data/ui/contentmain.ui:131
+#: data/ui/contentmain.ui:132
 msgid "Preferences"
 msgstr "Einstellungen"
 
-#: data/ui/contentmain.ui:146
+#: data/ui/contentmain.ui:147
 msgid "Keyboard Shortcuts"
 msgstr "Tastenkürzel"
 
-#: data/ui/contentmain.ui:160
+#: data/ui/contentmain.ui:161
 msgid "About"
 msgstr "Info zu mpvQC"
 
-#: data/ui/contentmain.ui:184
+#: data/ui/contentmain.ui:185
 msgid "New"
 msgstr "Neu"
 
-#: data/ui/contentmain.ui:188 mpvqc/utils/shortcuts.py:95
+#: data/ui/contentmain.ui:189 mpvqc/utils/shortcuts.py:95
 msgid "Create a new document"
 msgstr "Neues Dokument erstellen"
 
-#: data/ui/contentmain.ui:199 data/ui/prefpageimexport.ui:946
+#: data/ui/contentmain.ui:200 data/ui/prefpageimexport.ui:946
 msgid "Open"
 msgstr "Öffnen"
 
-#: data/ui/contentmain.ui:204
+#: data/ui/contentmain.ui:205
 msgid "Open document, video or subtitle files"
 msgstr "Dokumente, Videos oder Untertitel öffnen"
 
-#: data/ui/contentmain.ui:243
+#: data/ui/contentmain.ui:244
 msgid "Save"
 msgstr "Speichern"
 
-#: data/ui/contentmain.ui:247 mpvqc/utils/shortcuts.py:104
+#: data/ui/contentmain.ui:248 mpvqc/utils/shortcuts.py:107
 msgid "Save current document"
 msgstr "Aktuelles Dokument speichern"
 
@@ -262,11 +250,11 @@ msgstr "Verlauf löschen"
 msgid "Apply changes"
 msgstr "Änderungen übernehmen"
 
-#: data/ui/popovertimeedit.ui:80
+#: data/ui/popovertimeedit.ui:77
 msgid "Decrement time by one second"
 msgstr "Eine Sekunde zurückgehen"
 
-#: data/ui/popovertimeedit.ui:100
+#: data/ui/popovertimeedit.ui:97
 msgid "Increment time by one second"
 msgstr "Eine Sekunde vorgehen"
 
@@ -393,35 +381,35 @@ msgstr ""
 msgid "Close"
 msgstr "Schließen"
 
-#: data/ui/searchframe.ui:81 mpvqc/utils/shortcuts.py:194
+#: data/ui/searchframe.ui:81 mpvqc/utils/shortcuts.py:197
 msgid "Previous result"
 msgstr "Voriger Treffer"
 
-#: data/ui/searchframe.ui:104 mpvqc/utils/shortcuts.py:191
+#: data/ui/searchframe.ui:104 mpvqc/utils/shortcuts.py:194
 msgid "Next result"
 msgstr "Nächster Treffer"
 
-#: data/ui/statusbar.ui:37
+#: data/ui/statusbar.ui:34
 msgid "Customize time formatting"
 msgstr "Zeitformatierung anpassen"
 
-#: data/ui/statusbar.ui:78
+#: data/ui/statusbar.ui:75
 msgid "Default format"
 msgstr "Standardformat"
 
-#: data/ui/statusbar.ui:91
+#: data/ui/statusbar.ui:88
 msgid "Current time"
 msgstr "Aktuelle Zeit"
 
-#: data/ui/statusbar.ui:104
+#: data/ui/statusbar.ui:101
 msgid "Remaining time"
 msgstr "Verbleibende Zeit"
 
-#: data/ui/statusbar.ui:117
+#: data/ui/statusbar.ui:114
 msgid "Hide time"
 msgstr "Zeit verbergen"
 
-#: data/ui/statusbar.ui:141
+#: data/ui/statusbar.ui:138
 msgid "Progress in percent"
 msgstr "Fortschritt in Prozent"
 
@@ -639,14 +627,6 @@ msgstr "Typeset"
 msgid "Hint"
 msgstr "Hinweis"
 
-#: mpvqc/ui/contentmain.py:108
-msgid "nickname"
-msgstr "Nickname"
-
-#: mpvqc/ui/contentmain.py:111
-msgid "Welcome back {}!"
-msgstr "Willkommen zurück {}!"
-
 #: mpvqc/ui/contentpref.py:48 mpvqc/utils/shortcuts.py:31
 msgid "General"
 msgstr "Allgemein"
@@ -707,107 +687,111 @@ msgstr "Ausdruck nicht gefunden"
 msgid "Search"
 msgstr "Suche"
 
-#: mpvqc/utils/shortcuts.py:107
+#: mpvqc/utils/shortcuts.py:104
+msgid "Resize video to original resolution"
+msgstr "Video auf Originalgröße skalieren"
+
+#: mpvqc/utils/shortcuts.py:110
 msgid "Save current document with a different name"
 msgstr "Aktuelles Dokument unter anderem Namen speichern"
 
-#: mpvqc/utils/shortcuts.py:110
+#: mpvqc/utils/shortcuts.py:113
 msgid "Open preferences"
 msgstr "Einstellungen öffnen"
 
-#: mpvqc/utils/shortcuts.py:113
+#: mpvqc/utils/shortcuts.py:116
 msgid "Quit the application"
 msgstr "Anwendung beenden"
 
-#: mpvqc/utils/shortcuts.py:116
+#: mpvqc/utils/shortcuts.py:119
 msgid "Display shortcuts"
 msgstr "Tastenkürzel anzeigen"
 
-#: mpvqc/utils/shortcuts.py:122
+#: mpvqc/utils/shortcuts.py:125
 msgid "Open context menu"
 msgstr "Kontextmenü öffnen"
 
-#: mpvqc/utils/shortcuts.py:125
+#: mpvqc/utils/shortcuts.py:128
 msgid "Edit selected comment"
 msgstr "Ausgewählten Kommentar bearbeiten"
 
-#: mpvqc/utils/shortcuts.py:128
+#: mpvqc/utils/shortcuts.py:131
 msgid "Delete selected comment"
 msgstr "Ausgewählten Kommentar löschen"
 
-#: mpvqc/utils/shortcuts.py:134
+#: mpvqc/utils/shortcuts.py:137
 msgid "Enter/leave fullscreen mode"
 msgstr "Vollbildmodus ein-/ausschalten"
 
-#: mpvqc/utils/shortcuts.py:137
+#: mpvqc/utils/shortcuts.py:140
 msgid "Play/pause"
 msgstr "Abspielen/Pause"
 
-#: mpvqc/utils/shortcuts.py:140
+#: mpvqc/utils/shortcuts.py:143
 msgid "Seek backward by 2 seconds"
 msgstr "2 Sekunden zurückspulen"
 
-#: mpvqc/utils/shortcuts.py:143
+#: mpvqc/utils/shortcuts.py:146
 msgid "Seek forward by 2 seconds"
 msgstr "2 Sekunden vorspulen"
 
-#: mpvqc/utils/shortcuts.py:146
+#: mpvqc/utils/shortcuts.py:149
 msgid "Seek backward by 5 seconds to a keyframe"
 msgstr "5 Sekunden zu Keyframe zurückspulen"
 
-#: mpvqc/utils/shortcuts.py:149
+#: mpvqc/utils/shortcuts.py:152
 msgid "Seek forward by 5 seconds to a keyframe"
 msgstr "5 Sekunden zu Keyframe vorspulen"
 
-#: mpvqc/utils/shortcuts.py:152
+#: mpvqc/utils/shortcuts.py:155
 msgid "Increase volume"
 msgstr "Lautstärke erhöhen"
 
-#: mpvqc/utils/shortcuts.py:155
+#: mpvqc/utils/shortcuts.py:158
 msgid "Decrease volume"
 msgstr "Lautstärke verringern"
 
-#: mpvqc/utils/shortcuts.py:158
+#: mpvqc/utils/shortcuts.py:161
 msgid "Mute/unmute"
 msgstr "Stummschalten/Stummschalten aufheben"
 
-#: mpvqc/utils/shortcuts.py:161
+#: mpvqc/utils/shortcuts.py:164
 msgid "Go backward by one frame"
 msgstr "Frame zurückgehen"
 
-#: mpvqc/utils/shortcuts.py:164
+#: mpvqc/utils/shortcuts.py:167
 msgid "Go forward by one frame"
 msgstr "Frame vorgehen"
 
-#: mpvqc/utils/shortcuts.py:167
+#: mpvqc/utils/shortcuts.py:170
 msgid "Cycle through subtitle tracks"
 msgstr "Untertitelspur wechseln"
 
-#: mpvqc/utils/shortcuts.py:170
+#: mpvqc/utils/shortcuts.py:173
 msgid "Cycle through audio tracks"
 msgstr "Audiospur wechseln"
 
-#: mpvqc/utils/shortcuts.py:173
+#: mpvqc/utils/shortcuts.py:176
 msgid "Screenshot of the unscaled video"
 msgstr "Screenshot (unskaliert) anfertigen"
 
-#: mpvqc/utils/shortcuts.py:176
+#: mpvqc/utils/shortcuts.py:179
 msgid "Screenshot of the scaled video"
 msgstr "Screenshot anfertigen"
 
-#: mpvqc/utils/shortcuts.py:179
+#: mpvqc/utils/shortcuts.py:182
 msgid "Render subtitles at window/video resolution"
 msgstr "Untertitel in Fenster-/Videoauflösung rendern"
 
-#: mpvqc/utils/shortcuts.py:182
+#: mpvqc/utils/shortcuts.py:185
 msgid "Display statistics of the currently played video"
 msgstr "Statistik des aktuell wiedergegebenen Videos anzeigen"
 
-#: mpvqc/utils/shortcuts.py:188
+#: mpvqc/utils/shortcuts.py:191
 msgid "Toggle search"
 msgstr "Suche ein-/ausblenden"
 
-#: mpvqc/utils/shortcuts.py:197
+#: mpvqc/utils/shortcuts.py:200
 msgid "Hide search"
 msgstr "Suche verbergen"
 

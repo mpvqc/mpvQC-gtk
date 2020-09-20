@@ -10,3 +10,7 @@
 #SearchFrame {
     background-color: @theme_bg_color;
 }
+
+treeview.view *:focus {
+    outline-style: none;
+}

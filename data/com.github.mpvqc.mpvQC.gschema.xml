@@ -136,23 +136,5 @@
             <description/>
         </key>
 
-        <key name="app-window-width" type="i">
-            <default>1280</default>
-            <summary>Set the app window width</summary>
-            <description/>
-        </key>
-
-        <key name="app-window-height" type="i">
-            <default>850</default>
-            <summary>Set the app window height</summary>
-            <description/>
-        </key>
-
-        <key name="app-window-video-height" type="i">
-            <default>720</default>
-            <summary>Set the video height</summary>
-            <description/>
-        </key>
-
     </schema>
 </schemalist>

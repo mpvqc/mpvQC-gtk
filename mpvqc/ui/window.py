@@ -32,9 +32,7 @@ class MpvqcWindow(Gtk.ApplicationWindow):
         super().__init__(**kwargs)
         self.init_template()
 
-        s = get_settings()
-
-        self.set_default_size(s.app_window_width, s.app_window_height)
+        self.set_default_size(width=1280, height=960)
 
         from mpvqc.ui.contentmain import ContentMain
         content_main = ContentMain(mpvqc_window=self)
@@ -77,13 +75,6 @@ class MpvqcWindow(Gtk.ApplicationWindow):
             return True
 
         s = get_settings()
-
-        width, height = self.get_size()
-
-        s.app_window_height = height
-        s.app_window_width = width
-        s.app_window_video_height = self.__content_main.allocated_table_height
-
         s.write_config_file_input_content()
         s.write_config_file_mpv_content()
 

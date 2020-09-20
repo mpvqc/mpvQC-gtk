@@ -5,8 +5,6 @@
   <template class="MpvqcWindow" parent="GtkApplicationWindow">
     <property name="can_focus">False</property>
     <property name="events">GDK_KEY_PRESS_MASK | GDK_STRUCTURE_MASK</property>
-    <property name="default_width">1280</property>
-    <property name="default_height">720</property>
     <property name="gravity">center</property>
     <signal name="key-press-event" handler="on_key_press_event" swapped="no"/>
     <child>

@@ -39,7 +39,8 @@ class ContentMain(Gtk.Box):
 
     __gsignals__ = {
         # Signals, that there was a new video loaded:  p1 'video width' ; p2 'video height'
-        signals.MPVQC_NEW_VIDEO_LOADED: (GObject.SignalFlags.RUN_FIRST, None, (int, int))
+        signals.MPVQC_NEW_VIDEO_LOADED: (GObject.SignalFlags.RUN_FIRST, None, (int, int)),
+        signals.MPVQC_ON_VIDEO_RESIZE: (GObject.SignalFlags.RUN_FIRST, None, (int, int))
     }
 
     _header_bar: Gtk.HeaderBar = template.TemplateTrans.Child()
@@ -201,6 +202,10 @@ class ContentMain(Gtk.Box):
             if key == Gdk.KEY_f:  # CTRL + f
                 self.__search_frame.toggle_search()
                 return True
+            if key == Gdk.KEY_r:  # CTRL + r
+                if self.__video_widget.player.is_video_loaded():
+                    self.__fire_event_on_video_resize()
+                return True
 
         if self.__is_fullscreen:
             self.__video_widget.on_key_press_event(widget, event, is_fullscreen=True)
@@ -280,14 +285,6 @@ class ContentMain(Gtk.Box):
         mpv.connect(signals.MPVQC_FILENAME_NO_EXT, __on_file_name_changed)
         mpv.connect(signals.MPVQC_PATH, __on_file_path_changed)
 
-    def __fire_event_new_video_loaded(self):
-        player = self.__video_widget.player
-        self.emit(
-            signals.MPVQC_NEW_VIDEO_LOADED,
-            player.video_width(),
-            player.video_height(),
-        )
-
     def __update_title(self, _, has_changes) -> None:
         """
         Updates the title hinting to the current document state.
@@ -308,3 +305,19 @@ class ContentMain(Gtk.Box):
             self._header_bar.set_subtitle(self.__video_file_name)
         elif value == 2:
             self._header_bar.set_subtitle(self.__video_file_path)
+
+    def __fire_event_new_video_loaded(self):
+        player = self.__video_widget.player
+        self.emit(
+            signals.MPVQC_NEW_VIDEO_LOADED,
+            player.video_width(),
+            player.video_height(),
+        )
+
+    def __fire_event_on_video_resize(self):
+        player = self.__video_widget.player
+        self.emit(
+            signals.MPVQC_ON_VIDEO_RESIZE,
+            player.video_width(),
+            player.video_height(),
+        )

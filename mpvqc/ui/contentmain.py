@@ -16,9 +16,9 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-from gettext import gettext as _
+import time
 
-from gi.repository import Gtk, Gdk
+from gi.repository import Gtk, Gdk, GObject, GLib
 
 from mpvqc import template, get_settings
 from mpvqc.qc.manager import QcManager
@@ -30,12 +30,17 @@ from mpvqc.ui.statusbar import StatusBar
 from mpvqc.ui.window import MpvqcWindow
 from mpvqc.utils import draganddrop, keyboard
 from mpvqc.utils.shortcuts import ShortcutWindow
-from mpvqc.utils.signals import FILENAME_NO_EXT, PATH, STATUSBAR_UPDATE, QC_STATE_CHANGED
+from mpvqc.utils.signals import FILENAME_NO_EXT, PATH, STATUSBAR_UPDATE, QC_STATE_CHANGED, MPVQC_NEW_VIDEO_LOADED
 
 
 @template.TemplateTrans(resource_path='/data/ui/contentmain.ui')
 class ContentMain(Gtk.Box):
     __gtype_name__ = 'ContentMain'
+
+    __gsignals__ = {
+        # Signals, that there was a new video loaded:  p1 'video width' ; p2 'video height'
+        MPVQC_NEW_VIDEO_LOADED: (GObject.SignalFlags.RUN_FIRST, None, (int, int))
+    }
 
     _header_bar: Gtk.HeaderBar = template.TemplateTrans.Child()
     _stack: Gtk.Stack = template.TemplateTrans.Child()
@@ -82,7 +87,6 @@ class ContentMain(Gtk.Box):
 
         # Connect events: Player goes first
         self.__video_widget.connect("realize", self.__status_bar.on_mpv_player_realized)
-        self.__video_widget.connect("realize", self.__on_mpv_player_realized)
         # Connect events: Key event order
         self.__table_widget.connect("key-press-event", self.__table_widget.on_key_press_event)
         self.__table_widget.connect("key-press-event", self.__video_widget.on_key_press_event)
@@ -100,6 +104,8 @@ class ContentMain(Gtk.Box):
         self.__is_fullscreen = False
         self.__video_file_name = ""
         self.__video_file_path = ""
+
+        self.__on_mpv_player_realized()
 
     @property
     def __parent(self) -> MpvqcWindow:
@@ -231,6 +237,13 @@ class ContentMain(Gtk.Box):
 
         self.__table_widget.grab_focus()
 
+    def set_paned_grabber_to(self, position: int) -> None:
+        """
+        Sets the grabber to position. 0 means top.
+        """
+
+        self._paned.set_position(position)
+
     def __on_drag_data_received(self, _, drag_context, __, ___, data, ____, time) -> None:
         """
         Handles the drag event which is received on video and table.
@@ -240,14 +253,14 @@ class ContentMain(Gtk.Box):
         drag_context.finish(True, False, time)
         self.__qc_manager.do_open_drag_and_drop_data(videos, qc_documents, subtitle_documents)
 
-    def __on_mpv_player_realized(self, widget, *_) -> None:
+    def __on_mpv_player_realized(self, *_) -> None:
         """
         As soon as the player is ready, connect signals to obtain info about video file and file path.
 
         :param widget: the mpv widget (not player!)
         """
 
-        mpv = widget.player
+        mpv = self.__video_widget.player
 
         def __on_file_name_changed(_, value: str) -> None:
             self.__video_file_name = value
@@ -256,9 +269,24 @@ class ContentMain(Gtk.Box):
         def __on_file_path_changed(_, value: str) -> None:
             self.__video_file_path = value
             self.__update_subtitle()
+            GLib.idle_add(__on_new_file_was_loaded, None, GLib.PRIORITY_DEFAULT)
+
+        def __on_new_file_was_loaded(*_):
+            # Wait until new video information is available
+            while not (mpv.video_width() and mpv.video_height()):
+                time.sleep(0.05)
+            self.__fire_event_new_video_loaded()
 
         mpv.connect(FILENAME_NO_EXT, __on_file_name_changed)
         mpv.connect(PATH, __on_file_path_changed)
+
+    def __fire_event_new_video_loaded(self):
+        player = self.__video_widget.player
+        self.emit(
+            MPVQC_NEW_VIDEO_LOADED,
+            player.video_width(),
+            player.video_height(),
+        )
 
     def __update_title(self, _, has_changes) -> None:
         """

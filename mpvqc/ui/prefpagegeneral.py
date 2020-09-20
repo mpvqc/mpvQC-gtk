@@ -23,7 +23,7 @@ from gi.repository import Gtk, Gio, GObject
 from mpvqc import get_settings, template
 from mpvqc.ui.input import InputPopover
 from mpvqc.utils import list_header_func
-from mpvqc.utils.signals import APPLY
+from mpvqc.utils.signals import MPVQC_APPLY
 from mpvqc.utils.validators import NewCommentTypeValidator, ExistingCommentTypeValidator
 
 
@@ -75,7 +75,7 @@ class PreferencePageGeneral(Gtk.ScrolledWindow):
                            placeholder=_("Enter a new comment type"),
                            current_text="")
         pop.set_relative_to(self.button_ct_add)
-        pop.connect(APPLY, __apply)
+        pop.connect(MPVQC_APPLY, __apply)
         pop.popup()
 
     @template.TemplateTrans.Callback()
@@ -102,7 +102,7 @@ class PreferencePageGeneral(Gtk.ScrolledWindow):
                            current_text=current_text)
         pop.set_position(Gtk.PositionType.RIGHT)
         pop.set_relative_to(current_label)
-        pop.connect(APPLY, __apply)
+        pop.connect(MPVQC_APPLY, __apply)
         pop.popup()
 
     @template.TemplateTrans.Callback()

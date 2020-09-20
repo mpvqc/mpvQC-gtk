@@ -23,7 +23,7 @@ from gi.repository import Gtk, GLib
 from mpvqc import get_settings, template
 from mpvqc.ui.messagestack import MessageStack
 from mpvqc.utils import StatusbarMessageDuration, seconds_float_to_formatted_string_hours
-from mpvqc.utils.signals import TIME_POS, TIME_REMAINING, PERCENT_POS, DURATION
+from mpvqc.utils.signals import MPVQC_TIME_POS, MPVQC_TIME_REMAINING, MPVQC_PERCENT_POS, MPVQC_DURATION
 
 
 @template.TemplateTrans(resource_path='/data/ui/statusbar.ui')
@@ -116,10 +116,10 @@ class StatusBar(Gtk.Box):
             if self.__duration:
                 self.__time_remaining = seconds_float_to_formatted_string_hours(value, short=self.__short)
 
-        mpv.connect(DURATION, __on_player_duration_changed)
-        mpv.connect(TIME_POS, __on_player_time_pos_changed)
-        mpv.connect(PERCENT_POS, __on_player_percent_pos_changed)
-        mpv.connect(TIME_REMAINING, __on_player_time_remaining_changed)
+        mpv.connect(MPVQC_DURATION, __on_player_duration_changed)
+        mpv.connect(MPVQC_TIME_POS, __on_player_time_pos_changed)
+        mpv.connect(MPVQC_PERCENT_POS, __on_player_percent_pos_changed)
+        mpv.connect(MPVQC_TIME_REMAINING, __on_player_time_remaining_changed)
 
         self.__time_update_timer = GLib.timeout_add(75, self.__on_video_timer_timeout)
 

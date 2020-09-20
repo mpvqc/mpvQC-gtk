@@ -15,23 +15,33 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-# todo clean up all mpv property signals (get a list of all possible properties with 'mpv --list-properties')
-APPLY = "apply"
-CREATE_NEW_COMMENT = "create-new-comment"
-DURATION = "duration"
-FILENAME_NO_EXT = "filename/no-ext"
 
-PATH = "path"
-PERCENT_POS = "percent-pos"
-STATUSBAR_UPDATE = "statusbar-update"
-TABLE_CONTENT_CHANGED = "up-to-date"
-TIME_POS = "time-pos"
-TIME_REMAINING = "time-remaining"
-QC_STATE_CHANGED = "up-to-date"
+# Signals from mpv (to get a list of all possible properties run 'mpv --list-properties')
+MPVQC_DURATION \
+    = "duration"
+MPVQC_FILENAME_NO_EXT \
+    = "filename/no-ext"
+MPVQC_PATH \
+    = "path"
+MPVQC_PERCENT_POS \
+    = "percent-pos"
+MPVQC_TIME_POS \
+    = "time-pos"
+MPVQC_TIME_REMAINING \
+    = "time-remaining"
 
-MPVQC_WIDTH = "width"
-MPVQC_HEIGHT = "height"
-
-# todo clean up all custom defined signals
-MPVQC_NEW_VIDEO_LOADED = "mpvqc-new-video-loaded"
-MPVQC_USER_RESIZE_VIDEO = "mpvqc-user-resize-video"
+# Completely custom signals
+MPVQC_APPLY \
+    = "mpvqc-apply"
+MPVQC_CREATE_NEW_COMMENT \
+    = "mpvqc-create-new-comment"
+MPVQC_NEW_VIDEO_LOADED \
+    = "mpvqc-new-video-loaded"
+MPVQC_QC_STATE_CHANGED \
+    = "mpvqc-qc-state-changed"
+MPVQC_STATUSBAR_UPDATE \
+    = "mpvqc-statusbar-update"
+MPVQC_TABLE_CONTENT_CHANGED \
+    = "mpvqc-table-content-changed"
+MPVQC_USER_RESIZE_VIDEO \
+    = "mpvqc-user-resize-video"

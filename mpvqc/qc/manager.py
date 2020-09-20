@@ -22,15 +22,15 @@ from gi.repository import GObject, GLib
 
 import mpvqc.messagedialogs as md
 from mpvqc import get_settings, dialogs
-from mpvqc.utils.signals import TABLE_CONTENT_CHANGED, STATUSBAR_UPDATE, QC_STATE_CHANGED
+from mpvqc.utils.signals import MPVQC_TABLE_CONTENT_CHANGED, MPVQC_STATUSBAR_UPDATE, MPVQC_QC_STATE_CHANGED
 
 
 class QcManager(GObject.GObject):
     __gtype_name__ = "QcManager"
 
     __gsignals__ = {
-        STATUSBAR_UPDATE: (GObject.SignalFlags.RUN_FIRST, None, (str, int)),
-        QC_STATE_CHANGED: (GObject.SignalFlags.RUN_FIRST, None, (bool,))
+        MPVQC_STATUSBAR_UPDATE: (GObject.SignalFlags.RUN_FIRST, None, (str, int)),
+        MPVQC_QC_STATE_CHANGED: (GObject.SignalFlags.RUN_FIRST, None, (bool,))
     }
 
     def __init__(self, window, video_widget, table_widget):
@@ -55,7 +55,7 @@ class QcManager(GObject.GObject):
         self.__state_last_saved = None
         self.__during_state_change = False
 
-        self.__t.connect(TABLE_CONTENT_CHANGED, self.on_table_content_modified)
+        self.__t.connect(MPVQC_TABLE_CONTENT_CHANGED, self.on_table_content_modified)
 
         # Auto save
         self.__auto_save_timer = None
@@ -211,9 +211,9 @@ class QcManager(GObject.GObject):
         s = self.__state
 
         if s.message:
-            self.emit(STATUSBAR_UPDATE, s.message, s.duration.value)
+            self.emit(MPVQC_STATUSBAR_UPDATE, s.message, s.duration.value)
 
         changes = s.has_changes
-        self.emit(QC_STATE_CHANGED, changes)
+        self.emit(MPVQC_QC_STATE_CHANGED, changes)
 
         self.__during_state_change = False

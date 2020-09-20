@@ -101,13 +101,6 @@ class ContentMain(Gtk.Box):
         self.__video_file_name = ""
         self.__video_file_path = ""
 
-        # Welcome message
-        if s.export_qc_document_nick == "nickname":
-            nickname = _("nickname")
-        else:
-            nickname = s.export_qc_document_nick
-        self.__status_bar.update_statusbar_message(None, _("Welcome back {}!").format(nickname))
-
     @property
     def __parent(self) -> MpvqcWindow:
         return self.get_parent().get_parent()

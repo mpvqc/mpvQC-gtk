@@ -133,11 +133,9 @@ class MpvqcWindow(Gtk.ApplicationWindow):
             return
 
         screen: Gdk.Screen = self.get_window().get_screen()
-        monitor: Gdk.Monitor = Gdk.Display.get_default().get_monitor_at_window(screen.get_active_window())
-        geometry: Gdk.Rectangle = monitor.get_geometry()
 
-        screen_height = geometry.height
-        screen_width = geometry.width
+        screen_height = screen.get_height()
+        screen_width = screen.get_width()
 
         resized_width = new_width
         resized_height = new_height + new_height / 3

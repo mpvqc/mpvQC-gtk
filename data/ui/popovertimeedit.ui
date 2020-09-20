@@ -56,9 +56,6 @@
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="label">00:00:00</property>
-            <style>
-              <class name="label-monospace"/>
-            </style>
           </object>
           <packing>
             <property name="expand">False</property>

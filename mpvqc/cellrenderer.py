@@ -36,9 +36,6 @@ class CellRendererTime(Gtk.CellRendererText):
         super().__init__(**properties)
         self.set_padding(*_PADDING)
 
-        if platform.system() != "Windows":
-            self.set_property("family", "monospace")
-
 
 class CellRendererType(Gtk.CellRendererText):
 

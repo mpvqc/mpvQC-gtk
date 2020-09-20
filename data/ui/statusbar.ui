@@ -17,9 +17,6 @@
         <property name="name">LabelLines</property>
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <style>
-          <class name="label-monospace"/>
-        </style>
       </object>
       <packing>
         <property name="expand">False</property>

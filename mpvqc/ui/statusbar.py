@@ -222,7 +222,7 @@ class StatusBar(Gtk.Box):
             percent = ""
 
         self.label_button_time.set_label(
-            "{}   {}".format(percent, time).strip() + ("   " if video_loaded and (time or p_value) else "")
+            "{}      {}".format(percent, time).strip() + ("   " if video_loaded and (time or p_value) else "")
         )
 
         return True

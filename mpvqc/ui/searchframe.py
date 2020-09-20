@@ -119,6 +119,26 @@ class SearchFrame(Gtk.Frame):
         if has_changes:
             self.__current_matches = None
 
+    def toggle_search(self):
+        """
+        When the user presses CTRL + f.
+        """
+
+        if self.revealer.get_child_revealed():
+            if self.entry_search.has_focus():
+                self.__hide_search()
+            else:
+                self.entry_search.grab_focus()
+        else:
+            self.__show_search()
+
+    def __show_search(self):
+        self.__search_active = True
+        self.__table_widget.queue_draw()
+        self.revealer.show()
+        self.revealer.set_reveal_child(True)
+        self.entry_search.grab_focus()
+
     def __hide_search(self):
         """
         Hides the the search if is revealed.
@@ -134,26 +154,6 @@ class SearchFrame(Gtk.Frame):
             self.__table_widget.grab_focus()
             self.__search_active = False
             self.__table_widget.queue_draw()
-
-    def __show_search(self):
-        self.__search_active = True
-        self.__table_widget.queue_draw()
-        self.revealer.show()
-        self.revealer.set_reveal_child(True)
-        self.entry_search.grab_focus()
-
-    def toggle_search(self):
-        """
-        When the user presses CTRL + f.
-        """
-
-        if self.revealer.get_child_revealed():
-            if self.entry_search.has_focus():
-                self.__hide_search()
-            else:
-                self.entry_search.grab_focus()
-        else:
-            self.__show_search()
 
     def __update_all_matches(self, is_new_query):
         """

@@ -59,65 +59,6 @@ class PreferencePageGeneral(Gtk.ScrolledWindow):
 
         self.list_ct.unselect_all()
 
-    def on_preferences_closed(self):
-        """
-        Called when preferences view is closed.
-        """
-
-        self.list_ct.unselect_all()
-
-    def on_restore_default_clicked(self):
-        """
-        Called whenever the user presses restore and this preference page is visible.
-        """
-
-        s = get_settings()
-        s.reset_header_subtitle_format()
-        s.reset_comment_types()
-
-        self.__set_comment_type_content()
-
-    def __set_comment_type_content(self):
-        """
-        Set initial values from settings.
-        """
-
-        self.__comment_type_model.remove_all()
-
-        for comment_type in get_settings().comment_types:
-            self.__ct_add_item(comment_type)
-
-    """ 
-    Header bar subtitle related 
-    """
-
-    def __set_up_combo_box_header_subtitle(self):
-        """
-        Sets up the combo box regarding the display subtitle.
-        """
-
-        self.__combo_model.append([_("Display nothing")])
-        self.__combo_model.append([_("Current file name")])
-        self.__combo_model.append([_("Current file path")])
-        renderer = Gtk.CellRendererText()
-        self.cbox_header.pack_start(renderer, True)
-        self.cbox_header.add_attribute(renderer, "text", 0)
-        self.cbox_header.set_model(self.__combo_model)
-        get_settings().bind_header_subtitle_format(self.cbox_header, "active")
-
-    """ 
-    Comment type related 
-    """
-
-    def __set_up_comment_types_list_widget(self):
-        """
-        Sets up the comment type list widget
-        """
-
-        self.list_ct.bind_model(self.__comment_type_model, ct_create_widget_func)
-        self.list_ct.set_placeholder(_get_placeholder())
-        self.list_ct.set_header_func(list_header_func, None)
-
     @template.TemplateTrans.Callback()
     def on_ct_add_button_clicked(self, __):
         """
@@ -136,15 +77,6 @@ class PreferencePageGeneral(Gtk.ScrolledWindow):
         pop.set_relative_to(self.button_ct_add)
         pop.connect(APPLY, __apply)
         pop.popup()
-
-    @template.TemplateTrans.Callback()
-    def on_ct_remove_button_clicked(self, _):
-        """
-        When user clicks on the 'minus' button.
-        """
-
-        self.__comment_type_model.remove(position=self.list_ct.get_selected_row().get_index())
-        self.__update_comment_type_setting()
 
     @template.TemplateTrans.Callback()
     def on_ct_edit_button_clicked(self, __):
@@ -172,6 +104,15 @@ class PreferencePageGeneral(Gtk.ScrolledWindow):
         pop.set_relative_to(current_label)
         pop.connect(APPLY, __apply)
         pop.popup()
+
+    @template.TemplateTrans.Callback()
+    def on_ct_remove_button_clicked(self, _):
+        """
+        When user clicks on the 'minus' button.
+        """
+
+        self.__comment_type_model.remove(position=self.list_ct.get_selected_row().get_index())
+        self.__update_comment_type_setting()
 
     @template.TemplateTrans.Callback()
     def on_ct_up_button_clicked(self, _):
@@ -204,6 +145,57 @@ class PreferencePageGeneral(Gtk.ScrolledWindow):
         self.__comment_type_model.insert(idx_new, item)
         self.list_ct.select_row(self.list_ct.get_row_at_index(idx_new))
         self.__update_comment_type_setting()
+
+    def on_preferences_closed(self):
+        """
+        Called when preferences view is closed.
+        """
+
+        self.list_ct.unselect_all()
+
+    def on_restore_default_clicked(self):
+        """
+        Called whenever the user presses restore and this preference page is visible.
+        """
+
+        s = get_settings()
+        s.reset_header_subtitle_format()
+        s.reset_comment_types()
+
+        self.__set_comment_type_content()
+
+    def __set_comment_type_content(self):
+        """
+        Set initial values from settings.
+        """
+
+        self.__comment_type_model.remove_all()
+
+        for comment_type in get_settings().comment_types:
+            self.__ct_add_item(comment_type)
+
+    def __set_up_combo_box_header_subtitle(self):
+        """
+        Sets up the combo box regarding the display subtitle.
+        """
+
+        self.__combo_model.append([_("Display nothing")])
+        self.__combo_model.append([_("Current file name")])
+        self.__combo_model.append([_("Current file path")])
+        renderer = Gtk.CellRendererText()
+        self.cbox_header.pack_start(renderer, True)
+        self.cbox_header.add_attribute(renderer, "text", 0)
+        self.cbox_header.set_model(self.__combo_model)
+        get_settings().bind_header_subtitle_format(self.cbox_header, "active")
+
+    def __set_up_comment_types_list_widget(self):
+        """
+        Sets up the comment type list widget
+        """
+
+        self.list_ct.bind_model(self.__comment_type_model, ct_create_widget_func)
+        self.list_ct.set_placeholder(_get_placeholder())
+        self.list_ct.set_header_func(list_header_func, None)
 
     @template.TemplateTrans.Callback()
     def on_ct_list_row_selected(self, _, row):

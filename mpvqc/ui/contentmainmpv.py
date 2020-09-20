@@ -111,9 +111,9 @@ class ContentMainMpv(Gtk.EventBox):
 
         if btn == MouseButton.LEFT:
             self.__mpv.mouse_action(0, ActionType.UP)
-        else:
-            return False
-        return True
+            return True
+
+        return False
 
     def on_key_press_event(self, _: Gtk.Widget, event: Gdk.EventKey, is_fullscreen: bool = False) -> bool:
         """Returns True if handled, False else"""
@@ -123,11 +123,12 @@ class ContentMainMpv(Gtk.EventBox):
         cmd = ""
 
         # Handled by table
-        if key == Gdk.KEY_Up or key == Gdk.KEY_Down \
+        if key == Gdk.KEY_Up \
+                or key == Gdk.KEY_Down \
                 or key == Gdk.KEY_Delete \
                 or key == Gdk.KEY_Return \
                 or key == Gdk.KEY_BackSpace \
-                or no_mod and key == Gdk.KEY_Escape and not is_fullscreen:
+                or no_mod and not is_fullscreen and key == Gdk.KEY_Escape:
             return False
 
         # Handled by this widget

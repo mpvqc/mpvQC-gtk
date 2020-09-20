@@ -109,6 +109,49 @@ class ContentMainTable(Gtk.TreeView):
         # Class variables
         self.__scrollbar_position = None
 
+    @template.TemplateTrans.Callback()
+    def on_button_press_event(self, _, event) -> bool:
+        path, path_iter, col = self.__get_path_at_position(event)
+        btn = event.button
+
+        if path_iter:
+            row_selected = self.get_selection().iter_is_selected(path_iter)
+            video_loaded = self.__video_widget.player.is_video_loaded()
+
+            if btn == MouseButton.LEFT:
+                if col == self.__column_seek and video_loaded:
+                    self.__handle_seek(path, path_iter)
+                    return True
+                elif row_selected and col == self.__column_time and video_loaded:
+                    self.__video_widget.player.pause()
+                    self.__handle_seek(path, path_iter)
+                    self.__handle_time_edit(col, path, path_iter)
+                    return True
+                elif row_selected and col == self.__column_type:
+                    self.__handle_type_edit(col, path, path_iter)
+                    return True
+        return False
+
+    def on_key_press_event(self, _: Gtk.Widget, event: Gdk.EventKey) -> bool:
+        """Returns True if handled, False else"""
+
+        no_mod, ctrl, alt, shift = keyboard.extract_modifiers(event.state)
+        key = event.keyval
+
+        if key == Gdk.KEY_Delete:
+            self.__do_with_selected(self.__do_selected_delete_row)
+            return True
+        elif key == Gdk.KEY_Return or key == Gdk.KEY_BackSpace:
+            self.__do_with_selected(self.__do_selected_start_edit)
+            return True
+        elif ctrl and key == Gdk.KEY_c:
+            self.__do_with_selected(self.__do_selected_copy_to_clipboard)
+            return True
+        elif key == Gdk.KEY_space and not self.__video_widget.player.is_video_loaded():
+            # Avoid editing comments if video is not loaded using spacebar
+            return True
+        return False
+
     def add_comments(self, comments: Tuple[Comment]) -> None:
         """
         Adds a list of comments to the table and scrolls to the last added comment.
@@ -181,49 +224,6 @@ class ContentMainTable(Gtk.TreeView):
 
         GLib.timeout_add(90, __set_scrollbar_position)
 
-    @template.TemplateTrans.Callback()
-    def on_button_press_event(self, _, event) -> bool:
-        path, path_iter, col = self.__get_path_at_position(event)
-        btn = event.button
-
-        if path_iter:
-            row_selected = self.get_selection().iter_is_selected(path_iter)
-            video_loaded = self.__video_widget.player.is_video_loaded()
-
-            if btn == MouseButton.LEFT:
-                if col == self.__column_seek and video_loaded:
-                    self.__handle_seek(path, path_iter)
-                    return True
-                elif row_selected and col == self.__column_time and video_loaded:
-                    self.__video_widget.player.pause()
-                    self.__handle_seek(path, path_iter)
-                    self.__handle_time_edit(col, path, path_iter)
-                    return True
-                elif row_selected and col == self.__column_type:
-                    self.__handle_type_edit(col, path, path_iter)
-                    return True
-        return False
-
-    def on_key_press_event(self, _: Gtk.Widget, event: Gdk.EventKey) -> bool:
-        """Returns True if handled, False else"""
-
-        no_mod, ctrl, alt, shift = keyboard.extract_modifiers(event.state)
-        key = event.keyval
-
-        if key == Gdk.KEY_Delete:
-            self.__do_with_selected(self.__do_selected_delete_row)
-            return True
-        elif key == Gdk.KEY_Return or key == Gdk.KEY_BackSpace:
-            self.__do_with_selected(self.__do_selected_start_edit)
-            return True
-        elif ctrl and key == Gdk.KEY_c:
-            self.__do_with_selected(self.__do_selected_copy_to_clipboard)
-            return True
-        elif key == Gdk.KEY_space and not self.__video_widget.player.is_video_loaded():
-            # Avoid editing comments if video is not loaded using spacebar
-            return True
-        return False
-
     def __add_comment(self, c_time, c_type, c_comm="", start_editing=True):
         """
         Adds a comment to the table. Then scrolls to the newly added comment and starts edit mode if set to True.
@@ -251,8 +251,6 @@ class ContentMainTable(Gtk.TreeView):
     def __on_selection_changed(self, __=None):
         """
         Called whenever the selection changes.
-
-        :param __: not relevant, data from event
         """
 
         new_sel = self.get_selection().get_selected()[1]
@@ -368,11 +366,9 @@ class ContentMainTable(Gtk.TreeView):
         text = str(Comment(comment_time=row[1], comment_type=row[2], comment_note=row[3]))
         Gtk.Clipboard.get(Gdk.SELECTION_CLIPBOARD).set_text(text, -1)
 
-    def __fire_signal_not_up_to_date(self, *data):
+    def __fire_signal_not_up_to_date(self, *_):
         """
         Fires a signal that the table has changed
-
-        :param data: not relevant, data from event
         """
 
         if not self.__fire_signal_blocked:

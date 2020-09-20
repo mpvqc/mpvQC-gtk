@@ -61,13 +61,13 @@ class ContentPref(Gtk.Box):
         return self._header_bar
 
     @template.TemplateTrans.Callback()
-    def _on_button_preferences_back_clicked(self, *_) -> None:
+    def _on_button_back_clicked(self, *_) -> None:
         self.__parent.show_main()
         self.__page_general.on_preferences_closed()
         self._stack.set_visible_child(self.__page_general)
 
     @template.TemplateTrans.Callback()
-    def _on_button_preferences_restore_default_clicked(self, *_):
+    def _on_button_restore_clicked(self, *_):
         self._stack.get_visible_child().on_restore_default_clicked()
 
     def on_key_press_event(self, _: Gtk.Widget, event: Gdk.EventKey) -> bool:
@@ -77,7 +77,7 @@ class ContentPref(Gtk.Box):
         key = event.keyval
 
         if key == Gdk.KEY_Escape and no_mod:
-            self._on_button_preferences_back_clicked()
+            self._on_button_back_clicked()
             return True
 
         return False

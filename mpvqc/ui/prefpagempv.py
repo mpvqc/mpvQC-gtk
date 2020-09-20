@@ -35,6 +35,12 @@ class PreferencePageMpv(Gtk.ScrolledWindow):
 
         self.__set_initial_values()
 
+    @template.TemplateTrans.Callback()
+    def on_mpv_text_buffer_changed(self, *_):
+        start_iter = self.mpv_text_buffer.get_start_iter()
+        end_iter = self.mpv_text_buffer.get_end_iter()
+        get_settings().config_file_mpv_content = self.mpv_text_buffer.get_text(start_iter, end_iter, True)
+
     def on_restore_default_clicked(self):
         """
         Called whenever the user presses restore and this preference page is visible.
@@ -43,12 +49,6 @@ class PreferencePageMpv(Gtk.ScrolledWindow):
         get_settings().reset_config_file_mpv_content()
 
         self.__set_initial_values()
-
-    @template.TemplateTrans.Callback()
-    def on_mpv_text_buffer_changed(self, *_):
-        start_iter = self.mpv_text_buffer.get_start_iter()
-        end_iter = self.mpv_text_buffer.get_end_iter()
-        get_settings().config_file_mpv_content = self.mpv_text_buffer.get_text(start_iter, end_iter, True)
 
     def __set_initial_values(self):
         """

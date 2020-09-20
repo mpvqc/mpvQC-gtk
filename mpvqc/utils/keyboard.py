@@ -71,7 +71,7 @@ def extract_modifiers(state):
 
     ctrl = state & Gdk.ModifierType.CONTROL_MASK
     shift = state & Gdk.ModifierType.SHIFT_MASK
-    super = state & Gdk.ModifierType.SUPER_MASK
+    # super = state & Gdk.ModifierType.SUPER_MASK
     alt = state & Gdk.ModifierType.MOD1_MASK
     no = not ctrl and not shift and not alt
     return no, bool(ctrl), bool(alt), bool(shift)
@@ -90,6 +90,9 @@ def command_generator(ctrl, alt, shift, key_str, mod_required=False, is_char=Fal
     :return: The key-string to delegate to mpv if allowed. None else.
     """
 
+    if not key_str:
+        return ""
+
     shift = "shift" if shift else ""
     ctrl = "ctrl" if ctrl else ""
     alt = "alt" if alt else ""
@@ -105,7 +108,4 @@ def command_generator(ctrl, alt, shift, key_str, mod_required=False, is_char=Fal
             key_str = key_str.lower()
         shift = None
 
-    if key_str:
-        return "+".join([x for x in [shift, ctrl, alt, key_str] if x])
-    else:
-        return ""
+    return "+".join([x for x in [shift, ctrl, alt, key_str] if x])

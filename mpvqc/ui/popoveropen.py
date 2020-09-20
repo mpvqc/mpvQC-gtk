@@ -56,10 +56,6 @@ class PopoverOpen(Gtk.Popover):
         # Search query
         self.__current_search_query = ""
 
-    def popup(self):
-        self.__update_recent_files_list()
-        super(PopoverOpen, self).popup()
-
     @template.TemplateTrans.Callback()
     def on_button_qc_clicked(self, *_):
         self.popdown()
@@ -100,6 +96,10 @@ class PopoverOpen(Gtk.Popover):
                     self.__qc_manager.request_open_qc_documents([file_path])
                 else:
                     self.__qc_manager.request_open_video(file_path)
+
+    def popup(self):
+        self.__update_recent_files_list()
+        super(PopoverOpen, self).popup()
 
     def __list_filter_func(self, row, *_):
         """

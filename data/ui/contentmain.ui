@@ -39,7 +39,7 @@
           </object>
           <packing>
             <property name="name">page0</property>
-            <property name="title" translatable="yes">page0</property>
+            <property name="title">page0</property>
           </packing>
         </child>
       </object>
@@ -50,6 +50,11 @@
       </packing>
     </child>
   </template>
+  <object class="GtkImage" id="_image_arrow_down">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="icon_name">pan-down-symbolic</property>
+  </object>
   <object class="GtkOverlay" id="_overlay">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
@@ -57,22 +62,7 @@
       <placeholder/>
     </child>
   </object>
-  <object class="GtkScrolledWindow" id="_scrolled_window">
-    <property name="visible">True</property>
-    <property name="can_focus">True</property>
-    <property name="is_focus">True</property>
-    <property name="hscrollbar_policy">never</property>
-    <property name="shadow_type">in</property>
-    <child>
-      <placeholder/>
-    </child>
-  </object>
-  <object class="GtkImage" id="image1">
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="icon_name">pan-down-symbolic</property>
-  </object>
-  <object class="GtkPopover" id="popover_menu">
+  <object class="GtkPopover" id="_popover_menu">
     <property name="can_focus">False</property>
     <child>
       <object class="GtkBox">
@@ -84,7 +74,7 @@
         <property name="margin_bottom">10</property>
         <property name="orientation">vertical</property>
         <child>
-          <object class="GtkModelButton">
+          <object class="GtkModelButton" id="_button_save_as">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="receives_default">True</property>
@@ -114,7 +104,7 @@
             <property name="can_focus">False</property>
             <property name="receives_default">True</property>
             <property name="text" translatable="yes">Dark Theme</property>
-            <signal name="clicked" handler="_on_button_dark_theme_toggle_clicked" swapped="no"/>
+            <signal name="clicked" handler="_on_button_dark_theme_clicked" swapped="no"/>
           </object>
           <packing>
             <property name="expand">False</property>
@@ -134,12 +124,12 @@
           </packing>
         </child>
         <child>
-          <object class="GtkModelButton" id="menu_preferences">
+          <object class="GtkModelButton" id="_button_preferences">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="receives_default">True</property>
             <property name="text" translatable="yes">Preferences</property>
-            <signal name="clicked" handler="_on_menu_preferences_clicked" swapped="no"/>
+            <signal name="clicked" handler="_on_button_preferences_clicked" swapped="no"/>
           </object>
           <packing>
             <property name="expand">False</property>
@@ -148,13 +138,13 @@
           </packing>
         </child>
         <child>
-          <object class="GtkModelButton">
+          <object class="GtkModelButton" id="_button_shortcuts">
             <property name="name">menu_shortcuts</property>
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="receives_default">True</property>
             <property name="text" translatable="yes">Keyboard Shortcuts</property>
-            <signal name="clicked" handler="_on_menu_shortcuts_clicked" swapped="no"/>
+            <signal name="clicked" handler="_on_button_shortcuts_clicked" swapped="no"/>
           </object>
           <packing>
             <property name="expand">False</property>
@@ -163,12 +153,12 @@
           </packing>
         </child>
         <child>
-          <object class="GtkModelButton" id="menu_about">
+          <object class="GtkModelButton" id="_button_about">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="receives_default">True</property>
             <property name="text" translatable="yes">About</property>
-            <signal name="clicked" handler="_on_menu_about_clicked" swapped="no"/>
+            <signal name="clicked" handler="_on_button_about_clicked" swapped="no"/>
           </object>
           <packing>
             <property name="expand">False</property>
@@ -190,7 +180,7 @@
         <property name="can_focus">False</property>
         <property name="layout_style">start</property>
         <child>
-          <object class="GtkButton" id="button_new">
+          <object class="GtkButton" id="_button_new">
             <property name="label" translatable="yes">New</property>
             <property name="visible">True</property>
             <property name="can_focus">False</property>
@@ -212,7 +202,7 @@
             <property name="can_focus">False</property>
             <property name="receives_default">True</property>
             <property name="tooltip_text" translatable="yes">Open document, video or subtitle files</property>
-            <property name="image">image1</property>
+            <property name="image">_image_arrow_down</property>
             <property name="image_position">right</property>
             <property name="always_show_image">True</property>
             <signal name="clicked" handler="_on_button_open_clicked" swapped="no"/>
@@ -229,12 +219,12 @@
       </object>
     </child>
     <child>
-      <object class="GtkMenuButton" id="menubutton1">
+      <object class="GtkMenuButton" id="_menu_button">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="receives_default">True</property>
         <property name="direction">none</property>
-        <property name="popover">popover_menu</property>
+        <property name="popover">_popover_menu</property>
         <child>
           <object class="GtkImage">
             <property name="visible">True</property>
@@ -249,7 +239,7 @@
       </packing>
     </child>
     <child>
-      <object class="GtkButton">
+      <object class="GtkButton" id="_button_save">
         <property name="label" translatable="yes">Save</property>
         <property name="visible">True</property>
         <property name="can_focus">False</property>
@@ -261,6 +251,16 @@
         <property name="pack_type">end</property>
         <property name="position">2</property>
       </packing>
+    </child>
+  </object>
+  <object class="GtkScrolledWindow" id="_scrolled_window">
+    <property name="visible">True</property>
+    <property name="can_focus">True</property>
+    <property name="is_focus">True</property>
+    <property name="hscrollbar_policy">never</property>
+    <property name="shadow_type">in</property>
+    <child>
+      <placeholder/>
     </child>
   </object>
 </interface>

@@ -34,14 +34,14 @@
       </object>
     </child>
     <child>
-      <object class="GtkButton" id="button_preferences_back">
+      <object class="GtkButton" id="_button_back">
         <property name="visible">True</property>
         <property name="can_focus">True</property>
         <property name="receives_default">True</property>
         <property name="tooltip_text" translatable="yes">Return</property>
-        <signal name="clicked" handler="_on_button_preferences_back_clicked" swapped="no"/>
+        <signal name="clicked" handler="_on_button_back_clicked" swapped="no"/>
         <child>
-          <object class="GtkImage">
+          <object class="GtkImage" id="_image_arrow_back">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="icon_name">go-previous-symbolic</property>
@@ -53,14 +53,14 @@
       </packing>
     </child>
     <child>
-      <object class="GtkButton" id="button_preferences_restore">
+      <object class="GtkButton" id="_button_restore">
         <property name="label" translatable="yes">Restore default</property>
         <property name="visible">True</property>
         <property name="can_focus">True</property>
         <property name="receives_default">True</property>
         <property name="tooltip_text" translatable="yes">Restore the default settings on this page</property>
         <property name="always_show_image">True</property>
-        <signal name="clicked" handler="_on_button_preferences_restore_default_clicked" swapped="no"/>
+        <signal name="clicked" handler="_on_button_restore_clicked" swapped="no"/>
       </object>
       <packing>
         <property name="pack_type">end</property>

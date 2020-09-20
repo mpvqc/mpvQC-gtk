@@ -116,6 +116,7 @@ class PreferencePageExport(Gtk.ScrolledWindow):
             pop.set_relative_to(self.label_nick)
             pop.connect(APPLY, __apply)
             pop.popup()
+            return True
 
     @template.TemplateTrans.Callback()
     def on_button_open_backup_directory_clicked(self, _):

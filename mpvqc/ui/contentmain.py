@@ -40,8 +40,6 @@ class ContentMain(Gtk.Box):
     _header_bar: Gtk.HeaderBar = template.TemplateTrans.Child()
     _stack: Gtk.Stack = template.TemplateTrans.Child()
 
-    _button_open: Gtk.Button = template.TemplateTrans.Child()
-
     _button_dark_theme: Gtk.Button = template.TemplateTrans.Child()
 
     _box: Gtk.Box = template.TemplateTrans.Child()
@@ -135,8 +133,8 @@ class ContentMain(Gtk.Box):
         self.__qc_manager.request_new_document()
 
     @template.TemplateTrans.Callback()
-    def _on_button_open_clicked(self, *_) -> None:
-        self.__popover_open.set_relative_to(self._button_open)
+    def _on_button_open_clicked(self, button: Gtk.Button, *_) -> None:
+        self.__popover_open.set_relative_to(button)
         self.__popover_open.popup()
 
     @template.TemplateTrans.Callback()
@@ -148,7 +146,7 @@ class ContentMain(Gtk.Box):
         self.__qc_manager.request_save_qc_document_as()
 
     @template.TemplateTrans.Callback()
-    def _on_button_dark_theme_toggle_clicked(self, *_) -> None:
+    def _on_button_dark_theme_clicked(self, *_) -> None:
         s = get_settings()
         s.prefer_dark_theme = not s.prefer_dark_theme
 
@@ -156,12 +154,12 @@ class ContentMain(Gtk.Box):
         Gtk.Settings.get_default().set_property("gtk-application-prefer-dark-theme", s.prefer_dark_theme)
 
     @template.TemplateTrans.Callback()
-    def _on_menu_preferences_clicked(self, *_) -> None:
+    def _on_button_preferences_clicked(self, *_) -> None:
         self.__video_widget.player.pause()
         self.__parent.show_pref()
 
     @template.TemplateTrans.Callback()
-    def _on_menu_shortcuts_clicked(self, *_) -> None:
+    def _on_button_shortcuts_clicked(self, *_) -> None:
         self.__video_widget.player.pause()
         overlay = ShortcutWindow()
         overlay.set_transient_for(self.__parent)
@@ -169,7 +167,7 @@ class ContentMain(Gtk.Box):
         overlay.show_all()
 
     @template.TemplateTrans.Callback()
-    def _on_menu_about_clicked(self, *_) -> None:
+    def _on_button_about_clicked(self, *_) -> None:
         self.__video_widget.player.pause()
         about = AboutDialog()
         about.set_transient_for(self.__parent)
@@ -184,7 +182,7 @@ class ContentMain(Gtk.Box):
 
         if ctrl:
             if alt and key == Gdk.KEY_s:  # CTRL + ALT + s
-                self._on_menu_preferences_clicked()
+                self._on_button_preferences_clicked()
                 return True
 
             if key == Gdk.KEY_n:  # CTRL + n
@@ -193,20 +191,20 @@ class ContentMain(Gtk.Box):
             if key == Gdk.KEY_o:  # CTRL + o
                 self.__popover_open.on_button_qc_clicked()
                 return True
-            if key == Gdk.KEY_O:  # CTRL + O (= CTRL + SHIFT + O)
+            if key == Gdk.KEY_O:  # CTRL + O (= CTRL + SHIFT + o)
                 self.__popover_open.on_button_video_clicked()
                 return True
             if key == Gdk.KEY_s:  # CTRL + s
                 self._on_button_save_clicked()
                 return True
-            if key == Gdk.KEY_S:  # CTRL + S (= CTRL + SHIFT + S)
+            if key == Gdk.KEY_S:  # CTRL + S (= CTRL + SHIFT + s)
                 self._on_button_save_as_clicked()
                 return True
             if key == Gdk.KEY_q:  # CTRL + q
                 self.__parent.close()
                 return True
             if key == Gdk.KEY_F1:  # CTRL + F1
-                self._on_menu_shortcuts_clicked()
+                self._on_button_shortcuts_clicked()
                 return True
             if key == Gdk.KEY_f:  # CTRL + f
                 self.__search_frame.toggle_search()

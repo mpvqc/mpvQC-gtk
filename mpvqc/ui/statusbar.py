@@ -236,7 +236,7 @@ class StatusBar(Gtk.Box):
             self.label_line.set_text("")
         elif self.__comment_selected and self.__comment_count:
             selected = self.__comment_selected.zfill(len(self.__comment_count))
-            self.label_line.set_text(_("{}/{}").format(selected, self.__comment_count))
+            self.label_line.set_text("{}/{}".format(selected, self.__comment_count))
 
     def __on_destroy(self, *_):
         GLib.source_remove(self.__time_update_timer)

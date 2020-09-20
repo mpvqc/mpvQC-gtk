@@ -97,6 +97,8 @@ class PopoverTimeEdit(Gtk.Popover):
             self.on_button_apply_clicked()
             return True
 
+        return False
+
     @template.TemplateTrans.Callback()
     def on_scroll_event(self, _, event):
         direction = event.direction
@@ -107,4 +109,5 @@ class PopoverTimeEdit(Gtk.Popover):
         elif direction == Gdk.ScrollDirection.DOWN:
             self.on_button_minus_clicked()
             return True
+
         return False

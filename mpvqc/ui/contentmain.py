@@ -157,7 +157,6 @@ class ContentMain(Gtk.Box):
         self.__video_widget.player.pause()
         overlay = ShortcutWindow()
         overlay.set_transient_for(self.__parent)
-        overlay.set_position(Gtk.WindowPosition.CENTER_ALWAYS)
         overlay.show_all()
 
     @template.TemplateTrans.Callback()

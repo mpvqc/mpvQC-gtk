@@ -98,6 +98,15 @@ class _StrList(_Storable):
         return self._settings.get_strv(self._key)
 
 
+class _Nickname(_Str):
+
+    def __init__(self, key: str, settings: Gio.Settings):
+        super().__init__(key, settings)
+        if self.get() == "":
+            from gi.repository import GLib
+            self.set(GLib.get_user_name())
+
+
 class _StrListCommentTypes(_Storable):
 
     def __init__(self, key: str, settings: Gio.Settings):
@@ -202,7 +211,7 @@ class Settings:
 
         self.__import_open_video_automatically = _Bool("import-open-video-automatically", s)
 
-        self.__export_qc_document_nick = _Str("export-qc-document-nick", s)
+        self.__export_qc_document_nick = _Nickname("export-qc-document-nick", s)
         self.__export_append_nick = _Bool("export-append-nick", s)
         self.__export_write_header = _Bool("export-write-header", s)
         self.__export_write_date = _Bool("export-write-date", s)

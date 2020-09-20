@@ -65,9 +65,12 @@
         </key>
 
         <key name='export-qc-document-nick' type='s'>
-            <default>"nickname"</default>
+            <default>""</default>
             <summary>Set the nickname for document exports</summary>
-            <description/>
+            <description>
+                The nickname will be appended to a document while exporting and the user has the corresponding settings
+                active. An empty nickname will be evaluated to the username of the current active user on the system.
+            </description>
         </key>
 
         <key name="export-append-nick" type="b">

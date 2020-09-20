@@ -25,7 +25,7 @@ from mpvqc.ui.window import MpvqcWindow
 from mpvqc.utils import keyboard
 from mpvqc.utils.input import MouseButton, ActionType
 from mpvqc.utils.keyboard import KEY_MAPPINGS
-from mpvqc.utils.signals import CREATE_NEW_COMMENT
+from mpvqc.utils.signals import MPVQC_CREATE_NEW_COMMENT
 
 
 @template.TemplateTrans(resource_path='/data/ui/contentmainmpv.ui')
@@ -33,7 +33,7 @@ class ContentMainMpv(Gtk.EventBox):
     __gtype_name__ = 'ContentMainMpv'
 
     __gsignals__ = {
-        CREATE_NEW_COMMENT: (GObject.SignalFlags.RUN_FIRST, None, (str, str,)),
+        MPVQC_CREATE_NEW_COMMENT: (GObject.SignalFlags.RUN_FIRST, None, (str, str,)),
     }
 
     def __init__(self, content_main: ContentMain, mpvqc_window: MpvqcWindow, **kwargs):
@@ -171,7 +171,7 @@ class ContentMainMpv(Gtk.EventBox):
         self.__mpv.pause()
 
         def __on_clicked(value) -> None:
-            self.emit(CREATE_NEW_COMMENT, self.__mpv.position_current()[1], value.get_label())
+            self.emit(MPVQC_CREATE_NEW_COMMENT, self.__mpv.position_current()[1], value.get_label())
 
         menu = Gtk.Menu()
         menu.attach_to_widget(self, None)

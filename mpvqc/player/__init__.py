@@ -304,7 +304,7 @@ class MpvPlayer(_Observer):
         :return: The height of the video or 0 if no video is currently loaded.
         """
 
-        if self.is_video_loaded():
+        if self.is_video_loaded() and self._mpv.height is not None:
             return int(self._mpv.height)
         return 0
 
@@ -315,7 +315,7 @@ class MpvPlayer(_Observer):
         :return: The width of the video or 0 if no video is currently loaded.
         """
 
-        if self.is_video_loaded():
+        if self.is_video_loaded() and self._mpv.width is not None:
             return int(self._mpv.width)
         return 0
 

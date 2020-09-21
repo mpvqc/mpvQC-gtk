@@ -56,7 +56,7 @@ def __prepare_file_content(b_header: bool,
     else:
         d_header = ""
 
-    comments_joined = linesep.join(map(lambda c: str(c), comments))
+    comments_joined = "\n".join(map(lambda c: str(c), comments))
     comments_size = len(comments)
 
     return ("[FILE]\n"

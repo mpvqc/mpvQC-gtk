@@ -18,8 +18,8 @@
 
 from gi.repository import Gtk, GObject, Gdk
 
+import mpvqc.utils.signals as signals
 from mpvqc import template
-from mpvqc.utils.signals import APPLY
 
 
 @template.TemplateTrans(resource_path='/data/ui/input.ui')
@@ -27,7 +27,7 @@ class InputPopover(Gtk.Popover):
     __gtype_name__ = 'InputPopover'
 
     __gsignals__ = {
-        APPLY: (GObject.SignalFlags.RUN_FIRST, None, (str,))
+        signals.MPVQC_APPLY: (GObject.SignalFlags.RUN_FIRST, None, (str,))
     }
 
     label_input = template.TemplateTrans.Child()
@@ -67,7 +67,7 @@ class InputPopover(Gtk.Popover):
         Invoked, when apply clicked or enter pressed.
         """
 
-        self.emit(APPLY, self.entry.get_text())
+        self.emit(signals.MPVQC_APPLY, self.entry.get_text())
         self.popdown()
 
     @template.TemplateTrans.Callback()

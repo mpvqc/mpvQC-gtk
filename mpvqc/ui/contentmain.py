@@ -16,10 +16,11 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-from gettext import gettext as _
+import time
 
-from gi.repository import Gtk, Gdk
+from gi.repository import Gtk, Gdk, GObject, GLib
 
+import mpvqc.utils.signals as signals
 from mpvqc import template, get_settings
 from mpvqc.qc.manager import QcManager
 from mpvqc.ui.about import AboutDialog
@@ -30,12 +31,16 @@ from mpvqc.ui.statusbar import StatusBar
 from mpvqc.ui.window import MpvqcWindow
 from mpvqc.utils import draganddrop, keyboard
 from mpvqc.utils.shortcuts import ShortcutWindow
-from mpvqc.utils.signals import FILENAME_NO_EXT, PATH, STATUSBAR_UPDATE, QC_STATE_CHANGED
 
 
 @template.TemplateTrans(resource_path='/data/ui/contentmain.ui')
 class ContentMain(Gtk.Box):
     __gtype_name__ = 'ContentMain'
+
+    __gsignals__ = {
+        # Signals, if users wants to resize the video:  p1 'video width' ; p2 'video height'
+        signals.MPVQC_ON_VIDEO_RESIZE: (GObject.SignalFlags.RUN_FIRST, None, (int, int))
+    }
 
     _header_bar: Gtk.HeaderBar = template.TemplateTrans.Child()
     _stack: Gtk.Stack = template.TemplateTrans.Child()
@@ -82,7 +87,6 @@ class ContentMain(Gtk.Box):
 
         # Connect events: Player goes first
         self.__video_widget.connect("realize", self.__status_bar.on_mpv_player_realized)
-        self.__video_widget.connect("realize", self.__on_mpv_player_realized)
         # Connect events: Key event order
         self.__table_widget.connect("key-press-event", self.__table_widget.on_key_press_event)
         self.__table_widget.connect("key-press-event", self.__video_widget.on_key_press_event)
@@ -92,21 +96,16 @@ class ContentMain(Gtk.Box):
         self.__table_widget.get_model().connect("row-deleted", self.__status_bar.on_comments_row_changed)
         self.__table_widget.get_model().connect("row-inserted", self.__status_bar.on_comments_row_changed)
         # Connect events: QC-Manager
-        self.__qc_manager.connect(STATUSBAR_UPDATE, self.__status_bar.update_statusbar_message)
-        self.__qc_manager.connect(QC_STATE_CHANGED, self.__update_title)
-        self.__qc_manager.connect(QC_STATE_CHANGED, self.__search_frame.clear_current_matches)
+        self.__qc_manager.connect(signals.MPVQC_STATUSBAR_UPDATE, self.__status_bar.update_statusbar_message)
+        self.__qc_manager.connect(signals.MPVQC_QC_STATE_CHANGED, self.__update_title)
+        self.__qc_manager.connect(signals.MPVQC_QC_STATE_CHANGED, self.__search_frame.clear_current_matches)
 
         # Class variables
         self.__is_fullscreen = False
         self.__video_file_name = ""
         self.__video_file_path = ""
 
-        # Welcome message
-        if s.export_qc_document_nick == "nickname":
-            nickname = _("nickname")
-        else:
-            nickname = s.export_qc_document_nick
-        self.__status_bar.update_statusbar_message(None, _("Welcome back {}!").format(nickname))
+        self.__on_mpv_player_realized()
 
     @property
     def __parent(self) -> MpvqcWindow:
@@ -202,6 +201,10 @@ class ContentMain(Gtk.Box):
             if key == Gdk.KEY_f:  # CTRL + f
                 self.__search_frame.toggle_search()
                 return True
+            if key == Gdk.KEY_r:  # CTRL + r
+                if self.__video_widget.player.is_video_loaded():
+                    self.__fire_event_on_video_resize()
+                return True
 
         if self.__is_fullscreen:
             self.__video_widget.on_key_press_event(widget, event, is_fullscreen=True)
@@ -238,6 +241,13 @@ class ContentMain(Gtk.Box):
 
         self.__table_widget.grab_focus()
 
+    def set_paned_grabber_to(self, position: int) -> None:
+        """
+        Sets the grabber to position. 0 means top.
+        """
+
+        self._paned.set_position(position)
+
     def __on_drag_data_received(self, _, drag_context, __, ___, data, ____, time) -> None:
         """
         Handles the drag event which is received on video and table.
@@ -247,14 +257,14 @@ class ContentMain(Gtk.Box):
         drag_context.finish(True, False, time)
         self.__qc_manager.do_open_drag_and_drop_data(videos, qc_documents, subtitle_documents)
 
-    def __on_mpv_player_realized(self, widget, *_) -> None:
+    def __on_mpv_player_realized(self, *_) -> None:
         """
         As soon as the player is ready, connect signals to obtain info about video file and file path.
 
         :param widget: the mpv widget (not player!)
         """
 
-        mpv = widget.player
+        mpv = self.__video_widget.player
 
         def __on_file_name_changed(_, value: str) -> None:
             self.__video_file_name = value
@@ -264,8 +274,8 @@ class ContentMain(Gtk.Box):
             self.__video_file_path = value
             self.__update_subtitle()
 
-        mpv.connect(FILENAME_NO_EXT, __on_file_name_changed)
-        mpv.connect(PATH, __on_file_path_changed)
+        mpv.connect(signals.MPVQC_FILENAME_NO_EXT, __on_file_name_changed)
+        mpv.connect(signals.MPVQC_PATH, __on_file_path_changed)
 
     def __update_title(self, _, has_changes) -> None:
         """
@@ -287,3 +297,11 @@ class ContentMain(Gtk.Box):
             self._header_bar.set_subtitle(self.__video_file_name)
         elif value == 2:
             self._header_bar.set_subtitle(self.__video_file_path)
+
+    def __fire_event_on_video_resize(self):
+        player = self.__video_widget.player
+        self.emit(
+            signals.MPVQC_ON_VIDEO_RESIZE,
+            player.video_width(),
+            player.video_height(),
+        )

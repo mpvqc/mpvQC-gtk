@@ -21,10 +21,10 @@ from gettext import gettext as _
 
 from gi.repository import Gtk
 
+import mpvqc.utils.signals as signals
 from mpvqc import get_settings, get_app_paths, template
 from mpvqc.ui.input import InputPopover
 from mpvqc.utils import list_header_func, list_header_nested_func
-from mpvqc.utils.signals import APPLY
 from mpvqc.utils.validators import NicknameValidator
 
 
@@ -114,7 +114,7 @@ class PreferencePageExport(Gtk.ScrolledWindow):
                                placeholder=_("Enter nickname"),
                                current_text=get_settings().export_qc_document_nick)
             pop.set_relative_to(self.label_nick)
-            pop.connect(APPLY, __apply)
+            pop.connect(signals.MPVQC_APPLY, __apply)
             pop.popup()
             return True
 

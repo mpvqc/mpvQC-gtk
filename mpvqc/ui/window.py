@@ -16,9 +16,10 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-from gi.repository import Gtk, Gdk
+from gi.repository import Gtk, Gdk, GLib
 
 from mpvqc import get_settings, template
+from mpvqc.utils import signals
 
 
 @template.TemplateTrans(resource_path='/data/ui/window.ui')
@@ -36,6 +37,8 @@ class MpvqcWindow(Gtk.ApplicationWindow):
 
         from mpvqc.ui.contentmain import ContentMain
         content_main = ContentMain(mpvqc_window=self)
+        content_main.connect(signals.MPVQC_ON_VIDEO_RESIZE, self.__resize_video)
+
         from mpvqc.ui.contentpref import ContentPref
         content_pref = ContentPref()
 
@@ -123,3 +126,28 @@ class MpvqcWindow(Gtk.ApplicationWindow):
         super(MpvqcWindow, self).unfullscreen()
         self.__is_fullscreen = False
         self.__content_main.unfullscreen()
+
+    def __resize_video(self, _, new_width: int, new_height: int):
+        if self.__is_fullscreen or self.is_maximized():
+            return
+
+        screen: Gdk.Screen = self.get_window().get_screen()
+
+        screen_height = screen.get_height()
+        screen_width = screen.get_width()
+
+        resized_width = new_width
+        resized_height = new_height + new_height / 3
+
+        if resized_height > screen_height * 0.95 or resized_width > screen_width * 0.95:
+            # We maximize if the resized window is more than 95 % of the monitor height or width
+            self.maximize()
+            return
+
+        self.resize(width=resized_width, height=resized_height)
+
+        def move_grabber(*_):
+            self.__content_main.set_paned_grabber_to(position=new_height)
+            return False
+
+        GLib.timeout_add(50, move_grabber)

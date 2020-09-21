@@ -38,8 +38,7 @@ class ContentMain(Gtk.Box):
     __gtype_name__ = 'ContentMain'
 
     __gsignals__ = {
-        # Signals, that there was a new video loaded:  p1 'video width' ; p2 'video height'
-        signals.MPVQC_NEW_VIDEO_LOADED: (GObject.SignalFlags.RUN_FIRST, None, (int, int)),
+        # Signals, if users wants to resize the video:  p1 'video width' ; p2 'video height'
         signals.MPVQC_ON_VIDEO_RESIZE: (GObject.SignalFlags.RUN_FIRST, None, (int, int))
     }
 
@@ -274,13 +273,6 @@ class ContentMain(Gtk.Box):
         def __on_file_path_changed(_, value: str) -> None:
             self.__video_file_path = value
             self.__update_subtitle()
-            GLib.idle_add(__on_new_file_was_loaded, None, GLib.PRIORITY_DEFAULT)
-
-        def __on_new_file_was_loaded(*_):
-            # Wait until new video information is available
-            while not (mpv.video_width() and mpv.video_height()):
-                time.sleep(0.05)
-            self.__fire_event_new_video_loaded()
 
         mpv.connect(signals.MPVQC_FILENAME_NO_EXT, __on_file_name_changed)
         mpv.connect(signals.MPVQC_PATH, __on_file_path_changed)
@@ -305,14 +297,6 @@ class ContentMain(Gtk.Box):
             self._header_bar.set_subtitle(self.__video_file_name)
         elif value == 2:
             self._header_bar.set_subtitle(self.__video_file_path)
-
-    def __fire_event_new_video_loaded(self):
-        player = self.__video_widget.player
-        self.emit(
-            signals.MPVQC_NEW_VIDEO_LOADED,
-            player.video_width(),
-            player.video_height(),
-        )
 
     def __fire_event_on_video_resize(self):
         player = self.__video_widget.player

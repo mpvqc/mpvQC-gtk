@@ -37,7 +37,6 @@ class MpvqcWindow(Gtk.ApplicationWindow):
 
         from mpvqc.ui.contentmain import ContentMain
         content_main = ContentMain(mpvqc_window=self)
-        content_main.connect(signals.MPVQC_NEW_VIDEO_LOADED, self.__resize_video)
         content_main.connect(signals.MPVQC_ON_VIDEO_RESIZE, self.__resize_video)
 
         from mpvqc.ui.contentpref import ContentPref

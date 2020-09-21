@@ -35,8 +35,6 @@ MPVQC_APPLY \
     = "mpvqc-apply"
 MPVQC_CREATE_NEW_COMMENT \
     = "mpvqc-create-new-comment"
-MPVQC_NEW_VIDEO_LOADED \
-    = "mpvqc-new-video-loaded"
 MPVQC_ON_VIDEO_RESIZE \
     = "mpvqc-on_video_resize"
 MPVQC_QC_STATE_CHANGED \

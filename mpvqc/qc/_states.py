@@ -50,8 +50,8 @@ class State(ABC):
         self.__doc: Optional[str] = doc
         self.__vid: Optional[str] = vid
         self.__comments: Optional[Tuple[Comment]] = tuple(comments) if comments else ()
-        self.__message: Optional[str] = message
-        self.__duration: Optional[Duration] = duration
+        self.__message: Optional[str] = message or ""
+        self.__duration: Optional[Duration] = duration or Duration.LONG
 
     def has_same_content_as(self, other) -> bool:
         return self.__doc == other.__doc \
@@ -69,6 +69,18 @@ class State(ABC):
     @property
     def has_changes(self) -> bool:
         return self.__has_changes
+
+    @property
+    def _doc(self):
+        return self.__doc
+
+    @property
+    def _vid(self):
+        return self.__vid
+
+    @property
+    def _comments(self):
+        return self.__comments
 
     def copy(self) -> 'State':
         """
@@ -106,82 +118,53 @@ class State(ABC):
 
         raise RuntimeError("State not allowed", self.__class__)
 
+    @staticmethod
     def _state_initial(
-            self,
-            vid: Optional[str] = "",
-            comments: Optional[Tuple[Comment]] = (),
+            vid: Optional[str],
+            comments: Optional[Tuple[Comment]],
             message: Optional[str] = "",
             duration: Optional[Duration] = Duration.LONG
     ) -> 'State':
         """
         Returns an initial state based on the current state.
-        If a parameter is None, the parameter will be set to None.
-        If a parameter is a value, that value will be set.
-        If a parameter is not specified, the current state's value will be copied into the new state.
-        Message and duration will not be copied from the current values.
         """
 
-        return _StateInitial(
-            vid=None if vid is None else (vid or self.__vid),
-            comments=None if comments is None else (comments or self.__comments),
-            message=message or None,
-            duration=duration or Duration.LONG
-        )
+        return _StateInitial(vid=vid, comments=comments, message=message, duration=duration)
 
+    @staticmethod
     def _state_saved(
-            self,
-            doc: Optional[str] = "",
-            vid: Optional[str] = "",
-            comments: Optional[Tuple[Comment]] = (),
+            doc: Optional[str],
+            vid: Optional[str],
+            comments: Optional[Tuple[Comment]],
             message: Optional[str] = "",
             duration: Optional[Duration] = Duration.LONG
     ) -> 'State':
         """
         Returns a saved state based on the current state.
-        If a parameter is None, the parameter will be set to None.
-        If a parameter is a value, that value will be set.
-        If a parameter is not specified, the current state's value will be copied into the new state.
-        Message and duration will not be copied from the current values.
         """
 
-        return _StateSaved(
-            doc=None if doc is None else (doc or self.__doc),
-            vid=None if vid is None else (vid or self.__vid),
-            comments=None if comments is None else (comments or self.__comments),
-            message=message or None,
-            duration=duration or Duration.LONG
-        )
+        return _StateSaved(doc=doc, vid=vid, comments=comments, message=message, duration=duration)
 
+    @staticmethod
     def _state_unsaved(
-            self,
-            doc: Optional[str] = "",
-            vid: Optional[str] = "",
-            comments: Optional[Tuple[Comment]] = (),
+            doc: Optional[str],
+            vid: Optional[str],
+            comments: Optional[Tuple[Comment]],
             message: Optional[str] = "",
             duration: Optional[Duration] = Duration.LONG
     ) -> 'State':
         """
         Returns an unsaved state based on the current state.
-        If a parameter is None, the parameter will be set to None.
-        If a parameter is a value, that value will be set.
-        If a parameter is not specified, the current state's value will be copied into the new state.
-        Message and duration will not be copied from the current values.
         """
 
-        return _StateUnsaved(
-            doc=None if doc is None else (doc or self.__doc),
-            vid=None if vid is None else (vid or self.__vid),
-            comments=None if comments is None else (comments or self.__comments),
-            message=message or None,
-            duration=duration or Duration.LONG
-        )
+        return _StateUnsaved(doc=doc, vid=vid, comments=comments, message=message, duration=duration)
 
     def on_comments_modified(self, t: Table) -> 'State':
         """
         Called when the comments table was modified: added row, modified row or deleted row
         """
 
-        return self._state_unsaved(comments=t.get_all_comments())
+        return self._state_unsaved(doc=self.__doc, vid=self.__vid, comments=t.get_all_comments())
 
     def on_create_new_document(self, a: AppWindow, t: Table, _: MpvContainer) -> 'State':
         """
@@ -204,7 +187,8 @@ class State(ABC):
 
         t.clear_all_comments()
 
-        return self._state_initial(message=sm.get_new_doc_m(), duration=Duration.SHORT)
+        return self._state_initial(vid=self.__vid, comments=self.__comments,
+                                   message=sm.get_new_doc_m(), duration=Duration.SHORT)
 
     def on_save_pressed(self, a: AppWindow, t: Table, m: MpvContainer) -> 'State':
         """
@@ -216,11 +200,8 @@ class State(ABC):
 
         comments = t.get_all_comments()
         r = hs.do_save(self.__doc, self.__vid, comments)
-        return self._state_saved(doc=r.doc_new,
-                                 vid=r.vid_new,
-                                 comments=comments,
-                                 message=sm.get_save_m(as_new_name=False),
-                                 duration=Duration.SHORT)
+        return self._state_saved(doc=r.doc_new, vid=r.vid_new, comments=comments,
+                                 message=sm.get_save_m(as_new_name=False), duration=Duration.SHORT)
 
     def on_save_as_pressed(self, a: AppWindow, t: Table, m: MpvContainer) -> 'State':
         """
@@ -237,9 +218,7 @@ class State(ABC):
 
         get_settings().latest_paths_recent_files_add(doc)
 
-        return self._state_saved(doc=r.doc_new,
-                                 vid=r.vid_new,
-                                 comments=comments,
+        return self._state_saved(doc=r.doc_new, vid=r.vid_new, comments=comments,
                                  message=sm.get_save_m(as_new_name=True))
 
     def on_write_auto_save(self, _: AppWindow, __: Table, m: MpvContainer) -> None:
@@ -322,7 +301,7 @@ class State(ABC):
             _handle_docs_valid(hir.docs_valid)
             _handle_docs_invalid(hir.docs_invalid)
 
-            if not vids:
+            if not vids and vid_new:
                 opened = _handle_vids(vid_new)
                 if not opened:
                     vid_new = None
@@ -451,13 +430,13 @@ class _StateInitial(__StateSubtitleImportDelegate):
 
     def on_import_docs(self, message: str, docs: List[str], data: Data) -> 'State':
         if len(docs) == 1:
-            return self._state_saved(doc=data.doc_new, message=message, comments=data.comments)
-        return self._state_unsaved(doc=None, message=message, comments=data.comments)
+            return self._state_saved(doc=data.doc_new, vid=self._vid, comments=data.comments, message=message)
+        return self._state_unsaved(doc=None, vid=self._vid, comments=data.comments, message=message)
 
     def on_import_vid(self, message: str, video: str, data: Data) -> 'State':
         if data.is_cur_vid_is_imported_vid:
             return self.copy()
-        return self._state_initial(vid=video, message=message, comments=data.comments)
+        return self._state_initial(vid=video, comments=data.comments, message=message)
 
     def on_import_docs_vid(self, message: str, docs: List[str], video: str, data: Data) -> 'State':
         if len(docs) == 1:
@@ -467,8 +446,8 @@ class _StateInitial(__StateSubtitleImportDelegate):
             vid_linked_in_doc_equals_vid_separately = data.is_vid_from_docs_equals_vid_from_user
 
             if vid_linked_in_doc or vid_linked_in_doc_equals_vid_separately:
-                return self._state_saved(doc=data.doc_new, vid=video, message=message, comments=data.comments)
-        return self._state_unsaved(doc=None, vid=video, message=message, comments=data.comments)
+                return self._state_saved(doc=data.doc_new, vid=video, comments=data.comments, message=message)
+        return self._state_unsaved(doc=None, vid=video, comments=data.comments, message=message)
 
 
 # noinspection DuplicatedCode
@@ -485,15 +464,15 @@ class _StateSaved(__StateSubtitleImportDelegate):
         super().__init__(False, doc, vid, comments, message, duration)
 
     def on_import_docs(self, message: str, docs: List[str], data: Data) -> 'State':
-        return self._state_unsaved(doc=None, message=message, comments=data.comments)
+        return self._state_unsaved(doc=None, vid=self._vid, comments=data.comments, message=message)
 
     def on_import_vid(self, message: str, video: str, data: Data) -> 'State':
         if data.is_cur_vid_is_imported_vid:
             return self.copy()
-        return self._state_unsaved(doc=None, vid=video, message=message, comments=data.comments)
+        return self._state_unsaved(doc=None, vid=video, comments=data.comments, message=message)
 
     def on_import_docs_vid(self, message: str, docs: List[str], video: str, data: Data) -> 'State':
-        return self._state_unsaved(doc=None, vid=video, message=message, comments=data.comments)
+        return self._state_unsaved(doc=None, vid=video, comments=data.comments, message=message)
 
 
 # noinspection DuplicatedCode
@@ -510,15 +489,15 @@ class _StateUnsaved(__StateSubtitleImportDelegate):
         super().__init__(True, doc, vid, comments, message, duration)
 
     def on_import_docs(self, message: str, docs: List[str], data: Data) -> 'State':
-        return self._state_unsaved(doc=None, message=message, comments=data.comments)
+        return self._state_unsaved(doc=None, vid=self._vid, comments=data.comments, message=message)
 
     def on_import_vid(self, message: str, video: str, data: Data) -> 'State':
         if data.is_cur_vid_is_imported_vid:
             return self.copy()
-        return self._state_unsaved(doc=None, vid=video, message=message, comments=data.comments)
+        return self._state_unsaved(doc=None, vid=video, comments=data.comments, message=message)
 
     def on_import_docs_vid(self, message: str, docs: List[str], video: str, data: Data) -> 'State':
-        return self._state_unsaved(doc=None, vid=video, message=message, comments=data.comments)
+        return self._state_unsaved(doc=None, vid=video, comments=data.comments, message=message)
 
 
 def get_initial_state() -> State:

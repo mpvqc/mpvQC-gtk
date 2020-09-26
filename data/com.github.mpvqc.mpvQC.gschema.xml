@@ -109,12 +109,6 @@
             <description/>
         </key>
 
-        <key name="latest-paths-export-qc-directory" type="s">
-            <default>""</default>
-            <summary>Set the default directory for the document export</summary>
-            <description/>
-        </key>
-
         <key name="latest-paths-import-qc-directory" type="s">
             <default>""</default>
             <summary>Set the default directory for the document import</summary>

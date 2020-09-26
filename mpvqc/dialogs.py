@@ -19,6 +19,7 @@
 import platform
 from gettext import gettext as _
 from os import path
+from pathlib import Path
 
 from gi.repository import Gtk
 
@@ -170,9 +171,8 @@ def dialog_save_qc_document(video_file, parent=None):
     dialog.set_select_multiple(False)
     dialog.set_do_overwrite_confirmation(True)
 
-    latest_directory = get_settings().latest_paths_export_qc_directory
-    if path.isdir(latest_directory):
-        dialog.set_current_folder(latest_directory)
+    directory = path.dirname(video_file) if video_file else str(Path.home())
+    dialog.set_current_folder(directory)
 
     file_name = None
     if dialog.run() == Gtk.ResponseType.ACCEPT:

@@ -219,7 +219,6 @@ class Settings:
         self.__export_write_nick = _Bool("export-write-nick", s)
         self.__export_write_path = _Bool("export-write-path", s)
 
-        self.__latest_paths_export_qc_directory = _Str("latest-paths-export-qc-directory", s)
         self.__latest_paths_import_qc_directory = _Str("latest-paths-import-qc-directory", s)
         self.__latest_paths_import_video_directory = _Str("latest-paths-import-video-directory", s)
         self.__latest_paths_import_subtitle_directory = _Str("latest-paths-import-subtitle-directory", s)
@@ -436,18 +435,6 @@ class Settings:
 
     def bind_export_write_path(self, obj, prop, flags=Gio.SettingsBindFlags.DEFAULT) -> None:
         self.__export_write_path.bind(obj, prop, flags)
-
-    #
-    # Latest files: export qc directory
-    #
-
-    @property
-    def latest_paths_export_qc_directory(self) -> str:
-        return self.__latest_paths_export_qc_directory.get()
-
-    @latest_paths_export_qc_directory.setter
-    def latest_paths_export_qc_directory(self, value) -> None:
-        self.__latest_paths_export_qc_directory.set(value)
 
     #
     # Latest files: import qc directory

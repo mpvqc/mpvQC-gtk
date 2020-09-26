@@ -200,6 +200,11 @@ class State(ABC):
 
         comments = t.get_all_comments()
         r = hs.do_save(self.__doc, self.__vid, comments)
+
+        if r.save_error:
+            md.message_dialog_document_save_failed(parent=a)
+            return self.copy()
+
         return self._state_saved(doc=r.doc_new, vid=r.vid_new, comments=comments,
                                  message=sm.get_save_m(as_new_name=False), duration=Duration.SHORT)
 
@@ -214,6 +219,9 @@ class State(ABC):
         r = hs.do_save(doc, self.__vid, comments)
 
         if r.abort:
+            return self.copy()
+        elif r.save_error:
+            md.message_dialog_document_save_failed(parent=a)
             return self.copy()
 
         get_settings().latest_paths_recent_files_add(doc)

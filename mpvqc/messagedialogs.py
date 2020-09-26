@@ -176,3 +176,22 @@ def message_dialog_leave_with_unsaved_qc_document(parent=None):
     response = dialog.run()
     dialog.destroy()
     return response
+
+
+def message_dialog_document_save_failed(parent=None):
+    """
+    Displays a message dialog telling the user that saving failed.
+    """
+
+    title = _("Saving the QC Document Failed")
+    message = _("Are you sure you have permission to write in the selected directory?")
+
+    dialog = Gtk.MessageDialog(transient_for=parent,
+                               destroy_with_parent=True,
+                               modal=True,
+                               buttons=Gtk.ButtonsType.OK,
+                               text=message)
+    dialog.set_title(title)
+    dialog.show_all()
+    dialog.run()
+    dialog.destroy()

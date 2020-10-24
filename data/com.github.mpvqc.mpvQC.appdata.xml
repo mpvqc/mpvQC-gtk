@@ -11,6 +11,24 @@
         <p/>
     </description>
     <releases>
+        <release date="2019-10-42" version="v1.0">
+            <description>
+                <p>
+                    <ul>
+                        <li>Addition: add keyboard shortcut 'CTRL+r' to resize video to it's original resolution</li>
+                        <li>Improvement: improve wayland performance</li>
+                        <li>Improvement: subtitles can now be imported without a video opened already</li>
+                        <li>Improvement: propose the video location as save directory for documents</li>
+                        <li>Bugfix: close search field on focus loss</li>
+                        <li>Bugfix: arrow keys wont focus the comments table during search anymore</li>
+                        <li>Bugfix: fix filename of auto saved documents</li>
+                        <li>Bugfix: fix multiple state issues</li>
+                        <li>Bugfix: show an error dialog instead of quiting if document saving fails</li>
+                        <li>Generic: more bug fixes and interface enhancements</li>
+                    </ul>
+                </p>
+            </description>
+        </release>
         <release date="2019-09-04" version="v0.9">
             <description>
                 <p>Initial Linux release</p>

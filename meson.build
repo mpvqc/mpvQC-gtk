@@ -1,6 +1,6 @@
 project(
     'mpvQC',
-    version: 'v0.9',
+    version: 'v1.0',
     meson_version: '>= 0.50.0',
 )
 

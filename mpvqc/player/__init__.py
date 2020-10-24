@@ -141,7 +141,7 @@ class MpvPlayer(_Observer):
         """
 
         if self.is_video_loaded():
-            self._mpv.command("sub-add", sub_file, "select")
+            self._mpv.command_async("sub-add", sub_file, "select")
         else:
             self.__subtitle_cache.append(sub_file)
 
@@ -153,7 +153,7 @@ class MpvPlayer(_Observer):
         :param action_type: The action type to invoke.
         """
 
-        self._mpv.command(action_type.value, key_string)
+        self._mpv.command_async(action_type.value, key_string)
 
     def duration(self):
         """
@@ -194,7 +194,7 @@ class MpvPlayer(_Observer):
         :param action_type: The type of press
         """
 
-        self._mpv.command(action_type.value, "MOUSE_BTN" + str(btn_idx))
+        self._mpv.command_async(action_type.value, "MOUSE_BTN" + str(btn_idx))
 
     def mouse_move(self, x, y):
         """
@@ -204,7 +204,7 @@ class MpvPlayer(_Observer):
         :param y: Amount to move -> y
         """
 
-        self._mpv.command("mouse", x, y)
+        self._mpv.command_async("mouse", x, y)
 
     def open_url(self, url, play):
         """
@@ -214,7 +214,7 @@ class MpvPlayer(_Observer):
         :param play: True if start playing immediately, False else.
         """
 
-        self._mpv.command("loadfile", url, "replace")
+        self._mpv.command_async("loadfile", url, "replace")
         self.__load_subtitle_files()
 
         if play:
@@ -228,7 +228,7 @@ class MpvPlayer(_Observer):
         :param play: If True, will start playing immediately
         """
 
-        self._mpv.command("loadfile", video, "replace")
+        self._mpv.command_async("loadfile", video, "replace")
         self.__load_subtitle_files()
 
         if play:
@@ -279,7 +279,7 @@ class MpvPlayer(_Observer):
         """
 
         if self.is_video_loaded():
-            self._mpv.command("seek", position, "absolute+exact")
+            self._mpv.command_async("seek", position, "absolute+exact")
 
     def terminate(self):
         """

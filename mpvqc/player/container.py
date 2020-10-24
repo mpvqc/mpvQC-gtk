@@ -80,6 +80,7 @@ class __RenderContainer(Container, Gtk.GLArea):
 
     def __init__(self, **properties):
         super().__init__(**properties)
+        self.set_auto_render(False)
 
         # OpenGL
 
@@ -245,7 +246,6 @@ def get_mpv_widget(parent: Gtk.Widget) -> Gtk.Widget:
     """
 
     import locale
-    lc, enc = locale.getlocale(locale.LC_NUMERIC)
     # libmpv requires LC_NUMERIC to be set to "C". Since messing with global variables everyone else relies upon is
     # still better than segfaulting, we are setting LC_NUMERIC to "C".
     locale.setlocale(locale.LC_NUMERIC, 'C')

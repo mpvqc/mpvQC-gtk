@@ -1,2 +1,2 @@
-glfw>=1.12.0
-PyGObject>=3.36.1
+glfw>=2.0.0
+PyGObject>=3.38.0

@@ -28,7 +28,8 @@ PYTHON_DIR = join_paths(get_option('prefix'), PYTHON_INSTALLATION.get_path('pure
 git = find_program('git', required : false)
 if git.found()
     VCS_HASH = run_command('git', 'rev-parse', '--short', 'HEAD').stdout().strip()
-    VCS_TAG = run_command('git', 'tag').stdout().strip()
+    latest_hash = run_command('git', 'rev-list', '--tags', '--max-count=1').stdout().strip()
+    VCS_TAG = run_command('git', 'describe', '--tags', latest_hash).stdout().strip()
 else
     VCS_HASH = ''
     VCS_TAG = ''

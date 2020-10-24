@@ -55,7 +55,8 @@ Access the keyboard shortcut menu via menu or via shortcut `CTRL + F1`.
 ## FAQ
 
 * Are there plans for Windows Binaries?
-  > Yes, we will provide binaries with `v1.0`
+  > No. While the application does run fine on Windows, the user experience didn't match our expectations.  
+  > Please refer to the [default version](https://github.com/mpvqc/mpvQC).
 * How can I contribute code to the project?
   > Please read the **development section** from the [contributing guide](CONTRIBUTING.md)  
   > Then create or select an issue or tackle one of the todos in the code

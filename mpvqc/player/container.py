@@ -51,7 +51,6 @@ class __LinuxContainerX(Container, Gtk.Label):
     def on_realize(self, *args):
         app_paths = get_app_paths()
         mpv = MPV(
-            vo="gpu",
             wid=self.get_window().get_xid(),
             keep_open="yes",
             idle="yes",

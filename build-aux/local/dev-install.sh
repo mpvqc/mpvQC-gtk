@@ -1,3 +1,4 @@
+#!/bin/bash
 # Meant to be executed from root directory
 # Alternatively from the IDE run configuration
 

@@ -103,8 +103,22 @@ class _Nickname(_Str):
     def __init__(self, key: str, settings: Gio.Settings):
         super().__init__(key, settings)
         if self.get() == "":
-            from gi.repository import GLib
-            self.set(GLib.get_user_name())
+            self._set_nickname()
+
+    def _set_nickname(self):
+        self.set(self._get_computer_user_name() or self._get_backup_username())
+
+    @staticmethod
+    def _get_computer_user_name() -> str:
+        from gi.repository import GLib
+        return GLib.get_user_name()
+
+    @staticmethod
+    def _get_backup_username() -> str:
+        return "nickname"
+
+    def reset(self):
+        self._set_nickname()
 
 
 class _StrListCommentTypes(_Storable):

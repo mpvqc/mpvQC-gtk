@@ -1,11 +1,18 @@
-**mpvQC is a libmpv based application for the creation of quality control reports of video files.**
+<div align="center">
+  <h1>mpvQC</h1>
+  <img alt="Logo" src="https://avatars3.githubusercontent.com/u/47739558?s=200&v=4" width="128" height="128"/>
+  <br/>
+  <br/>
+  <b>libmpv based application for the quick and easy creation of quality control reports of video files</b>
+</div>
 
 ![screenshot](data/screenshots/mpvQC-1.png)
 
+---
+
 ## Installation
 
-Currently this application runs on Linux and on Windows (MSYS2).  
-Binaries for Windows will be provided once `v1.0` gets released.
+Currently, this application runs on Linux only.
 
 ### Arch/Manjaro
 

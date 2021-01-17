@@ -1,5 +1,5 @@
 <div align="center">
-  <h1>mpvQC</h1>
+  <h1>mpvQC-gtk</h1>
   <img alt="Logo" src="https://avatars3.githubusercontent.com/u/47739558?s=200&v=4" width="128" height="128"/>
   <br/>
   <br/>

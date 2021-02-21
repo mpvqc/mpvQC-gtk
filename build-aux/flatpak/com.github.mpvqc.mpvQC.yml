@@ -1,0 +1,133 @@
+app-id: com.github.mpvqc.mpvQC
+runtime: org.gnome.Platform
+runtime-version: '3.36'
+sdk: org.gnome.Sdk
+command: mpvQC
+
+finish-args:
+  - --device=dri
+  - --share=ipc
+  - --socket=wayland
+  - --socket=fallback-x11
+  - --socket=pulseaudio
+  - --filesystem=host
+  - --filesystem=~/.config/dconf:ro
+  - --talk-name=ca.desrt.dconf
+  - --env=DCONF_USER_CONFIG_DIR=.config/dconf
+
+build-options:
+  cflags: -O2 -g
+  cxxflags: -O2 -g
+  env:
+    V: '1'
+
+cleanup:
+  - /include
+  - /lib/pkgconfig
+  - /man
+  - /share/doc
+  - /share/gtk-doc
+  - /share/man
+  - '*.la'
+  - '*.a'
+
+modules:
+  - name: libmpv
+    cleanup:
+      - "/include"
+      - "/lib/pkgconfig"
+    buildsystem: simple
+    build-commands:
+      - python3 waf configure --prefix=${FLATPAK_DEST} --enable-libmpv-shared --disable-manpage-build
+        --disable-debug-build
+      - python3 waf build
+      - python3 waf install
+    sources:
+      - sha256: 9163f64832226d22e24bbc4874ebd6ac02372cd717bef15c28a0aa858c5fe592
+        type: archive
+        url: https://github.com/mpv-player/mpv/archive/v0.32.0.tar.gz
+      - dest-filename: waf
+        sha256: ba63c90a865a9bcf46926c4e6776f9a3f73d29f33d49b7f61f96bc37b7397cef
+        type: file
+        url: https://waf.io/waf-2.0.19
+    modules:
+      - name: luajit
+        no-autogen: true
+        cleanup:
+          - /bin
+          - /lib/*.a
+          - /include
+          - /lib/pkgconfig
+          - /share/man
+        sources:
+          - sha256: 1ad2e34b111c802f9d0cdf019e986909123237a28c746b21295b63c9e785d9c3
+            type: archive
+            url: http://luajit.org/download/LuaJIT-2.1.0-beta3.tar.gz
+          - commands:
+              - sed -i 's|/usr/local|/app|' ./Makefile
+            type: shell
+      - name: libass
+        cleanup:
+          - /include
+          - /lib/*.la
+          - /lib/pkgconfig
+        config-opts:
+          - --disable-static
+        sources:
+          - sha256: 881f2382af48aead75b7a0e02e65d88c5ebd369fe46bc77d9270a94aa8fd38a2
+            type: archive
+            url: https://github.com/libass/libass/releases/download/0.14.0/libass-0.14.0.tar.xz
+        modules:
+          - name: "fribidi"
+            cleanup:
+              - /bin
+              - /include
+              - /lib/pkgconfig
+              - /lib/*.la
+              - /share/man
+            buildsystem: simple
+            build-commands:
+              - meson setup --prefix=${FLATPAK_DEST} --buildtype=release build -D docs=false
+              - ninja -C build
+              - ninja -C build install
+            sources:
+              - type: git
+                url: https://github.com/fribidi/fribidi.git
+      - name: ffmpeg
+        cleanup:
+          - /include
+          - /lib/pkgconfig
+          - /share/ffmpeg/examples
+        config-opts:
+          - --enable-shared
+          - --disable-static
+          - --enable-gnutls
+          - --disable-doc
+          - --disable-programs
+          - --disable-muxers
+          - --disable-devices
+        sources:
+          - type: git
+            url: https://github.com/FFmpeg/FFmpeg.git
+  - name: pypi-dependencies
+    buildsystem: simple
+    build-commands: []
+    config-opts:
+      - --force-clean
+    modules:
+      - name: glfw
+        buildsystem: simple
+        build-commands:
+          - pip3 install --prefix=${FLATPAK_DEST} --no-cache-dir 'glfw>=2.0.0'
+        build-options:
+          build-args:
+            - --share=network
+
+  - name: mpvQC
+    buildsystem: meson
+    config-opts:
+      - --libdir=lib
+    builddir: true
+    sources:
+      - type: git
+        url: https://github.com/mpvqc/mpvQC-gtk.git

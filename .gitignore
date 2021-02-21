@@ -202,7 +202,9 @@ dmypy.json
 ### Python Patch ###
 .venv/
 
+# End of https://www.gitignore.io/api/python,pycharm+all
+
 .builddir
 .execdir
-
-# End of https://www.gitignore.io/api/python,pycharm+all
+.flatpak-builder
+build-dir

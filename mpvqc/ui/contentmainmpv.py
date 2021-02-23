@@ -42,7 +42,7 @@ class ContentMainMpv(Gtk.EventBox):
         self.__mpvqc_window = mpvqc_window
         self.init_template()
 
-        container = get_mpv_widget(self)
+        container = get_mpv_widget()
         container.show()
         self.add(container)
 

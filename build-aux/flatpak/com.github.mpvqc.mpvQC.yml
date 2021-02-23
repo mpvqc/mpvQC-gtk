@@ -115,10 +115,10 @@ modules:
     config-opts:
       - --force-clean
     modules:
-      - name: glfw
+      - name: PyOpenGL
         buildsystem: simple
         build-commands:
-          - pip3 install --prefix=${FLATPAK_DEST} --no-cache-dir 'glfw>=2.0.0'
+          - pip3 install --prefix=${FLATPAK_DEST} --no-cache-dir 'PyOpenGL>=3.1.5'
         build-options:
           build-args:
             - --share=network

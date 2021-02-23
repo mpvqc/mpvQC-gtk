@@ -1,8 +1,5 @@
 # Building and installing mpvQC-gtk as Flatpak locally
 
-**TODO:** This does not work on Wayland yet.  
-**TODO:** Dependencies are outdated.
-
 1. Ensure `flatpak` and `flatpak-builder` are installed
 1. Clone the repository
 1. From the project root run 

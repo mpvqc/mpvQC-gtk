@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Copyright 2019 - mpvQC developers -->
+<!-- Copyright 2021 - mpvQC developers -->
 <component type="desktop">
     <id>com.github.mpvqc.mpvQC.desktop</id>
     <metadata_license>CC0-1.0</metadata_license>
@@ -10,8 +10,16 @@
     <description>
         <p/>
     </description>
+    <screenshots>
+    <screenshot type="default">
+      <image>https://raw.githubusercontent.com/mpvqc/mpvQC-gtk/master/data/screenshots/mpvQC-1.png</image>
+    </screenshot>
+    <screenshot>
+      <image>https://raw.githubusercontent.com/mpvqc/mpvQC-gtk/master/data/screenshots/mpvQC-2.png</image>
+    </screenshot>
+  </screenshots>
     <releases>
-        <release date="2019-10-42" version="v1.0">
+        <release date="2019-10-24" version="v1.0">
             <description>
                 <p>
                     <ul>
@@ -36,6 +44,7 @@
         </release>
     </releases>
     <project_group>mpvQC</project_group>
+    <content_rating type="oars-1.0" />
     <url type="homepage">https://github.com/mpvqc/mpvQC-gtk</url>
     <url type="bugtracker">https://github.com/mpvqc/mpvQC-gtk/issues</url>
     <update_contact>elias.mueller@mailbox.org</update_contact>

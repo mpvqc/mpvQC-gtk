@@ -130,4 +130,6 @@ modules:
     builddir: true
     sources:
       - type: git
+        tag: v1.1
+        commit: f24b358955ac3548620678353fc5b1b16dbff986
         url: https://github.com/mpvqc/mpvQC-gtk.git

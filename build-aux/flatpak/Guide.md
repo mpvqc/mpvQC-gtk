@@ -4,11 +4,11 @@
 1. Clone the repository
 1. From the project root run 
    ```shell
-   flatpak-builder --force-clean build-dir build-aux/flatpak/com.github.mpvqc.mpvQC.yml
+   flatpak-builder --force-clean build-dir com.github.mpvqc.mpvQC.yml
    ```
 1. Then run
    ```shell
-   flatpak-builder --user --install build-dir build-aux/flatpak/com.github.mpvqc.mpvQC.yml --force-clean
+   flatpak-builder --user --install build-dir com.github.mpvqc.mpvQC.yml --force-clean
     ```
 1. Start the application 
    ```shell

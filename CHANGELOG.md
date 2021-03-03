@@ -1,3 +1,8 @@
+# v1.1
+* Addition: we now have an icon
+* Improvement: only render using libmpv
+* Bugfix: username reset should not result in an empty name
+
 # v1.0
 * Addition: add keyboard shortcut 'CTRL+r' to resize video to its original resolution
 * Improvement: improve wayland performance

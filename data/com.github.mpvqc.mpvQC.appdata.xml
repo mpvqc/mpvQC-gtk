@@ -19,6 +19,17 @@
     </screenshot>
   </screenshots>
     <releases>
+         <release date="2021-03-03" version="v1.1">
+            <description>
+                <p>
+                    <ul>
+                        <li>Addition: we now have an icon</li>
+                        <li>Improvement: only render using libmpv</li>
+                        <li>Bugfix: username reset should not result in an empty name</li>
+                    </ul>
+                </p>
+            </description>
+        </release>
         <release date="2019-10-24" version="v1.0">
             <description>
                 <p>
